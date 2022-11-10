@@ -1,0 +1,11 @@
+home:
+  welcome: 🔥 Updates
+
+metas:
+  site: 🔥 Updates
+  description: A blog to follow the updates of Lume, the static site generator for Deno
+  twitter: "@misteroom"
+  lang: en
+
+mergedKeys:
+  metas: object
