@@ -55,6 +55,33 @@ This is a markdown file with the title **{ title }**.
 <Image alt="foo" />
 ```
 
+### About Lume string based components
+
+MDX is designed to work with JSX components. If you use a plugin that returns
+the HTML code as string it will be escaped. To avoid that, you have to use the
+`dangerouslySetInnerHTML` attribute.
+
+For example, let's say you have nunjucks component to render a title:
+
+```liquid
+<h1>{{ text }}</h1>
+```
+
+A way to use it in a mdx file is:
+
+```md
+<div dangerouslySetInnerHTML={{ __html: comp.title({ text: "Hello world" }) }} />
+```
+
+Or using a wrapper for a bit more friendly code:
+
+```md
+export const Raw = ({ children }) => <div dangerouslySetInnerHTML={{ __html:
+children }} />
+
+<Raw>{ comp.title({ text: "Hello world" }) }</Raw>
+```
+
 ## New `sitemap` plugin
 
 The `sitemap` plugin was created by [Jrson](https://github.com/jrson83) some
