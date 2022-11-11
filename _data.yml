@@ -1,10 +1,6 @@
 home:
   welcome: 🔥 Updates
 
-author:
-  name: Óscar Otero
-  url: https://oscarotero.com
-
 metas:
   site: 🔥 Updates
   description: A blog to follow the updates of Lume, the static site generator for Deno
@@ -13,3 +9,7 @@ metas:
 
 mergedKeys:
   metas: object
+
+menu_links:
+  - text: Lume docs
+    href: https://lume.land
