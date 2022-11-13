@@ -19,8 +19,8 @@ library. The new `mdx` plugin allows to create your pages in `.mdx`, so you can
 combine markdown and JSX components in a single file.
 
 To enable MDX in your site, you only need to import the `mdx` plugin and any of
-the `jsx` plugins available (depending on whether you want to use React or
-Preact). This is an example with React:
+the JSX plugins available (`jsx` to use React, `jsx_preact` to use Preact). This
+is an example with React:
 
 ```js
 import lume from "lume/mod.ts";
@@ -55,84 +55,56 @@ This is a markdown file with the title **{ title }**.
 <Image alt="foo" />
 ```
 
-### About Lume string based components
-
-MDX is designed to work with JSX components. If you use a plugin that returns
-the HTML code as string it will be escaped. To avoid that, you have to use the
-`dangerouslySetInnerHTML` attribute.
-
-For example, let's say you have nunjucks component to render a title:
-
-```liquid
-<h1>{{ text }}</h1>
-```
-
-A way to use it in a mdx file is:
-
-```md
-<div dangerouslySetInnerHTML={{ __html: comp.title({ text: "Hello world" }) }} />
-```
-
-Or using a wrapper for a bit more friendly code:
-
-```md
-export const Raw = ({ children }) => <div dangerouslySetInnerHTML={{ __html:
-children }} />
-
-<Raw>{ comp.title({ text: "Hello world" }) }</Raw>
-```
+[See more info in the documentation](https://lume.land/plugins/mdx/)
 
 ## New `sitemap` plugin
 
 The `sitemap` plugin was created by [Jrson](https://github.com/jrson83) some
 time ago in the
 [experimental plugins repo](https://github.com/lumeland/experimental-plugins).
-It creates a `sitemap.xml` file for SEO purposes and a `robots.txt` file with a
+It creates a `sitemap.xml` file and a `robots.txt` file with a
 link to the sitemap file.
 
-Now you can import it like any other Lume official plugin:
+This plugin is now included in Lume 1.13.0, so you can import it via
+`lume/plugins/sitemap.ts`.
 
-```js
-import lume from "lume/mod.ts";
-import sitemap from "lume/plugins/sitemap.ts";
-
-const site = lume();
-
-site.use(sitemap());
-
-export default site;
-```
+[See more info in the documentation](https://lume.land/plugins/sitemap/)
 
 ## Deprecated `page.dest` and `page.updateDest`
 
-Pages in Lume have the properties `src`, with info about the source file and
+All pages in Lume have the property
 `dest` with info about the destination file.
 
 The destination is calculated according to the `page.data.url` value (if
 defined) or the source file name. More info
 [in the Lume docs](https://lume.land/docs/creating-pages/page-files/).
 
-The problem is the URL can be modified by preprocessors and processors after the
-destination is calculated. For example, a SASS plugin that modifies the
-extension of the files from `.scss` to `.css`:
+The problem is whenever the URL of a page is changed, it's necessary to change
+the value in two places, `page.data.url` and `page.dest`. For example, a SASS
+plugin that modifies the extension of the files from `.scss` to `.css`:
 
 ```js
 // Extremely simplified code:
 site.process([".scss"], (page) => {
   page.content = processSASS(page.content);
+
+  // Change the page URL
   page.data.url = page.data.url.replace(/\.scss$/, ".css");
+
+  // Change the destination extension
+  page.dest.ext = ".css";
 });
 ```
 
-Because the `page.dest` value wasn't changed, it still has the old value so the
-file will be saved with the `.scss` extension. To prevent this issue, there's
-the `page.updateDest` function that changes the `page.dest` and `page.data.url`
-values accordingly, ensuring both properties are consistent:
+There's the `page.updateDest` function that changes the `page.dest` and
+`page.data.url` values accordingly, ensuring both properties are consistent:
 
 ```js
 // Extremely simplified code:
 site.process([".scss"], (page) => {
   page.content = processSASS(page.content);
+
+  // Change the page URL and destination
   page.updateDest({ ext: ".css" });
 });
 ```
@@ -143,35 +115,10 @@ have different purposes and they can have different values (like a page with the
 url `/about-us/` but the destination file is `/about-us/index.html`).
 
 In Lume 1.13.0 the `page.dest` and `page.updateDest` are deprecated (and
-probably removed in 1.14.0). Now you only have to change the value in one place
-(`page.data.url`) and the destination path is calculated just before it's saved.
+probably removed in 1.14.0). Now you only have to change the value in one place:
+`page.data.url`.
+
 More simple and intuitive.
-
-## New `slug` value
-
-Now all pages have the `slug` value (it's calculated if it doesn't exist). If
-defined, it's used to change the last part of the file URL. Take for example, a
-post file in the `/posts` folder with this data:
-
-```md
----
-title: Post title
-slug: post-title
----
-
-Hello world
-```
-
-Because the post has a `slug` defined, the URL of this post will be
-`/posts/post-title/` no matter the file name of the source file.
-
-The slug provides also a convenient way to select a page by slug. For example
-`search.page("type=post slug=post-title")`. Keep in mind that slugs are not
-required to be unique values.
-
-If the `slug` is missing, it will be calculated according to the filename, so
-all pages will have this value defined, no matter if they are manually defined
-or not.
 
 ## New option `returnPageData` to `search` helper
 
@@ -204,7 +151,7 @@ Once configured, the following code:
 {% endfor %}
 ```
 
-must be changed to:
+needs to be changed to:
 
 ```liquid
 {% for article in search.pages("type=article", "date=desc") %} 
@@ -238,6 +185,42 @@ site.use(modifyUrls({
 export default site;
 ```
 
-There are more changes. See the
+## New `emptyDest` option
+
+Lume needs to load all pages in order to build the site. This may be a problem
+for large sites with 50K or more pages that cause out of memory issues.
+
+A solution is to build these large sites in several steps,
+creating different builds exporting to the same `dest` directory, so the site can be built incrementally. Lume
+automatically empty the `dest` folder before any build, so the new `emptyDest`
+option allows to change this behavior:
+
+```ts
+const site = lume({
+  emptyDest: false, // Don't empty the dest folder
+});
+```
+
+## Removed timestamp detection in the filename
+
+Lume can
+[extract dates from the page's filename](https://lume.land/docs/creating-pages/page-files/#page-date)
+(for instance `2022-10-02_post-title.md`).
+
+If there's a number (like `23_post-title.md`), it's
+interpreted as a timestamp. This behavior was removed because it's a too
+generical pattern
+([See this issue](https://github.com/lumeland/lume/issues/284)). If you need
+this feature back, you can create a preprocessor for that:
+
+```ts
+site.preprocess([".md"], (page) => {
+  const [date, url] = myCustomFileParse(page.data.url);
+  page.data.date = date;
+  page.data.url = url;
+});
+```
+
+See the
 [CHANGELOG.md file](https://github.com/lumeland/lume/blob/v1.13.0/CHANGELOG.md)
-to see all.
+for a full list of changes.
