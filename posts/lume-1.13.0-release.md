@@ -20,11 +20,11 @@ combine markdown and JSX components in a single file.
 
 To enable MDX in your site, you only need to import the `mdx` plugin and any of
 the JSX plugins available (`jsx` to use React, `jsx_preact` to use Preact). This
-is an example with React:
+is an example with Preact:
 
 ```js
 import lume from "lume/mod.ts";
-import jsx from "lume/plugins/jsx.ts";
+import jsx from "lume/plugins/jsx_preact.ts";
 import mdx from "lume/plugins/mdx.ts";
 
 const site = lume();
