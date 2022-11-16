@@ -210,7 +210,9 @@ HTML links:
 import lume from "lume/mod.ts";
 import modifyUrls from "lume/plugins/modify_urls.ts";
 
-const site = lume();
+const site = lume({
+  prettyUrls: false, //To export the pages as example.html
+});
 
 site.use(modifyUrls({
   fn: (url) => url.replace(/\.html$/, ""),
