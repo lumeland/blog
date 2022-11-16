@@ -3,7 +3,7 @@ title: Lume 1.13.0 is out
 tags:
   - releases
 author: Óscar Otero
-date: 2022-11-14
+date: 2022-11-16
 ---
 
 I'm happy to announce that Lume `1.13.0` was released with some interesting
@@ -62,18 +62,52 @@ This is a markdown file with the title **{ title }**.
 The `sitemap` plugin was created by [Jrson](https://github.com/jrson83) some
 time ago in the
 [experimental plugins repo](https://github.com/lumeland/experimental-plugins).
-It creates a `sitemap.xml` file and a `robots.txt` file with a
-link to the sitemap file.
+It creates a `sitemap.xml` file and a `robots.txt` file with a link to the
+sitemap file.
 
 This plugin is now included in Lume 1.13.0, so you can import it via
 `lume/plugins/sitemap.ts`.
 
 [See more info in the documentation](https://lume.land/plugins/sitemap/)
 
+## Improved the `multilanguage` plugin
+
+The `multilanguage` plugin allows to create multiple language versions of the
+same page. In Lume `v1.13.0` it's possible to save the language versions in
+different files. To be identified by the plugin as language versions of the same
+page, the files must fulfill the following requirements:
+
+- They must be saved in the same directory.
+- They must have the `lang` variable defined.
+- They must have the same filename ending with the `_[lang]` suffix.
+
+For example:
+
+```
+|_ /posts
+  |_ /my-first-post_en.md
+  |_ /my-first-post_es.md
+```
+
+These two files contains the same post but in different languages and Lume will
+generate the pages `/en/posts/my-first-post/` and `/es/posts/my-first-post/`.
+
+It's possible to have one page without the language suffix, useful if you
+already have a site with only one language and want to add other languages
+progressively without affeting to the existing urls. For example:
+
+```
+|_ /posts
+  |_ /my-first-post.md
+  |_ /my-first-post_es.md
+```
+
+In this case, Lume detects they are the same posts but the URLs generated are
+`/posts/my-first-post/` and `/es/my-first-post/`.
+
 ## Deprecated `page.dest` and `page.updateDest`
 
-All pages in Lume have the property
-`dest` with info about the destination file.
+All pages in Lume have the property `dest` with info about the destination file.
 
 The destination is calculated according to the `page.data.url` value (if
 defined) or the source file name. More info
@@ -190,10 +224,10 @@ export default site;
 Lume needs to load all pages in order to build the site. This may be a problem
 for large sites with 50K or more pages that cause out of memory issues.
 
-A solution is to build these large sites in several steps,
-creating different builds exporting to the same `dest` directory, so the site can be built incrementally. Lume
-automatically empty the `dest` folder before any build, so the new `emptyDest`
-option allows to change this behavior:
+A solution is to build these large sites in several steps, creating different
+builds exporting to the same `dest` directory, so the site can be built
+incrementally. Lume automatically empty the `dest` folder before any build, so
+the new `emptyDest` option allows to change this behavior:
 
 ```ts
 const site = lume({
@@ -207,9 +241,8 @@ Lume can
 [extract dates from the page's filename](https://lume.land/docs/creating-pages/page-files/#page-date)
 (for instance `2022-10-02_post-title.md`).
 
-If there's a number (like `23_post-title.md`), it's
-interpreted as a timestamp. This behavior was removed because it's a too
-generical pattern
+If there's a number (like `23_post-title.md`), it's interpreted as a timestamp.
+This behavior was removed because it's a too generical pattern
 ([See this issue](https://github.com/lumeland/lume/issues/284)). If you need
 this feature back, you can create a preprocessor for that:
 
