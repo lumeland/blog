@@ -103,7 +103,7 @@ progressively without affeting to the existing urls. For example:
 ```
 
 In this case, Lume detects they are the same posts but the URLs generated are
-`/posts/my-first-post/` and `/es/my-first-post/`.
+`/posts/my-first-post/` and `/es/posts/my-first-post/`.
 
 ## Deprecated `page.dest` and `page.updateDest`
 
