@@ -1,7 +1,7 @@
 ---
 title: Lume 1.13.0 is out
 tags:
-  - releases
+  - Releases
 author: Óscar Otero
 date: 2022-11-16
 ---
