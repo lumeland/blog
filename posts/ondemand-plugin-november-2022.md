@@ -38,16 +38,16 @@ since the issue was created, it's still not possible and looks like it won't be
 in the short term. Lume uses dynamic imports to load pages and data in
 JavaScript, JSX and TypeScript, so if your on demand pages use any of these
 formats, they will fail on Deno Deploy. The only way to skip this limitation is
-by generating a file that imports statically all files that should be imported
-dynamically (this file is generated automatically
+by generating a file that imports statically all files that, under normal
+conditions, would be imported dynamically (this file is generated automatically
 [by the ondemand plugin](https://lume.land/plugins/on_demand/#preload-modules)).
 It's not an elegant solution but it's the only solution that works at this
 moment.
 
 ## No support for NPM modules
 
-As of version 1.12.0, Lume uses `npm:` modules for dependencies loaded
-previously from esm.sh. NPM especifiers
+As of version 1.12.0, Lume uses `npm:` modules for some dependencies. NPM
+especifiers
 [are not yet supported in Deno Deploy](https://github.com/denoland/deploy_feedback/issues/314).
 Fortunately we can use import maps to use the esm.sh version of the NPM
 packages. In the repository of the plugin demo, you can
