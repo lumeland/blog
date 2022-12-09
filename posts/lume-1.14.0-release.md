@@ -9,6 +9,8 @@ draft: true
 
 Lume `1.14.0` was released. This is a list of the changes and new features.
 
+<!-- more -->
+
 ## New functions to (pre)process all pages at the same time
 
 The functions `site.process()` and `site.preprocess()` run a callback to all
@@ -49,6 +51,44 @@ site.process([".html"], third_processor);
 In this example, `second_processor` is run after `first_processor` and before
 `third_processor`.
 
+## Introducing `hooks`
+
+Hooks are functions registered by some plugins that can be invoked by other
+plugins or by yourself in the `_config` file. Hooks are stored in `site.hooks`
+and are useful to change a plugin configuration after the installation. For
+example, the `postcss` plugin sets the hook `addPostcssPlugin` to add new
+plugins to PostCSS. Now you can create a Lume plugin to, for example, minify the
+css code with [CSS Nano](https://cssnano.co):
+
+```js
+import cssnano from "npm:cssnano@5.1.14";
+
+export default function () {
+  return (site) => {
+    if (!site.hooks.addPostcssPlugin) {
+      throw new Error("This plugin depends on postcss");
+    }
+
+    site.hooks.addPostcssPlugin(cssnano);
+  };
+}
+```
+
+Now, you can use this plugin in the `_config.ts` file:
+
+```ts
+import lume from "lume/mod.ts";
+import postcss from "lume/plugins/postcss.ts";
+import nanocss from "./plugins/nanocss.ts";
+
+const site = lume();
+
+site.use(postcss());
+site.use(nanocss());
+
+export default site;
+```
+
 ## Improved `metas` plugin
 
 A couple of improvements have been added to `metas`:
@@ -74,7 +114,7 @@ automatically for you.
 
 ### Field aliases
 
-Field aliases are a new way to reuse a value in the `metas`. For example:
+Field aliases are the new way to reuse a value in the `metas`. For example:
 
 ```yml
 title: This is the title
@@ -84,7 +124,7 @@ metas:
 ```
 
 Any value starting with `=` is considered an alias to another field. You can use
-dots to use subvalues:
+dots for subvalues:
 
 ```yml
 title: This is the title
@@ -96,14 +136,14 @@ metas:
 ```
 
 Field aliases are more powerful than the `defaultPageData` option of the plugin,
-which is deprecated and probably will be removed in the future.
+which **is deprecated and will be removed in the future**.
 
 ## Changes to `prism` plugin
 
 The [prism plugin](https://lume.land/plugins/prism/) now loads the
-[Prism](https://prismjs.com/) library from `npm:`. This change makes the
-`languages` option no longer works so if you need to load additional languages,
-just import them in your `_config.ts` file:
+[Prism](https://prismjs.com/) library from `npm:`. This change removes the
+`languages` option so if you need to load additional languages, just import them
+in your `_config.ts` file:
 
 ```ts
 import lume from "lume/mod.ts";
@@ -125,17 +165,14 @@ The good news is you can also [load plugins](https://prismjs.com/#plugins).
 
 This plugin is the first step to deprecate the `--dev` mode of Lume (that only
 ignores the pages with `draft=true`). The new plugin `filter_pages` filters
-pages using a callback that provides more flexibility and allows the use of
-environment variables to filter out the draft pages in the production
-environment. For example, let's say you want to ignore the `draft` pages in the
-production environment:
+pages using a callback and provides more flexibility. For example, let's say you
+want to ignore the `draft` pages in the production environment:
 
 ```ts
 import lume from "lume/mod.ts";
 import filter_pages from "lume/plugins/filter_pages.ts";
 
 const site = lume();
-
 const isProd = Deno.env.get("DENO_ENV") === "prod";
 
 site.use(filter_pages({
