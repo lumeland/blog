@@ -89,6 +89,27 @@ site.use(nanocss());
 export default site;
 ```
 
+## Support for `splitting` mode for esbuild
+
+[Code splitting](https://esbuild.github.io/api/#splitting) is a bundle technique
+that creates separate files with common code shared by multiple entry points.
+For example, if both entry points `a.ts` and `b.ts` imports `c.ts`, instead of
+including the `c.ts` code in both files (which would be duplicated), the code is
+saved into a _chunk_ file that is imported by both files.
+
+To generate the _chunk_ files, we need to know all entry points first. But
+thanks to the implementation of `processAll()` function (explained above) this
+is now possible in Lume. To enable the splitting mode, just need to configure
+the esbuild plugin in this way:
+
+```js
+site.use(esbuild({
+  options: {
+    splitting: true,
+  },
+}));
+```
+
 ## Improved `metas` plugin
 
 A couple of improvements have been added to `metas`:
@@ -135,8 +156,11 @@ metas:
   description: "=intro.text"
 ```
 
-Field aliases are more powerful than the `defaultPageData` option of the plugin,
-which **is deprecated and will be removed in the future**.
+Field aliases are way more powerful than the `defaultPageData` option of the
+plugin, which **is deprecated and will be removed in the future**.
+
+- Field aliases supports subvalues.
+- They can be configured at page or folder level with `_data` files.
 
 ## Changes to `prism` plugin
 
