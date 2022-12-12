@@ -3,19 +3,17 @@ title: Lume 1.14.0 is out
 tags:
   - Releases
 author: Óscar Otero
-#date: 2022-11-16
-draft: true
+date: 2022-12-12
 ---
 
-Lume `1.14.0` was released. This is a list of the changes and new features.
+Lume `1.14.0` was released. This is a list of the main changes and new features.
 
 <!-- more -->
 
 ## New functions to (pre)process all pages at the same time
 
-The functions `site.process()` and `site.preprocess()` run a callback to all
-pages with a specific extension. For example, to process the HTML pages, you can
-do:
+The functions `site.process()` and `site.preprocess()` are used to modify pages
+after or before rendering. For example, to process the HTML pages, you can do:
 
 ```js
 site.process([".html"], (page) => my_processor(page));
@@ -56,9 +54,9 @@ In this example, `second_processor` is run after `first_processor` and before
 Hooks are functions registered by some plugins that can be invoked by other
 plugins or by yourself in the `_config` file. Hooks are stored in `site.hooks`
 and are useful to change a plugin configuration after the installation. For
-example, the `postcss` plugin sets the hook `addPostcssPlugin` to add new
-plugins to PostCSS. Now you can create a Lume plugin to, for example, minify the
-css code with [CSS Nano](https://cssnano.co):
+example, the `postcss` plugin sets the hook `addPostcssPlugin`. You can create a
+Lume plugin to, for example, minify the css code with
+[CSS Nano](https://cssnano.co):
 
 ```js
 import cssnano from "npm:cssnano@5.1.14";
@@ -98,9 +96,9 @@ including the `c.ts` code in both files (which would be duplicated), the code is
 saved into a _chunk_ file that is imported by both files.
 
 To generate the _chunk_ files, we need to know all entry points first. But
-thanks to the implementation of `processAll()` function (explained above) this
-is now possible in Lume. To enable the splitting mode, just need to configure
-the esbuild plugin in this way:
+thanks to the implementation of `processAll()` function (previously explained)
+this is now possible in Lume. To enable the splitting mode, just need to
+configure the esbuild plugin in this way:
 
 ```js
 site.use(esbuild({
@@ -166,8 +164,8 @@ plugin, which **is deprecated and will be removed in the future**.
 
 The [prism plugin](https://lume.land/plugins/prism/) now loads the
 [Prism](https://prismjs.com/) library from `npm:`. This change removes the
-`languages` option so if you need to load additional languages, just import them
-in your `_config.ts` file:
+`languages` option so if you need to load additional languages, you have to
+import them in your `_config.ts` file:
 
 ```ts
 import lume from "lume/mod.ts";
@@ -187,7 +185,7 @@ The good news is you can also [load plugins](https://prismjs.com/#plugins).
 
 ## New plugin `filter_pages`
 
-This plugin is the first step to deprecate the `--dev` mode of Lume (that only
+This plugin is the first step to deprecate the `--dev` mode of Lume (that
 ignores the pages with `draft=true`). The new plugin `filter_pages` filters
 pages using a callback and provides more flexibility. For example, let's say you
 want to ignore the `draft` pages in the production environment:
