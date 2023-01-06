@@ -5,7 +5,9 @@ export default function (title: string) {
     content: {
       title,
       date: new Date(),
+      author: "Óscar Otero",
       draft: true,
+      tags: ["Releases"],
     },
   };
 }

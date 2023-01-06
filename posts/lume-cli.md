@@ -1,6 +1,7 @@
 ---
 title: Lume CLI
 date: 2023-01-06
+author: Óscar Otero
 tags:
   - Releases
 ---
