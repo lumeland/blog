@@ -33,12 +33,13 @@ export default function () {
 ```
 
 The archetypes are invoked with the command
-`deno task lume new [archetype-name]` (or `lume new [archetype-name]` if you're
-using the new [Lume CLI](./lume-cli.md)) so have to run `lume new example` to
-run this archetype and create the file `/pages/example.md`.
+`deno task lume new [archetype-name]` (or `lume new [archetype-name]` with the
+new [Lume CLI](./lume-cli.md)). If you run `lume new example` to run this
+archetype, the file `/pages/example.md` will be created.
 
 See the [archetypes documentation](https://lume.land/docs/core/archetypes/) to
-learn how to create different formats, pass arguments or create multiple files.
+learn more about how to generate different formats, pass arguments or create
+multiple files.
 
 ## Tailwindcss
 
@@ -49,7 +50,7 @@ available was [Windi CSS](https://lume.land/plugins/windi_css/).
 The support of `npm:` packages in Deno allowed to use many NPM packages that
 until now only work on Node. Still, there were errors in Tailwind due the
 [`acorn-node`](https://www.npmjs.com/package/acorn-node) dependency that doesn't
-work on Deno due the usage of `__proto__`.
+work on Deno.
 
 The [`@lumeland`](https://www.npmjs.com/search?q=%40lumeland) organization in
 NPM contains modified versions of the packages that don't work in Deno.
@@ -84,9 +85,9 @@ site.data("layout", "main.njk");
 ```
 
 The context of this data is global: is available to all pages of the site. It's
-equivalent to create a `_data.*` file in the root of your site. As of Lume
-1.15.0, it's possible to specify the directory of the data. This means that this
-data will be assigned only to that directory and subdirectories. For example:
+equivalent to having a `_data.*` file in the root of your site. As of Lume
+1.15.0, it's possible to specify the directory of the data in the third
+argument, for example:
 
 ```ts
 site.data("layout", "main.njk", "/posts");
@@ -101,12 +102,12 @@ You can assign data not only to directories but also to specific files:
 site.data("layout", "main.njk", "/posts/hello-world.md");
 ```
 
-## Breaking changes in the plugin `date`
+## 💣 Breaking changes in the plugin `date`
 
-The `date` plugin used the
+The `date` plugin use the
 [Deno version of `date_fns`](https://deno.land/x/date_fns@v2.15.0) to transform
-the dates. The Deno's version wasn't updated in 2 years so I decided to switch
-to [the Node version](https://www.npmjs.com/package/date-fns). Everything should
+the dates. That version wasn't updated in 2 years so I decided to switch to
+[the Node version](https://www.npmjs.com/package/date-fns). Everything should
 work fine, the only difference is the locales configuration, that need to be
 imported from npm in the _config file. For example, if you have this
 configuration:
@@ -131,13 +132,13 @@ site.use(date({
 
 ## Other changes
 
-- The `sass` plugin uses a
+- The `sass` plugin uses now a
   [modified version](https://www.npmjs.com/package/@lumeland/sass) of the
   official NPM package.
 - The `relations` plugin has been improved and there are some breaking changes
   in the configuration API.
-  [See the documentation](https://lume.land/plugins/relations/) for the updated
-  info.
+  [See the plugin page](https://lume.land/plugins/relations/) for the updated
+  documentation.
 - Dependency update and bugfixes.
 
 See the

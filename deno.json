@@ -3,7 +3,7 @@
   "tasks": {
     "lume": "echo \"import 'lume/cli.ts'\" | deno run --unstable -A -",
     "build": "deno task lume",
-    "serve": "deno task lume -s --dev"
+    "serve": "deno task lume -s"
   },
   "lint": {
     "files": {
