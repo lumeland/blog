@@ -1,6 +1,6 @@
 ---
 title: Lume 1.15.0 - Release notes
-date: 2023-01-09
+date: 2023-01-10
 author: Óscar Otero
 ---
 
