@@ -12,59 +12,113 @@ Hi everyone! This is a brief summary of what the new version of Lume
 
 <!-- more -->
 
-## Easier TypeScript
+## BREAKING CHANGE: `multilanguage` plugin refactor
 
-Working with Lume's Types is a bit tedious, because you have to import the types
-from `lume/core.ts` everywhere:
+The `multilanguage` plugin was created to simplify the creation of sites in
+multiple languages. But the way it worked until now was a bit confusing and not
+very practical:
 
-```ts
-import type { PageData, PageHelpers } from "lume/core.ts";
+- It worked differently depending on the page language.
+- It wasn't easy for paginations.
+- It was too picky detecting different language versions of the same page.
 
-// Create a custom PageData interface
-interface CustomPageData extends PageData {
-  readingTime?: string;
-}
+This plugin got some big changes, and (sadly) that means it breaks some
+compatibility with the old version. But I think the new behavior is much more
+clear and easy to use and understand. This is a list of the changes:
 
-export default function (data: CustomPageData, helpers: PageHelpers) {
-  // Return the page content
-}
-```
+### You need to specify the available languages in the _config file
 
-Lume 1.16 comes with the `lib.d.ts` file that you can include into
-`compilerOptions.lib` in the `deno.json` file:
-
-```json
-{
-  "tasks": {
-    "lume": "echo \"import 'lume/cli.ts'\" | deno run --unstable -A -",
-    "build": "deno task lume",
-    "serve": "deno task lume -s"
-  },
-  "imports": {
-    "lume/": "https://deno.land/x/lume@v1.16.0/"
-  },
-  "compilerOptions": {
-    "lib": [
-      "deno.ns",
-      "deno.window",
-      "https://deno.land/x/lume@v1.16.0/lib.d.ts"
-    ]
-  }
-}
-```
-
-This enables the `Lume` namespace in the global scope so you can use the Lume
-types everywhere without importing them:
+In the old plugin, each page defined its own languages. There wasn't a place to
+specify the available languages for the whole site. This makes the plugin not
+work consistently for all pages, because it depended on the number of languages
+for each page. The new version requires to specify the languages in the _config
+file, so it will work in the same way with all pages.
 
 ```ts
-interface CustomPageData extends Lume.PageData {
-  readingTime?: string;
-}
-
-export default function (data: CustomPageData, helpers: Lume.PageHelpers) {
-  // Return the page content
-}
+site.use(multilanguage({
+  languages: ["en", "gl"],
+}));
 ```
+
+### The language prefix is automatically added to the urls.
+
+The new plugin automatically prepend the `/${lang}/` prefix to all urls. If you
+have the following page:
+
+```md
+---
+lang: en
+url: /hello-world/
+---
+
+# Hello world
+```
+
+The output file is `/en/hello-world/`. This ensure all pages in the same
+language are in the same subdirectory.
+
+It's possible to define a language as default, so all pages in this language
+won't have this suffix. For example:
+
+```ts
+site.use(multilanguage({
+  languages: ["en", "gl"],
+  defaultLanguage: "en",
+}));
+```
+
+With this configuration, the english version of the page is `/hello-world/` but
+the galician version is `/gl/hello-world/`.
+
+### Use the same `id` to relate pages in different languages
+
+In the old version, to store versions of the same page in multiple files, you
+had to follow some strict instructions:
+
+- All files must be in the same folder.
+- They must have the same name, suffixed with the language.
+
+For example:
+
+```
+- /about-me_en.md
+- /about-me_gl.md
+```
+
+The new plugin removes this behavior. You have to use the `id` variable to
+relate different pages.
+
+For example, the english version:
+
+```md
+---
+lang: en
+url: /about-me/
+id: about
+---
+
+# About me
+```
+
+The galician version:
+
+```md
+---
+lang: gl
+url: /acerca-de-min/
+id: about
+---
+
+# Acerca de min
+```
+
+The new plugin interprets these two pages as the same content but in different
+languages, because they have the same id (`about`) with different values in the
+`lang` variable. You don't need to have all files in the same folder with a
+specific name.
+
+See the [plugin documentation](https://lume.land/plugins/multilanguage/) for
+more info.
 
 ## New `nav` plugin
 
@@ -82,7 +136,8 @@ but intended for navigation stuff. The `nav` variable has some useful functions:
 
 ### Menu
 
-The `nav.menu()` function returns an object with the whole site structure:
+The `nav.menu()` function returns an object with the site structure, so you can
+build a tree menu:
 
 ```ts
 const tree = nav.menu();
@@ -129,9 +184,9 @@ console.log(tree);
   - If its a folder without an `index` page, the value is the folder name. For
     example, the `/articles/second-article/` folder doesn't have any `index`
     file so the title is the folder name (`second-article`).
-- Items can have the `url` value if it's a page or a folder with an `index`
+- Items can have the `url` value when they are pages or folders with an `index`
   page.
-- Items can have the `children` value if it contains more pages inside.
+- Items can have the `children` value they contains more pages inside.
 
 ### Breadcrumb
 
@@ -172,3 +227,82 @@ You can see an example of the nav plugin in the
   ([see the code](https://github.com/lumeland/theme-simple-wiki/blob/main/src/_includes/templates/menu.njk))
 - The breadcrumb above the title is built with `nav.breadcrumb()`
   ([see the code](https://github.com/lumeland/theme-simple-wiki/blob/main/src/_includes/templates/breadcrumb.njk))
+
+## New `copyRemainingFiles` function
+
+Until now, the only way to copy static files was using the `site.copy()`
+function, that allows to specify a file/folder or an array of extensions. This
+works fine if you know in advance all files that must be copied, because they
+are in a specific folder like `/static` or have a known extension (`.jpg`,
+`.png`, etc).
+
+But it's not practical when your static files are distributed in random folders
+or can have any extension. The new `copyRemainingFiles` function allows to copy
+all files found that cannot be processed in any other way (they aren't pages,
+data files or static files).
+
+For example, imagine you have a website with articles, and every article is
+stored in it's folder that can contain static files of any extension:
+
+```
+|_ articles/
+    |_ article-1/
+    |   |_ index.md
+    |   |_ picture.jpg
+    |   |_ document.pdf
+    |   |_ foo32.gif
+    |_ article-2/
+        |_ index.md
+        |_ journey.mp4
+        |_ download.zip
+```
+
+The `site.copy()` function doesn't work here because if we copy the `/articles/`
+folder, the `index.md` files won't be processed (they will be treated as static
+files). We can select the files by extension with
+`site.copy([".jpg", ".pdf", ".gif", ".mp4", ".zip"])` but every time a new
+extension appears, you have to remember to include it in the `_config` file.
+
+The `copyRemainingFiles()` basically says: when you find a file and don't know
+what to do, just copy it. You can include a function to filter which files will
+be copied. For example:
+
+```ts
+site.copyRemainingFiles((path: string) => path.startsWith("/articles/"));
+```
+
+Now, only the remaining files inside the `/articles/` folder will be copied.
+
+## `page.data.children` property
+
+Let's say you have a blog and want to list all posts with their content. It's
+possible with this code:
+
+```njk
+{% for post in search.pages("type=post") %}
+  <h1>{{ post.data.title }}</h1>
+  {{ post.data.content | md | safe }}
+{% endfor %}
+```
+
+If the post are written in Markdown, the variable `post.data.content` of the
+page has the unrendered markdown code, so you have to use the `md` filter to
+render it to HTML. This has the drawback of every post need to be rendered
+twice, one to build the post page and other to build this list of posts.
+
+If your posts are in `MDX` this is even worse, because there's no filter to
+convert `mdx` code to HTML. It's possible to get the rendered content of the
+page from `post.content` but it includes not only the HTML of the post but also
+the layout used in this page.
+
+As of version 1.16, Lume will save the rendered content into the `children`
+property, so you can use it in other pages in this way:
+
+```njk
+{% for post in search.pages("type=post") %}
+  <h1>{{ post.data.title }}</h1>
+  {{ post.data.children | safe }}
+{% endfor %}
+```
+
+The content will be rendered only once and no filter is needed.
