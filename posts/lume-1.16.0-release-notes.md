@@ -16,15 +16,16 @@ Hi everyone! This is a brief summary of what the new version of Lume
 The `multilanguage` plugin was created to simplify the creation of sites in
 multiple languages. But the way it worked so far was a bit confusing and not
 very practical. Lume 1.16 introduce some changes that (sadly) breaks some
-compatibility with the previous version. But I think the new behavior is much more
-clear and easy to use and understand. Some of the most important changes:
+compatibility with the previous version. But I think the new behavior is much
+more clear and easy to use and understand. Some of the most important changes:
 
 ### You need to specify the available languages in the _config file
 
 In the old plugin, each page defined its own languages. There wasn't a place to
 specify the available languages for the whole site. This makes the plugin to
-work inconsistently for each page, because it depended on the number of languages defined in every case. The new version requires to specify the languages in the _config
-file, so it will work in the same way with all pages.
+work inconsistently for each page, because it depended on the number of
+languages defined in every case. The new version requires to specify the
+languages in the _config file, so it will work in the same way with all pages.
 
 ```ts
 site.use(multilanguage({
@@ -50,7 +51,8 @@ The output file is `/en/hello-world/`. This ensure all pages in the same
 language are in the same subdirectory.
 
 It's possible to define a language as default, so all pages in this language
-won't have this prefix. For example, let's say our site is in english and galician but we want to set english as the main language:
+won't have this prefix. For example, let's say our site is in english and
+galician but we want to set english as the main language:
 
 ```ts
 site.use(multilanguage({
@@ -64,8 +66,8 @@ the galician version is `/gl/hello-world/`.
 
 ### Use `id` to relate pages in different languages
 
-In the old version, to setup multiple versions of the same page in individual files, you
-had to follow some strict instructions:
+In the old version, to setup multiple versions of the same page in individual
+files, you had to follow some strict instructions:
 
 - All files must be in the same folder.
 - They must have the same name, suffixed with the language.
@@ -105,16 +107,16 @@ id: about
 ```
 
 The new plugin interprets these two pages as the same content but in different
-languages, because they have the same id (`about`). You don't need to have all files in the same folder with a
-specific name.
+languages, because they have the same id (`about`). You don't need to have all
+files in the same folder with a specific name.
 
-See
-the [complete plugin documentation](https://lume.land/plugins/multilanguage/).
+See the
+[complete plugin documentation](https://lume.land/plugins/multilanguage/).
 
 ## New `nav` plugin
 
-The `nav` plugin builds automatically a menu of your site using the URLs
-to define the hierarchy. For example, let's say we have a site which exports the
+The `nav` plugin builds automatically a menu of your site using the URLs to
+define the hierarchy. For example, let's say we have a site which exports the
 following pages:
 
 - `/`
@@ -123,8 +125,9 @@ following pages:
 - `/articles/second-article/chapter-1/`
 - `/articles/second-article/chapter-2/`
 
-This plugin register the `nav` variable in your templates, similar to [`search`](https://lume.land/plugins/search/)
-but intended for navigation stuff. The `nav` variable has some useful functions:
+This plugin register the `nav` variable in your templates, similar to
+[`search`](https://lume.land/plugins/search/) but intended for navigation stuff.
+The `nav` variable has some useful functions:
 
 ### Menu
 
@@ -225,8 +228,9 @@ are in a specific folder like `/static` or have a known extension (`.jpg`,
 `.png`, etc).
 
 But it's not practical when your static files are distributed in random folders
-or can have any extension. For example, imagine you have a website with articles, and every article is
-stored in it's folder that can contain static files of any extension:
+or can have any extension. For example, imagine you have a website with
+articles, and every article is stored in it's folder that can contain static
+files of any extension:
 
 ```
 |_ articles/
@@ -241,15 +245,15 @@ stored in it's folder that can contain static files of any extension:
         |_ download.zip
 ```
 
-The `site.copy()` function it's not very helpful because if we copy the `/articles/`
-folder, the `index.md` files won't be processed (they will be treated as static
-files). We can select the files by extension with
+The `site.copy()` function it's not very helpful because if we copy the
+`/articles/` folder, the `index.md` files won't be processed (they will be
+treated as static files). We can select the files by extension with
 `site.copy([".jpg", ".pdf", ".gif", ".mp4", ".zip"])` but every time a new
 extension is uploaded, we have to remember to include it in the `_config` file.
 
 The `copyRemainingFiles()` basically says: **when you find a file and don't know
-what to do, just copy it.** You can include a function to filter which files will
-be copied. For example:
+what to do, just copy it.** You can include a function to filter which files
+will be copied. For example:
 
 ```ts
 site.copyRemainingFiles((path: string) => path.startsWith("/articles/"));
@@ -257,7 +261,8 @@ site.copyRemainingFiles((path: string) => path.startsWith("/articles/"));
 
 Now, only the remaining files inside the `/articles/` folder will be copied.
 
-More info [in the documentation site](https://lume.land/docs/configuration/copy-static-files/#copy-remaining-files).
+More info
+[in the documentation site](https://lume.land/docs/configuration/copy-static-files/#copy-remaining-files).
 
 ## `page.data.children` property
 
@@ -293,4 +298,6 @@ property, so you can use it in other pages in this way:
 
 The content will be rendered only once and no filter is needed.
 
-There are more interesting things in Lume v1.16.0. See the [CHANGELOG.md file](https://github.com/lumeland/lume/blob/v1.16.0/CHANGELOG.md) for the full list of changes.
+There are more interesting things in Lume v1.16.0. See the
+[CHANGELOG.md file](https://github.com/lumeland/lume/blob/v1.16.0/CHANGELOG.md)
+for the full list of changes.

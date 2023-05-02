@@ -8,12 +8,10 @@
     "lume/": "https://deno.land/x/lume@v1.15.3/"
   },
   "lint": {
-    "files": {
-      "exclude": [
-        "./_site",
-        "./_bin"
-      ]
-    },
+    "exclude": [
+      "./_site",
+      "./_bin"
+    ],
     "rules": {
       "tags": [
         "recommended"
@@ -21,11 +19,9 @@
     }
   },
   "fmt": {
-    "files": {
-      "exclude": [
-        "./_site",
-        "./_bin"
-      ]
-    }
+    "exclude": [
+      "./_site",
+      "./_bin"
+    ]
   }
 }
