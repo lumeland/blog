@@ -4,7 +4,7 @@ date: 2023-05-01
 author: Óscar Otero
 tags:
   - Releases
-draft: false
+url: false
 ---
 
 This is a brief summary of the main changes introduced in Lume (**1.17.0**).
