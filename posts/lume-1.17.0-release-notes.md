@@ -4,7 +4,7 @@ date: 2023-05-01
 author: Óscar Otero
 tags:
   - Releases
-draft: true
+draft: false
 ---
 
 This is a brief summary of the main changes introduced in Lume (**1.17.0**).
@@ -30,21 +30,24 @@ To use this plugin, just import it in your `_config.ts` and configure it:
 import lume from "lume/mod.ts";
 import feed from "lume/plugins/feed.ts";
 
-export default lume()
-  .use(feed({
-    output: ["/posts.rss", "/posts.json"],
-    query: "type=post",
-    sort: "date=desc",
-    limit: 10,
-    info: {
-      title: "My awesome blog",
-      description: "Post updates of my blog",
-    },
-    items: {
-      title: "=title",
-      description: "=excerpt",
-    },
-  }));
+const site = lume();
+
+site.use(feed({
+  output: ["/posts.rss", "/posts.json"],
+  query: "type=post",
+  sort: "date=desc",
+  limit: 10,
+  info: {
+    title: "My awesome blog",
+    description: "Post updates of my blog",
+  },
+  items: {
+    title: "=title",
+    description: "=excerpt",
+  },
+}));
+
+export default site;
 ```
 
 In this example, Lume creates two Feed files defined in the `output` key:
@@ -71,33 +74,36 @@ We just have to start the value of the code with `$`:
 import lume from "lume/mod.ts";
 import feed from "lume/plugins/feed.ts";
 
-export default lume()
-  .use(feed({
-    output: ["/posts.rss", "/posts.json"],
-    query: "type=post",
-    sort: "date=desc",
-    limit: 10,
-    info: {
-      title: "My awesome blog",
-      description: "Post updates of my blog",
-    },
-    items: {
-      title: "=title",
-      description: "=excerpt",
-      content: "$.post-content",
-    },
-  }));
+const site = lume();
+
+site.use(feed({
+  output: ["/posts.rss", "/posts.json"],
+  query: "type=post",
+  sort: "date=desc",
+  limit: 10,
+  info: {
+    title: "My awesome blog",
+    description: "Post updates of my blog",
+  },
+  items: {
+    title: "=title",
+    description: "=excerpt",
+    content: "$.post-content",
+  },
+}));
+
+export default site;
 ```
 
 If you want to create more than one feed, just use the plugin once per feed:
 
 ```ts
-lume.use(feed({
+site.use(feed({
   output: "/posts.rss",
   // Posts feed configuration
 }));
 
-lume.use(feed({
+site.use(feed({
   output: "/articles.rss",
   // Articles feed configuration
 }));
@@ -143,18 +149,19 @@ a string instead of an array of paths.
 ## Allow to pass extra data to on demand pages
 
 The [on_demand plugin](https://lume.land/plugins/on_demand/) allows to render a
-page on request time, instead of build time. This is usefull to insert dynamic
+page on request time, instead of build time. This is useful to insert dynamic
 content and reduce the build time specially for big sites. Lume 1.17 introduces
 a way to insert additional variables to the page before rendering.
 
-The `onDemand` middleware has the new property `extraData` which accepts a
-function that must return an object with the extra data to be passed to the
-page. For example, let's say we want to pass the search parameters of the
-request's url:
+The `onDemand` plugin has the new option `extraData` which accepts a function
+that must return an object with the extra data to be passed to the page. For
+example, let's say we want to pass the search parameters of the request's url:
 
 ```ts
-server.use(onDemand({
-  site,
+import lume from "lume/mod.ts";
+import onDemand from "lume/plugins/on_demand.ts";
+
+site.use(onDemand({
   extraData(request: Request) {
     const searchParams = new URL(request.url).searchParams;
     const params = Object.fromEntries(searchParams.entries());
@@ -164,6 +171,8 @@ server.use(onDemand({
     };
   },
 }));
+
+export default site;
 ```
 
 Now, the on demand pages will have the `params` key with the search params
@@ -188,8 +197,8 @@ so you should consider this plugin as highly experimental.
 ## Removed old code
 
 A few versions ago, Lume removed the ability to be installed globally (with
-`deno install ...`) in benefit of Deno tasks. Some old files were keept for
-backward compatibility on upgrading from an old version. Now these files were
+`deno install ...`) in benefit of `deno task`. Some old files were keept for
+backward compatibility when upgrading from an old version. Now these files were
 removed (`ci.ts`, `install.ts`). If you get any issue running Lume (specially in
 CI environments), please update your script to use `deno task lume`.
 
