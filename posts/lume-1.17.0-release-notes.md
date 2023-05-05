@@ -1,10 +1,9 @@
 ---
 title: Lume 1.17.0 release notes
-date: 2023-05-01
+date: 2023-05-05
 author: Óscar Otero
 tags:
   - Releases
-url: false
 ---
 
 This is a brief summary of the main changes introduced in Lume (**1.17.0**).
