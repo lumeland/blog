@@ -15,14 +15,13 @@ This is a summary of the new features introduced in Lume (**1.18.0**).
 
 Adding images to web pages is a hard task nowadays. There are new modern image
 formats like AVIF and JPEG XL with better quality and compression but they are
-not supported by all browsers. And it's also possible to provide different
-images for different resolutions.
+not supported by all browsers.
 
 In order to make this work more easy, Lume has the `picture` plugin that
 converts any regular `<img>` element to a full featured `<picture>` element
 creating all `<source srset>` needed to support all formats and resolutions.
 This plugin relies on the `imagick` plugin to make the transformations, so you
-need the two plugins installed:
+need the two plugins installed in this exact order:
 
 ```ts
 import lume from "lume/mod.ts";
@@ -50,40 +49,37 @@ The output HTML code is:
 
 ```html
 <picture>
-  <source srcset="/flowers-300w.avif, /flowers-300w@2.avif 2x" width="300" type="image/avif">
-  <source srcset="/flowers-300w.webp, /flowers-300w@2.webp 2x" width="300" type="image/webp">
-  <source srcset="/flowers-300w.jpg, /flowers-300w@2.jpg 2x" width="300" type="image/jpeg">
+  <source srcset="/flowers-300w.avif, /flowers-300w@2.avif 2x" type="image/avif">
+  <source srcset="/flowers-300w.webp, /flowers-300w@2.webp 2x" type="image/webp">
+  <source srcset="/flowers-300w.jpg, /flowers-300w@2.jpg 2x" type="image/jpeg">
   <img src="/flowers.jpg">
 </picture>
 ```
 
 ## Symlinks support
 
-This new version introduces symlinks support in the `src` directory. This means
-that you can include a symlink targeting to a file or folder outside of the
-`src` (for example a page or a template file) and Lume will follow that link and
-will use those files to build the site.
+Lume 1.18.0 introduces symlinks support in the `src` directory. This means that
+you can include symlinks targeting files and folders outside of the `src` (for
+example a page or a folder with templates) and Lume will follow them and will
+use those files to build the site.
 
 This can be useful if you want to reuse the same files for different projects.
 Instead of copying the files for each project, you can store them in a single
 place and add symlinks from the different projects.
 
-Note that the Lume watcher doesn't detect changes in these files for now.
+Keep in mind that the Lume watcher doesn't detect changes in these files.
 
 ## Vento plugin
 
-[Vento](https://github.com/oscarotero/vento) is a new template engine that want
-to use the best ideas from Nunjucks, Liquid, Eta/EJS and Mustache.
+[Vento](https://github.com/oscarotero/vento) is a new template engine designed
+to use the best ideas from Nunjucks, Liquid, Eta/EJS and Mustache. Some
+highlighted features are:
 
 - Async friendly
 - Simple API
 - Allows to write JavaScript code in the templates
 
-The template engine has been created by me (Óscar Otero, also the Lume creator)
-and I'm thinking of making it the default engine (replacing Nunjucks) at some
-point.
-
-For now, you have to enable it in the _config file:
+To use it, you must setup in the _config file:
 
 ```js
 import lume from "lume/mod.ts";
@@ -95,22 +91,25 @@ site.use(vento());
 export default site;
 ```
 
+Vento template engine has been created by me (Óscar Otero, also the Lume
+creator) and I'm thinking of making it the default engine (replacing Nunjucks)
+at some point.
+
 ## LightningCSS bundler
 
 Until now, the `lightningcss` plugin only transformed the CSS code but
 [it couldn't bundle it](https://github.com/lumeland/lume/issues/273) (inline the
-`@import`ed files to output a single file with all the code). The reason is
-LightningCSS is an NPM package that didn't work on Deno due the lack of support
-of some NAPI functions so Lume used the WASM version
+`@import`'ed styles to output a single file with all the code). The reason is
+LightningCSS is an NPM package that didn't work properly on Deno due the lack of
+support of some NAPI functions so Lume had to use the WASM version
 [that only transform the code but not bundle it](https://github.com/parcel-bundler/lightningcss/issues/277).
-The only way to bundle CSS code was by using the `postcss` plugin.
 
-Deno team finally improved support NAPI and now it's possible to use
-`lightningcss` as a NPM package and bundle the code. So as of Lume 1.18 the
+Deno team finally improved support for NAPI and now it's possible to use the NPM
+version of `lightningcss` and bundle the code. In fact, as of Lume 1.18 the
 plugin **bundles the CSS code by default**.
 
-If you want to disable the bundler and only transform the code (like the
-previous version), just add a `includes: false` option in the _config file:
+If you want to disable the bundler and only transform the code, just add a
+`includes: false` option in the _config file:
 
 ```js
 import lume from "lume/mod.ts";
@@ -126,4 +125,43 @@ export default site;
 
 ## Support for JSONC and TOML
 
-New formats
+Thanks to [@kwaa](https://github.com/kwaa) for working on the JSONC and TOML
+support for Lume. Now you not only can use YAML format in the front matter but
+also JSON and TOML formats.
+
+To use JSON (or JSONC) in the front matter:
+
+```
+{
+  "title": "Hello world"
+}
+
+Page content
+```
+
+To use TOML in the front matter:
+
+```
++++
+title = Hello world
++++
+
+Page content
+```
+
+JSONC is enabled by default for pages and data files. So any file with the
+extension `.tmpl.jsonc` or a data file `_data.jsonc` or `_data/*.jsonc` is
+loaded by default.
+
+TOML files can be used also for pages and data files but it's not enabled by
+default, you have to import the plugin in the _config file:
+
+```js
+import lume from "lume/mod.ts";
+import toml from "lume/plugins/toml.ts";
+
+const site = lume();
+site.use(toml());
+
+export default site;
+```
