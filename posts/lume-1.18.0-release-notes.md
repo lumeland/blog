@@ -79,7 +79,7 @@ highlighted features are:
 - Simple API
 - Allows to write JavaScript code in the templates
 
-To use it, you must setup in the _config file:
+To use it, you must import it in the _config file:
 
 ```js
 import lume from "lume/mod.ts";
@@ -93,7 +93,7 @@ export default site;
 
 Vento template engine has been created by me (Óscar Otero, also the Lume
 creator) and I'm thinking of making it the default engine (replacing Nunjucks)
-at some point.
+at some point. I would like to know your thoughts.
 
 ## LightningCSS bundler
 
@@ -108,8 +108,8 @@ Deno team finally improved support for NAPI and now it's possible to use the NPM
 version of `lightningcss` and bundle the code. In fact, as of Lume 1.18 the
 plugin **bundles the CSS code by default**.
 
-If you want to disable the bundler and only transform the code, just add a
-`includes: false` option in the _config file:
+If you want to disable the bundler and only transform the code (back to the
+previous behavior), just add a `includes: false` option in the _config file:
 
 ```js
 import lume from "lume/mod.ts";
@@ -153,8 +153,9 @@ JSONC is enabled by default for pages and data files. So any file with the
 extension `.tmpl.jsonc` or a data file `_data.jsonc` or `_data/*.jsonc` is
 loaded by default.
 
-TOML files can be used also for pages and data files but it's not enabled by
-default, you have to import the plugin in the _config file:
+TOML files can also be used for pages and data files but this format is not
+enabled by default (probably it will in Lume 2.0). To enable it, just import the
+plugin in the _config file:
 
 ```js
 import lume from "lume/mod.ts";
