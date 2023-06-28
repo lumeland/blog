@@ -2,7 +2,6 @@
 title: Lume 1.18.0 release notes
 date: 2023-06-22T12:51:21.843Z
 author: Óscar Otero
-draft: true
 tags:
   - Releases
 ---
@@ -56,6 +55,9 @@ The output HTML code is:
 </picture>
 ```
 
+[See the documentation](https://lume.land/plugins/picture/) for more info about
+this plugin.
+
 ## Symlinks support
 
 Lume 1.18.0 introduces symlinks support in the `src` directory. This means that
@@ -94,6 +96,9 @@ export default site;
 Vento template engine has been created by me (Óscar Otero, also the Lume
 creator) and I'm thinking of making it the default engine (replacing Nunjucks)
 at some point. I would like to know your thoughts.
+
+[See more info about this plugin](https://lume.land/plugins/vento/) in the
+documentation.
 
 ## LightningCSS bundler
 
