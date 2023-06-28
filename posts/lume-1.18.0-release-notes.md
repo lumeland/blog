@@ -171,3 +171,7 @@ site.use(toml());
 
 export default site;
 ```
+
+See the
+[CHANGELOG.md file](https://github.com/lumeland/lume/blob/v1.18.0/CHANGELOG.md)
+for the full list of changes.
