@@ -18,7 +18,7 @@ not supported by all browsers.
 
 In order to make this work more easy, Lume has the `picture` plugin that
 converts any regular `<img>` element to a full featured `<picture>` element
-creating all `<source srset>` needed to support all formats and resolutions.
+creating all `<source srcset>` needed to support all formats and resolutions.
 This plugin relies on the `imagick` plugin to make the transformations, so you
 need the two plugins installed in this exact order:
 
