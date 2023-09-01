@@ -5,6 +5,8 @@ author: Óscar Otero
 draft: false
 tags:
   - Plugins
+comments:
+  src: https://fosstodon.org/@lume/110990571055604951
 ---
 
 Documentation is possibly one of the most important things for the adoption of
