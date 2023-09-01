@@ -16,7 +16,7 @@ it.
 
 Lume was very clear about that from the beginning and a lot of effort was put
 into the documentation website. But one of the difficulties is to keep it
-updated with the new changes because **wrong** documentation is worse than no
+updated with the new changes because **wrong documentation is worse than no
 documentation.**
 
 ## Plugins documentation
@@ -34,8 +34,7 @@ a
 thanks to `deno`doc`, which can extract a lot of interesting info from
 TypeScript files. It's used to build automatically the modules' documentation in
 deno.land/x repository. Take a look at
-[the options](https://deno.land/x/lume@v1.18.5/plugins/date.ts?s=Options) for
-the date plugin](https://deno.land/x/lume@v1.18.5/plugins/date.ts?s=Options).
+[the options for the date plugin](https://deno.land/x/lume@v1.18.5/plugins/date.ts?s=Options).
 
 ## Deno Doc + Aldara
 
