@@ -5,7 +5,7 @@
     "serve": "deno task lume -s"
   },
   "imports": {
-    "lume/": "https://deno.land/x/lume@v1.18.1/"
+    "lume/": "https://deno.land/x/lume@v1.18.5/"
   },
   "lint": {
     "exclude": [
