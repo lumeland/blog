@@ -12,6 +12,8 @@ any OSS project. No matter if your software is good and easy to use: if you
 don't communicate it well, most people won't spend time figuring out how to use
 it.
 
+<!-- more -->
+
 Lume was very clear about that from the beginning and a lot of effort was put
 into the documentation website. But one of the difficulties is to keep it
 updated with the new changes because **wrong** documentation is worse than no
