@@ -33,7 +33,7 @@ But Lume is built on top of Deno, and Deno is supposed to make our life better,
 right? (at least our life as developers). **And it does!** because Deno includes
 a
 [Documentation generator](https://deno.land/manual@v1.36.3/tools/documentation_generator)
-thanks to `deno`doc`, which can extract a lot of interesting info from
+thanks to `deno doc`, which can extract a lot of interesting info from
 TypeScript files. It's used to build automatically the modules' documentation in
 deno.land/x repository. Take a look at
 [the options for the date plugin](https://deno.land/x/lume@v1.18.5/plugins/date.ts?s=Options).
