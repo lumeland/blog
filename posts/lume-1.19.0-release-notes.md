@@ -1,9 +1,11 @@
 ---
 title: Lume 1.19.0 release notes
-date: 2023-09-21T18:25:59.387Z
+date: 2023-09-25T18:25:59.387Z
 author: Óscar Otero
 tags:
   - Releases
+comments:
+  src: https://fosstodon.org/@lume/111127262980585815
 ---
 
 Lume 1.19.0 was released! Hopefully, it will be the last minor version of 1.x
