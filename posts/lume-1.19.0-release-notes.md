@@ -37,7 +37,7 @@ export default site;
 
 See [the favicon plugin documentation](https://lume.land/plugins/favicon/).
 
-## Read info plugin
+## Reading info plugin
 
 This plugin was created by [Jrson](https://github.com/jrson83) and available in
 the
@@ -46,8 +46,8 @@ since a time ago, under the name `reading_time`. It's a simple plugin to
 calculate the time required to read the content of a page.
 
 Due the plugin is being used in several projects (among them, this blog), it was
-moved to Lume repo and renamed to `read_info`. The reason of the new name is the
-plugin not only returns the time, but also other interesting info like the
+moved to Lume repo and renamed to `reading_info`. The reason of the new name is
+the plugin not only returns the time, but also other interesting info like the
 number of words. Maybe we can include more interesting info in the future, let
 me know your suggestions.
 
@@ -62,7 +62,8 @@ it in your templates in this way:
 <p>{{ readingInfo.words }} words / {{ readingInfo.minutes }} min read</p>
 ```
 
-See [the read_info plugin documentation](https://lume.land/plugins/read_info/)
+See
+[the reading_info plugin documentation](https://lume.land/plugins/reading_info/)
 
 ## Improved the `picture` plugin
 
