@@ -2,21 +2,20 @@
 title: Lume 1.19.0 release notes
 date: 2023-09-21T18:25:59.387Z
 author: Óscar Otero
-draft: true
 tags:
   - Releases
 ---
 
-Lume 1.19.0 was released and this will be the last minor version of 1.x before
-the incoming Lume 2. This is a summary of the changes and new features.
+Lume 1.19.0 was released! Hopefully, it will be the last minor version of 1.x
+before the incoming Lume 2. This is a summary of the changes and new features.
 
 <!-- more -->
 
 ## Favicon plugin
 
-The favicon is a not-so-simple task we have to do every time we build a new
-website, because there are different formats, sizes, resolutions, etc. The new
-`favicon` plugin was created to make it more simple.
+The favicon is a common task we have to do every time we build a new website.
+It's not as easy as should be because there are different formats, sizes,
+resolutions, etc. The new `favicon` plugin was created to make it more simple.
 
 You only have to specify an input file (by default `favicon.svg`) and the plugin
 automatically creates the files `/favicon.ico`, `/favicon-16.png`,
@@ -35,6 +34,8 @@ site.use(favicon());
 
 export default site;
 ```
+
+See [the favicon plugin documentation](https://lume.land/plugins/favicon/).
 
 ## Read info plugin
 
@@ -59,6 +60,130 @@ it in your templates in this way:
 ```vento
 <h1>{{ title }}</h1>
 <p>{{ readingInfo.words }} words / {{ readingInfo.minutes }} min read</p>
+```
+
+See [the read_info plugin documentation](https://lume.land/plugins/read_info/)
+
+## Improved the `picture` plugin
+
+The [picture plugin](https://lume.land/plugins/picture/) has received many
+improvements and bug fixes. The most notable:
+
+### Changed the `src` value of the original `img` element
+
+In previous versions, the `src` value of the `img` element referred to the
+original image. But this image isn't always exported so it returns a `404`
+error. As of Lume 1.19, the last `source` element will be used as the value for
+the `img`:
+
+```html
+<!-- Source code -->
+<img src="/images/test.jpg" imagick="jpg webp 600">
+
+<!-- Previous output: -->
+<picture>
+  <source srcset="/images/test-600w.webp" type="image/webp">
+  <source srcset="/images/test-600w.jpg" type="image/jpeg">
+  <img src="/images/test.jpg">
+</picture>
+
+<!-- New output: -->
+<picture>
+  <source srcset="/images/test-600w.webp" type="image/webp">
+  <img src="/images/test-600w.jpg">
+</picture>
+```
+
+### Formats sorted automatically
+
+In the previous version, the `source` elements were created in the same order as
+defined in the `imagick` attribute. For example:
+
+```html
+<img src="/images/test.jpg" imagick="jpg webp avif 600">
+```
+
+This outputs the `source` elements in the same order (`jpg`, `webp` and `avif`):
+
+```html
+<picture>
+  <source srcset="/images/test-600w.jpg" type="image/jpeg">
+  <source srcset="/images/test-600w.webp" type="image/webp">
+  <source srcset="/images/test-600w.avif" type="image/avif">
+  <img src="/images/test.jpg">
+</picture>
+```
+
+Because `jpg` is a format widely supported, it will be choosen by all browsers
+because it's the first in the list, even if better formats like `webp` or `avif`
+are there. As of Lume 1.19 the formats are sorted automatically. By default the
+order is: `jxl, avif, webp, png, jpg` (from the most modern to the most
+supported). So the new output is:
+
+```html
+<picture>
+  <source srcset="/images/test-600w.avif" type="image/avif">
+  <source srcset="/images/test-600w.webp" type="image/webp">
+  <img src="/images/test-600w.jpg">
+</picture>
+```
+
+### Allow to define only formats
+
+From now on, the `imagick` attribute can have only formats, sizes are no longer
+mandatory. It's useful if you don't want to resize the image, just provide
+different formats:
+
+```html
+<!-- Source code -->
+<img src="/images/test.jpg" imagick="avif jpg webp">
+
+<!-- Ouputs: -->
+<picture>
+  <source srcset="/images/test.avif" type="image/avif">
+  <source srcset="/images/test.webp" type="image/webp">
+  <img src="/images/test.jpg">
+</picture>
+```
+
+### Don't create a new picture just for one source
+
+If the image has only one format, no `picture` element will be created:
+
+```html
+<!-- Source code -->
+<img src="/images/test.jpg" imagick="avif 300">
+
+<!-- Previous output: -->
+<picture>
+  <source srcset="/images/test-300.avif" type="image/avif">
+  <img src="/images/test.jpg">
+</picture>
+
+<!-- New ouput: -->
+<img src="/images/test-300.avif">
+```
+
+### Support for `size` attribute
+
+The plugin now supports the `size` attribute:
+
+```html
+<!-- Source code -->
+<img src="img.png" imagick="avif png 100@2" sizes="(width < 700px) 100px, 200px">
+
+<!-- Previous output: -->
+<picture>
+  <source srcset="img-100w.avif, img-100w@2.avif 2x" type="image/avif">
+  <source srcset="img-100w.png, img-100w@2.png 2x" type="image/png">
+  <img src="img.png" />
+</picture>
+
+<!-- New output: -->
+<picture>
+  <source srcset="img-100w.avif, img-100w@2.avif 2x" type="image/avif" sizes="(width < 700px) 100px, 200px">
+  <img src="img-100w.png" srcset="img-100w@2.png 2x" sizes="(width < 700px) 100px, 200px">
+</picture>
 ```
 
 ## New functions to `site` instance
@@ -129,16 +254,6 @@ but also some changes:
 - The option `indexing.bundleDirectory` was renamed to `outputPath`.
 - Added the option `customRecords` that allows to add additional records to the
   pagefind database in addition to those generated by the output pages.
-
-## More features
-
-- The `picture` plugin now supports the `sizes` attribute.
-- The `sitemap` plugin supports multilanguage sites (using the `multilanguage`
-  plugin).
-- Removed some unnecessary twitter meta tags created by the `metas` plugin.
-- The `minify_html` plugin now works online. Previously it downloaded the wasm
-  file every time it was called. Now the file is cached the first time is
-  downloaded.
 
 See the
 [CHANGELOG.md file](https://github.com/lumeland/lume/blob/v1.19.0/CHANGELOG.md)
