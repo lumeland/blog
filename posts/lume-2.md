@@ -1,11 +1,61 @@
 ---
-title: Lume 2
-date: 2023-09-10T23:29:44.134Z
+title: Lume 2 is finally here!!
+date: 2023-10-10T23:29:44.134Z
 author: Óscar Otero
 draft: true
 tags:
   - Releases
 ---
+
+A new major version of Lume was released. In this version I wanted to take the
+opportunity to fix some bad design decisions that seemed like a good idea at the
+time, remove some confusing APIs and implement some new features.
+
+<!-- more -->
+
+## New `slug` variable
+
+Although Lume allows to customize the final URL of the pages, there are some
+cases not easy to achieve:
+
+- If you want to remove a directory name: For example to export all pages in
+  `/articles/` without the `/articles` folder.
+- You want to change a directory name, so the `/articles/first-article.md` is
+  output as `/news/first-article/`.
+
+To achieve that in Lume 1, you have to build the new URL completely by creating
+a `url()` function or setting it manually in the front matter of every page.
+
+In Lume 2 you can change how a folder or a page affects to the complete URL with
+the `slug` variable. It's a special variable (like `url`) but it only affects to
+this part of the url, so it's much more easy to make small changes. You only
+have to define a `_data.*` file in the folder which name you want to change,
+with the `slug` variable. In the first example, to remove the directory name
+from the final URL, just set the slug as empty:
+
+```yml
+# /articles/_data.yml
+
+slug: "" # Don't use "/articles" in the final URL
+```
+
+To change the directory name:
+
+```yml
+# /articles/_data.yml
+
+slug: news # Use "/news" instead of "/articles" in the final URL.
+```
+
+Note that you can also remove or add additional paths:
+
+```yml
+slug: "../" # Remove the current and previous folder name
+```
+
+```yml
+slug: "articles/news" # Add two slugs
+```
 
 ## Search returns the page data
 
@@ -39,23 +89,23 @@ removed.
 [See the GitHub issue for more info](https://github.com/lumeland/lume/issues/251).
 
 This change also affects to `search.page()` (the singular version of
-`search.pages()`). The `data` filter, register by this plugin was also removed
-because it's now useless.
+`search.pages()`). The `data` filter, registered by this plugin in Lume v1 was
+also removed because it's now useless.
 
 ### Removed `search.tags()`
 
 The function `search.tags()` was just a shortcut of `search.values("tags")`. It
-was removed in Lume 2 because it's useless.
+was removed in Lume 2 for simplicity.
 
 ## Removed sub-extensions from layouts
 
 Some extensions like `.js`, `.ts` or `.jsx` can be used to generate pages or
-browser interactions. To make a distinction between these two purposes, Lume 1
-use the `.tmpl` sub-extension. For example, you can create the homepage of your
-website with the file `index.tmpl.js` (from which the `index.html` file is
-generated) and also have the file `/carousel.js` with some JavaScript code for
-an interactive carousel in the UI (maybe bundled or minified with `esbuild` or
-`terser` plugins).
+javascript files to be executed by the browser. To make a distinction between
+these two purposes, Lume 1 use the `.tmpl` sub-extension. For example, you can
+create the homepage of your website with the file `index.tmpl.js` (from which
+the `index.html` file is generated) and also have the file `/carousel.js` with
+some JavaScript code for an interactive carousel in the UI (maybe bundled or
+minified with `esbuild` or `terser` plugins).
 
 Lume 1 implementation requires the `.tmpl.js` extension not only in the main
 file but also in the layouts. This makes no sense because layouts don't need to
@@ -147,6 +197,59 @@ body {
 }
 ```
 
+## Don't prettify the `/404.html` page by default
+
+Most servers and hostings are configured by default to serve the `/404.html`
+page if the requested file doesn't exist. For example
+[Vercel](https://vercel.com/guides/custom-404-page#static-site-generator-(ssg)),
+[Netlify](https://docs.netlify.com/routing/redirects/redirect-options/#custom-404-page-handling)
+and others. It's almost a standard when serving static sites. Lume has also this
+option by default. But it has also the `prettyUrls` option enabled, so the 404
+page is exported to `/404/index.html`, making the default option for the 404
+page conflicting with the default option to prettify the urls.
+
+In Lume 2 the `prettyUrls` option is NOT applied if the page is `/404`, so the
+file is saved as `/404.html` instead of `/404/`. Note that you can change this
+behavior by explicity setting the `url` variable in the front matter of the
+page.
+
+## Changed the behavior of plugins with plugins
+
+One of the goals of Lume plugins is to provide good defaults so, in most cases
+you don't need to customize anything, just use the plugin and that's all. There
+are some Lume plugins like `postcss` that use other libraries that also accept
+plugins:
+
+```js
+import reporter from "npm:postcss-reporter";
+
+site.use(postcss({
+  plugins: [reporter],
+}));
+```
+
+The `postcss` plugin is configured by default to use `postcssNesting` and
+`autoprefixer` plugins. But setting additional plugins replaces the default
+plugins. If you want to keep using the default plugins, you have to use the
+`keepDefaultPlugins` option:
+
+```js
+import reporter from "npm:postcss-reporter";
+
+site.use(postcss({
+  plugins: [reporter],
+  keepDefaultPlugins: true, // keep using nesting and autoprefixer default plugins, in addition to reporter
+}));
+```
+
+The desired behavior in most cases is to add additional plugins, not replace the
+default plugins. In Lume 2, adding new plugins **doesn't replace the default
+plugins.** The option `keepDefaultPlugins` was removed and a new option
+`useDefaultPlugins` was added which is `true` by default.
+
+This change affects to all plugins that accept library-specific plugins like
+`postcss`, `markdown`, `mdx` and `remark`.
+
 ## Removed `--dev` mode
 
 In Lume 1, the `--dev` mode allows to output the pages marked as `draft`. The
@@ -166,9 +269,9 @@ if (site.options.dev) {
 export default site;
 ```
 
-Because dev mode is calculated before the instantiation, if we want to configure
-Lume differently depending on whether we are in dev mode or not, we have to hack
-this detection like this:
+Because dev mode is calculated in the instantiation, if we want to instantiate
+Lume differently depending on whether we are in dev mode or not, we have to
+detect the flag manually:
 
 ```ts
 import lume from "lume/mod.ts";
@@ -190,9 +293,9 @@ In addition to that, dev mode can be interpreted as a mode for developers, which
 is not. In dev mode you don't have more info about errors and the assets are not
 bundled in a specific way. The only difference is draft pages are not ignored.
 
-We think the best way to handle this is using environment variables, so in Lume
-2 you can configure Lume to show the draft pages setting the variable
-`LUME_DRAFTS=true`. For convenience, you may want to create a task:
+The best way to handle this is by using environment variables, so in Lume 2 you
+can configure Lume to show the draft pages by setting the variable
+`LUME_SHOW_DRAFTS=true`. For convenience, you may want to create a task:
 
 ```json
 {
@@ -200,13 +303,13 @@ We think the best way to handle this is using environment variables, so in Lume
     "lume": "echo \"import 'lume/cli.ts'\" | deno run --unstable -A -",
     "build": "deno task lume",
     "serve": "deno task lume -s",
-    "dev": "LUME_DRAFTS=true deno task lume -s"
+    "dev": "LUME_SHOW_DRAFTS=true deno task lume -s"
   }
 }
 ```
 
 Due this variable is not longer stored in the `site` instance, you can access to
-it from anywhere:
+it everywhere:
 
 ```js
 if (Deno.env.get("LUME_DRAFTS") == "true") {
@@ -214,8 +317,14 @@ if (Deno.env.get("LUME_DRAFTS") == "true") {
 }
 ```
 
-This opens the door for more `LUME_` variables in the future for more
-configurations and even use an `.env` file to manage them.
+## Removed `--quiet` argument
+
+The `--quiet` flag doesn't ouput anything to the terminal when building a site.
+In Lume 2 this option was replaced with the environment variable
+`LUME_LOG_LEVEL`. This allows to configure what level of logs you want to see.
+It uses the [Deno's `std/log` library](https://deno.land/std/log/mod.ts), that
+allows to configure 5 levels: `DEBUG|INFO|WARNING|ERROR|CRITICAL`. By default is
+`INFO`.
 
 ## Removed some configurations functions
 
