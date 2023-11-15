@@ -7,13 +7,48 @@ tags:
   - Releases
 ---
 
-A new major version of Lume was released. In this version I wanted to take the
+A major version of Lume was released. In this new version I wanted to take the
 opportunity to fix some bad design decisions that seemed like a good idea at the
 time, remove some confusing APIs and implement some new features.
 
+Of course, there are some breaking changes. I tried to make the transition from
+Lume 1 to Lume 2 as smooth as possible, but not always is possible. I'm sorry
+for the troubles!
+
 <!-- more -->
 
-## New `slug` variable
+## `vento` is the new default template engine
+
+The default template engine in Lume 1 is Nunjucks, which is a great and
+battle-tested template engine, this is why it was enabled by default.
+
+But Nunjucks has some limitations, especially with async functions.
+[Vento](https://vento.js.org/) is a new template engine that I've created. It
+was available in Lume 1 thanks to the
+[`vento` plugin](https://lume.land/plugins/vento/), but now it's enabled by
+default. Some of the strenghs of Vento:
+
+- Created natively with Deno in TypeScript.
+- It has an API similar to Nunjucks (but not the same) so it's very ergonomic to
+  use.
+- It works great with async functions.
+- You can use javascript inside the templates, so no need to create filters for
+  trivial things like convert to uppercase or filter an array.
+
+Nunjucks is also available but not installed by default. If you want to keep
+using it, just import the plugin in the `_config.ts` file:
+
+```js
+import lume from "lume/mod.ts";
+import nunjucks from "lume/plugins/nunjucks.ts";
+
+const site = lume();
+site.use(nunjucks());
+
+export default site;
+```
+
+## New `basename` variable
 
 Although Lume allows to customize the final URL of the pages, there are some
 cases not easy to achieve:
@@ -26,17 +61,17 @@ cases not easy to achieve:
 To achieve that in Lume 1, you have to build the new URL completely by creating
 a `url()` function or setting it manually in the front matter of every page.
 
-In Lume 2 you can change how a folder or a page affects to the complete URL with
-the `slug` variable. It's a special variable (like `url`) but it only affects to
-this part of the url, so it's much more easy to make small changes. You only
-have to define a `_data.*` file in the folder which name you want to change,
-with the `slug` variable. In the first example, to remove the directory name
-from the final URL, just set the slug as empty:
+In Lume 2 you can change how a folder or a page affects to the final URL with
+the `basename` variable. It's a special variable (like `url`) but it only
+affects to this part of the url, so it's much more easy to make small tweaks.
+You only have to define a `_data.*` file in the folder which name you want to
+change, with the `basename` variable. In the first example, to remove the
+directory name from the final URL, just set the basename as empty:
 
 ```yml
 # /articles/_data.yml
 
-slug: "" # Don't use "/articles" in the final URL
+basename: "" # Don't use "/articles" in the final URL
 ```
 
 To change the directory name:
@@ -44,17 +79,17 @@ To change the directory name:
 ```yml
 # /articles/_data.yml
 
-slug: news # Use "/news" instead of "/articles" in the final URL.
+basename: news # Use "/news" instead of "/articles" in the final URL.
 ```
 
 Note that you can also remove or add additional paths:
 
 ```yml
-slug: "../" # Remove the current and previous folder name
+basename: "../" # Remove the current and previous folder name
 ```
 
 ```yml
-slug: "articles/news" # Add two slugs
+basename: "articles/news" # Create a subfolder
 ```
 
 ## Search returns the page data
@@ -96,6 +131,88 @@ also removed because it's now useless.
 
 The function `search.tags()` was just a shortcut of `search.values("tags")`. It
 was removed in Lume 2 for simplicity.
+
+## TypeScript improvements
+
+Althought in Lume 1 it's possible to import and use the Lume types, it's not
+very ergonomic. Lume 2 register the global namespace `Lume` containing some
+useful types.
+
+To use the new Lume types, update the `deno.json` adding the `types` key to the
+`compilerOption` entry:
+
+```json
+{
+  // ...
+  "compilerOptions": {
+    "types": [
+      "lume/types.ts"
+    ]
+  }
+}
+```
+
+Now you can use the `Lume` namespace anywhere, without needing to import
+anything:
+
+```ts
+export default function (data: Lume.PageData, helpers: Lume.PageHelpers) {
+  return `<h1>${data.title}</h1>`;
+}
+```
+
+The `Lume.PageData` accepts also a generic, so you can extend it with your own
+interface:
+
+```ts
+interface Props {
+  name: string;
+}
+
+export default function (data: Lume.PageData<Props>) {
+  return `<h1>${data.name}</h1>`;
+}
+```
+
+### DOM types
+
+Lume uses [`deno-dom`](https://github.com/b-fuze/deno-dom) to manipulate the
+HTML pages. It's an awesome package but it uses its own types and that's not
+very ergonomic. Let's see this example:
+
+```js
+import type { Element } "lume/deps/dom.ts";
+
+const document = page.document;
+
+document.querySelectorAll("img").forEach((img) => {
+  const src = (img as Element).getAttribute("src");
+})
+```
+
+With `deno-dom` types, you have to add the
+[type assertion for `Element`](https://github.com/b-fuze/deno-dom/issues/141),
+so you have to import the `Element` type.
+
+Lume 2 loads the standard libraries
+[`dom` and `dom.iterable`](https://github.com/microsoft/TypeScript-DOM-lib-generator)
+(that are available by default in TypeScript but disabled in Deno). The code
+above can be simplified to:
+
+```js
+const document = page.document as Document;
+
+document.querySelectorAll("img").forEach((img) => {
+  const src = img.getAttribute("src");
+})
+```
+
+No need to import anything because DOM types are available everywhere.
+
+### Search plugin
+
+Other nice addition is the generics to the `search` helper, so you can search
+pages with `search.pages<MyCustomPage>()`.
 
 ## Removed sub-extensions from layouts
 
@@ -199,14 +316,16 @@ body {
 
 ## Don't prettify the `/404.html` page by default
 
-Most servers and hostings are configured by default to serve the `/404.html`
-page if the requested file doesn't exist. For example
+Most servers and hostings like
 [Vercel](https://vercel.com/guides/custom-404-page#static-site-generator-(ssg)),
-[Netlify](https://docs.netlify.com/routing/redirects/redirect-options/#custom-404-page-handling)
-and others. It's almost a standard when serving static sites. Lume has also this
-option by default. But it has also the `prettyUrls` option enabled, so the 404
-page is exported to `/404/index.html`, making the default option for the 404
-page conflicting with the default option to prettify the urls.
+[Netlify](https://docs.netlify.com/routing/redirects/redirect-options/#custom-404-page-handling),
+[GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-custom-404-page-for-your-github-pages-site)
+and others are configured by default to serve the `/404.html` page if the
+requested file doesn't exist. It's almost a standard when serving static sites.
+Lume has also this option by default. But it has also the `prettyUrls` option
+enabled, so the 404 page is exported to `/404/index.html`, making the default
+option for the 404 page conflicting with the default option to prettify the
+urls.
 
 In Lume 2 the `prettyUrls` option is NOT applied if the page is `/404`, so the
 file is saved as `/404.html` instead of `/404/`. Note that you can change this
@@ -312,7 +431,7 @@ Due this variable is not longer stored in the `site` instance, you can access to
 it everywhere:
 
 ```js
-if (Deno.env.get("LUME_DRAFTS") == "true") {
+if (Deno.env.get("LUME_SHOW_DRAFTS") == "true") {
   // Things to do when the draft posts are visible
 }
 ```
@@ -368,3 +487,26 @@ were removed and `loadPages` configure automatically the components:
 ```js
 site.loadPages([".njk"], { loader, engine });
 ```
+
+## New option `locationPathInDest`
+
+When Lume outputs the site to the dest folder, the subfolder of the location is
+ignored. For example, if the site location is
+`https://example.com/documentation`, the site is exported to `_site`, not to
+`_site/documentation`.
+
+Other static site generators reflect the base directory in the output folder and
+some people prefer this behavior
+([See issue #381](https://github.com/lumeland/lume/issues/381)). In Lume 2 you
+can enable this behavior with the new option `locationPathInDest`. For example:
+
+```js
+const site = lume({
+  location: new URL("https://example.com/documentation/"),
+  locationPathInDest: true,
+});
+```
+
+## And more changes
+
+Please, read the CHANGELOG.md file if you want an exhaustive list of changes.
