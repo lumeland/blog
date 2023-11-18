@@ -488,25 +488,6 @@ were removed and `loadPages` configure automatically the components:
 site.loadPages([".njk"], { loader, engine });
 ```
 
-## New option `locationPathInDest`
-
-When Lume outputs the site to the dest folder, the subfolder of the location is
-ignored. For example, if the site location is
-`https://example.com/documentation`, the site is exported to `_site`, not to
-`_site/documentation`.
-
-Other static site generators reflect the base directory in the output folder and
-some people prefer this behavior
-([See issue #381](https://github.com/lumeland/lume/issues/381)). In Lume 2 you
-can enable this behavior with the new option `locationPathInDest`. For example:
-
-```js
-const site = lume({
-  location: new URL("https://example.com/documentation/"),
-  locationPathInDest: true,
-});
-```
-
 ## And more changes
 
 Please, read the CHANGELOG.md file if you want an exhaustive list of changes.
