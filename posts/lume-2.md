@@ -7,13 +7,13 @@ tags:
   - Releases
 ---
 
-A major version of Lume was released. In this new version I wanted to take the
+A major version of Lume was released. In this new version, I wanted to take the
 opportunity to fix some bad design decisions that seemed like a good idea at the
-time, remove some confusing APIs and implement some new features.
+time, remove some confusing APIs, and implement a couple of new features.
 
-Of course, there are some breaking changes. I tried to make the transition from
-Lume 1 to Lume 2 as smooth as possible, but not always is possible. I'm sorry
-for the troubles!
+An yes, there are some breaking changes. I tried to make the transition from
+Lume 1 to Lume 2 as smoothly as possible, but not always possible. I'm sorry for
+the trouble!
 
 <!-- more -->
 
@@ -24,16 +24,16 @@ battle-tested template engine, this is why it was enabled by default.
 
 But Nunjucks has some limitations, especially with async functions.
 [Vento](https://vento.js.org/) is a new template engine that I've created. It
-was available in Lume 1 thanks to the
-[`vento` plugin](https://lume.land/plugins/vento/), but now it's enabled by
-default. Some of the strenghs of Vento:
+was available in Lume 1 through the
+[`vento` plugin](https://lume.land/plugins/vento/), but in Lume 2 it's enabled
+by default. Some of the strengths of Vento:
 
 - Created natively with Deno in TypeScript.
 - It has an API similar to Nunjucks (but not the same) so it's very ergonomic to
   use.
 - It works great with async functions.
-- You can use javascript inside the templates, so no need to create filters for
-  trivial things like convert to uppercase or filter an array.
+- You can use javascript inside the templates, so no need to use filters for
+  trivial things like converting to uppercase or filtering an array.
 
 Nunjucks is also available but not installed by default. If you want to keep
 using it, just import the plugin in the `_config.ts` file:
@@ -61,12 +61,12 @@ cases not easy to achieve:
 To achieve that in Lume 1, you have to build the new URL completely by creating
 a `url()` function or setting it manually in the front matter of every page.
 
-In Lume 2 you can change how a folder or a page affects to the final URL with
-the `basename` variable. It's a special variable (like `url`) but it only
-affects to this part of the url, so it's much more easy to make small tweaks.
-You only have to define a `_data.*` file in the folder which name you want to
-change, with the `basename` variable. In the first example, to remove the
-directory name from the final URL, just set the basename as empty:
+In Lume 2 you can change how a folder or a page affects the final URL with the
+`basename` variable. It's a special variable (like `url`) but it only affects
+this part of the URL, so it's much easier to make small tweaks. You only have to
+define a `_data.*` file in the folder which name you want to change, with the
+`basename` variable. For example, to remove the directory name from the final
+URL, just set the basename as empty:
 
 ```yml
 # /articles/_data.yml
@@ -92,12 +92,45 @@ basename: "../" # Remove the current and previous folder name
 basename: "articles/news" # Create a subfolder
 ```
 
+The `basename` variable can be used in the pages frontmatter, to change the
+filename part in the final URL:
+
+```yml
+# /posts/post1.md
+
+title: My first post
+basename: my-first-post # Create the URL /posts/my-first-post/
+```
+
+Same as `url`, if the basename variable is defined automatically if it's
+missing. So you can use it to search pages:
+
+```js
+pages = search.pages("basename=index");
+```
+
+In Lume 1, there is some similar: the `slug` variable in the `page.src`. This
+variable was removed, so if you are using it to generate custom URL, you have to
+modify the `url` function. Example:
+
+```js
+// Lume 1
+export function url(page) {
+  return `/articles/${page.src.slug}/`;
+}
+
+// Lume 2
+export function url(page) {
+  return `/articles/${page.data.basename}/`;
+}
+```
+
 ## Search returns the page data
 
 The [`search` plugin](https://lume.land/plugins/search/) provides the `search`
 helper with some useful functions like `search.pages()` to return an array of
 pages that meet a query. In Lume 1, this array contained the `Page` object, so
-you had to access to the page data from the `data` property. For example:
+you had to access the page data from the `data` property. For example:
 
 ```vento
 {{ for article of search.pages("type=article") }}
@@ -123,7 +156,7 @@ This behavior was available in Lume 1 by configuring the plugin with the option
 removed.
 [See the GitHub issue for more info](https://github.com/lumeland/lume/issues/251).
 
-This change also affects to `search.page()` (the singular version of
+This change also affects `search.page()` (the singular version of
 `search.pages()`). The `data` filter, registered by this plugin in Lume v1 was
 also removed because it's now useless.
 
@@ -134,12 +167,12 @@ was removed in Lume 2 for simplicity.
 
 ## TypeScript improvements
 
-Althought in Lume 1 it's possible to import and use the Lume types, it's not
-very ergonomic. Lume 2 register the global namespace `Lume` containing some
-useful types.
+Although in Lume 1 it's possible to import and use the Lume types, it's not very
+ergonomic. Lume 2 registers the global namespace `Lume` containing some useful
+types.
 
-To use the new Lume types, update the `deno.json` adding the `types` key to the
-`compilerOption` entry:
+To use the new Lume types, update the `deno.json` by adding the `types` key to
+the `compilerOption` entry:
 
 ```json
 {
@@ -152,8 +185,8 @@ To use the new Lume types, update the `deno.json` adding the `types` key to the
 }
 ```
 
-Now you can use the `Lume` namespace anywhere, without needing to import
-anything:
+Now you can use the `Lume` namespace anywhere, without needing to import it
+manually:
 
 ```ts
 export default function (data: Lume.PageData, helpers: Lume.PageHelpers) {
@@ -177,8 +210,8 @@ export default function (data: Lume.PageData<Props>) {
 ### DOM types
 
 Lume uses [`deno-dom`](https://github.com/b-fuze/deno-dom) to manipulate the
-HTML pages. It's an awesome package but it uses its own types and that's not
-very ergonomic. Let's see this example:
+HTML pages. It's an awesome package but it uses its types and that's not very
+ergonomic. Let's see this example:
 
 ```js
 import type { Element } "lume/deps/dom.ts";
@@ -207,18 +240,20 @@ document.querySelectorAll("img").forEach((img) => {
 })
 ```
 
-No need to import anything because DOM types are available everywhere.
+`deno-dom` is still used under the hood but with different types, which makes
+the code much more interoperable between back and front. And no need to import
+anything because DOM types are available everywhere.
 
 ### Search plugin
 
-Other nice addition is the generics to the `search` helper, so you can search
+Another nice addition is the generics to the `search` helper, so you can search
 pages with `search.pages<MyCustomPage>()`.
 
 ## Removed sub-extensions from layouts
 
-Some extensions like `.js`, `.ts` or `.jsx` can be used to generate pages or
+Some extensions like `.js`, `.ts`, or `.jsx` can be used to generate pages or
 javascript files to be executed by the browser. To make a distinction between
-these two purposes, Lume 1 use the `.tmpl` sub-extension. For example, you can
+these two purposes, Lume 1 uses the `.tmpl` sub-extension. For example, you can
 create the homepage of your website with the file `index.tmpl.js` (from which
 the `index.html` file is generated) and also have the file `/carousel.js` with
 some JavaScript code for an interactive carousel in the UI (maybe bundled or
@@ -226,9 +261,9 @@ minified with `esbuild` or `terser` plugins).
 
 Lume 1 implementation requires the `.tmpl.js` extension not only in the main
 file but also in the layouts. This makes no sense because layouts don't need to
-be distinguished from other layouts. It's also inconsistent because,
-`_components` files don't use the `.tmpl` sub-extension: to create the _button_
-component, the file must be named as `/_components/button.js`, and
+be distinguished from other layouts. It's also inconsistent because
+`_components` JavaScript files don't use the `.tmpl` sub-extension: to create
+the _button_ component, the file must be named as `/_components/button.js`, and
 `/_components/button.tmpl.js` would fail.
 
 This is an example of Lume 1 structure:
@@ -240,9 +275,9 @@ _data.js
 index.tmpl.js
 ```
 
-Lume 2 don't need sub-extension for layouts, so it's more aligned with the
+Lume 2 doesn't need sub-extension for layouts, so it's more aligned with the
 components and removes that unnecessary requirement. The previous example would
-become to the following (but not exactly, keep reading below):
+become the following (but not exactly, keep reading below):
 
 ```plain
 _includes/layout.js
@@ -266,8 +301,8 @@ _data.js
 index.page.js
 ```
 
-Note that the sub-extension is configurable. If you want keep using `.tmpl` as
-the sub-extension, just configure the `modules` and `json` plugins:
+Note that the sub-extension is configurable. If you want to keep using `.tmpl`
+as the sub-extension, just configure the `modules` and `json` plugins:
 
 ```js
 import lume from "lume/mod.ts";
@@ -285,18 +320,18 @@ Tip: I've created a script to automatically
 
 ## Removed output extension detection from the filename
 
-In Lume 1 the file `/about.njk` outputs the file `/about/index.html`, but it's
-possible to output a non-HTML file by adding the extension to the filename. For
-example `/styles.css.njk` outputs `/styles.css`.
+In Lume 1 the file `/example.njk` outputs the file `/example/index.html`, but
+it's possible to output a non-HTML file by adding the extension to the filename.
+For example `/example.css.njk` outputs `/example.css`.
 
-This automatic extension detection has been proved as a bad decision because it
+This automatic extension detection has been proven as a bad decision because it
 has unexpected behaviors. For example, we may want to create the file
 `/posts/using-missing.css.njk` to talks about the
 [missing.css](https://missing.style/) library but Lume outputs the file
 `/posts/using-missing.css` and treat it as a CSS file.
 
-Lume 2 remove this automatic detection and all pages will be exported as HTML
-pages making it more preditable. This not only solves this issue but also align
+Lume 2 removes this automatic detection and all pages will be exported as HTML
+pages making it more predictable. This not only solves this issue but also align
 Lume with the behavior of other static site generators like Jekyll and Eleventy.
 [See more info in the GitHub issue](https://github.com/lumeland/lume/issues/430).
 
@@ -316,7 +351,7 @@ body {
 
 ## Don't prettify the `/404.html` page by default
 
-Most servers and hostings like
+Most servers and static hostings like
 [Vercel](https://vercel.com/guides/custom-404-page#static-site-generator-(ssg)),
 [Netlify](https://docs.netlify.com/routing/redirects/redirect-options/#custom-404-page-handling),
 [GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-custom-404-page-for-your-github-pages-site)
@@ -324,20 +359,19 @@ and others are configured by default to serve the `/404.html` page if the
 requested file doesn't exist. It's almost a standard when serving static sites.
 Lume has also this option by default. But it has also the `prettyUrls` option
 enabled, so the 404 page is exported to `/404/index.html`, making the default
-option for the 404 page conflicting with the default option to prettify the
-urls.
+option for the 404 page conflict with the default option to prettify the URLs.
 
 In Lume 2 the `prettyUrls` option is NOT applied if the page is `/404`, so the
 file is saved as `/404.html` instead of `/404/`. Note that you can change this
-behavior by explicity setting the `url` variable in the front matter of the
+behavior by explicitly setting the `url` variable in the front matter of the
 page.
 
 ## Changed the behavior of plugins with plugins
 
-One of the goals of Lume plugins is to provide good defaults so, in most cases
+One of the goals of Lume plugins is to provide good defaults so, in most cases,
 you don't need to customize anything, just use the plugin and that's all. There
-are some Lume plugins like `postcss` that use other libraries that also accept
-plugins:
+are some Lume plugins like `postcss` or `markdown` that use other libraries that
+also accept plugins:
 
 ```js
 import reporter from "npm:postcss-reporter";
@@ -366,12 +400,12 @@ default plugins. In Lume 2, adding new plugins **doesn't replace the default
 plugins.** The option `keepDefaultPlugins` was removed and a new option
 `useDefaultPlugins` was added which is `true` by default.
 
-This change affects to all plugins that accept library-specific plugins like
-`postcss`, `markdown`, `mdx` and `remark`.
+This change affects all plugins that accept library-specific plugins like
+`postcss`, `markdown`, `mdx`, and `remark`.
 
 ## Removed `--dev` mode
 
-In Lume 1, the `--dev` mode allows to output the pages marked as `draft`. The
+In Lume 1, the `--dev` mode allows outputting the pages marked as `draft`. The
 problem with this option is it's automatically detected by Lume after the
 instantiation, so it's not available before. For example, let's say we have the
 following `_config.ts` file:
@@ -388,7 +422,7 @@ if (site.options.dev) {
 export default site;
 ```
 
-Because dev mode is calculated in the instantiation, if we want to instantiate
+Because dev mode is calculated in the instantiation if we want to instantiate
 Lume differently depending on whether we are in dev mode or not, we have to
 detect the flag manually:
 
@@ -427,8 +461,8 @@ can configure Lume to show the draft pages by setting the variable
 }
 ```
 
-Due this variable is not longer stored in the `site` instance, you can access to
-it everywhere:
+Due to this variable is not longer stored in the `site` instance, you can access
+to it everywhere:
 
 ```js
 if (Deno.env.get("LUME_SHOW_DRAFTS") == "true") {
@@ -436,20 +470,43 @@ if (Deno.env.get("LUME_SHOW_DRAFTS") == "true") {
 }
 ```
 
+If you use [Lume CLI](https://github.com/lumeland/cli), there's the `--drafts`
+option to add automatically this environment variable:
+
+```sh
+lume -s --drafts
+# Runs `LUME_SHOW_DRAFTS=true deno task lume -s`
+```
+
 ## Removed `--quiet` argument
 
-The `--quiet` flag doesn't ouput anything to the terminal when building a site.
+The `--quiet` flag doesn't output anything to the terminal when building a site.
 In Lume 2 this option was replaced with the environment variable
-`LUME_LOG_LEVEL`. This allows to configure what level of logs you want to see.
-It uses the [Deno's `std/log` library](https://deno.land/std/log/mod.ts), that
-allows to configure 5 levels: `DEBUG|INFO|WARNING|ERROR|CRITICAL`. By default is
-`INFO`.
+`LUME_LOG_LEVEL`. This allows you to configure what level of logs you want to
+see. It uses the [Deno's `std/log` library](https://deno.land/std/log/mod.ts),
+which allows configuring 5 levels: `DEBUG|INFO|WARNING|ERROR|CRITICAL`. By
+default is `INFO`.
 
-## Removed some configurations functions
+For example, to only show CRITICAL errors:
+
+```sh
+LUME_LOG_LEVEL=CRITICAL deno task build
+```
+
+For convenience, [Lume CLI](https://github.com/lumeland/cli) has also the
+`--debug`, `--info`, `--warning`, `--error` and `--critical` options to add
+automatically this environment variable:
+
+```sh
+lume -s --error
+# Runs `LUME_LOG_LEVEL=error deno task lume -s`
+```
+
+## Removed some configuration functions
 
 ### Removed `site.includes()`
 
-This function allowed to configure the includes folder for some extensions. For
+This function allows to configure the includes folder for some extensions. For
 example: `site.includes([".css"], "/_includes/css")` configure the includes
 folder of `.css` files to the `/_includes/css` path.
 
@@ -469,7 +526,7 @@ in the plugins.
 
 ### Merged `site.loadComponents()`, `site.engine()` and `site.loadPages()`
 
-These three functions configure the loader or/and engine used for some
+These three functions configure the loader and/or engine used for some
 extensions for specific cases, but they have some conflicts and can override
 each other. For example:
 
@@ -480,9 +537,9 @@ site.engine([".njk"], engine3);
 ```
 
 In reality, when we want to register a new engine (like Nunjucks), we want to
-use it to render pages and components, so spliting this configuration in three
-different functions didn't make sense. In Lume 2 `loadComponents` and `engine`
-were removed and `loadPages` configure automatically the components:
+use it to render pages and components, so splitting this configuration into
+three different functions didn't make sense. In Lume 2 `loadComponents` and
+`engine` were removed and `loadPages` configure automatically the components:
 
 ```js
 site.loadPages([".njk"], { loader, engine });
