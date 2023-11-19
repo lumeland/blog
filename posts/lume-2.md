@@ -366,6 +366,17 @@ file is saved as `/404.html` instead of `/404/`. Note that you can change this
 behavior by explicitly setting the `url` variable in the front matter of the
 page.
 
+## Removed WindiCSS plugin and added UnoCSS
+
+[WindiCSS is sunsetting](https://windicss.org/posts/sunsetting.html). In Lume 2
+this plugin has been removed, or rather, replaced with
+[UnoCSS](https://unocss.dev/).
+
+Not all features from WindiCSS are already supported by UnoCSS. For now, the
+plugin can extract class names from the HTML code and generate new CSS code, but
+cannot transform existing CSS code with directives like `@apply`, `@screen` and
+`theme()`. If anyone want to help with this, please let me know.
+
 ## Changed the behavior of plugins with plugins
 
 One of the goals of Lume plugins is to provide good defaults so, in most cases,
