@@ -125,6 +125,90 @@ export function url(page) {
 }
 ```
 
+## Changes in `process`, `preprocess`, `processAll` and `preprocessAll`
+
+In Lume 1, if you want to modify pages, you can use the `site.process` function.
+For example:
+
+```js
+site.process([".html"], (page) => {
+  page.document?.querySelectorAll("a[href^='http']", (a) => {
+    a.setAttribute("target", "_blank");
+  });
+});
+```
+
+But after implementing this, we realized that sometimes we need to run some code
+after or before the processor. So we had to add the `processAll` function, that
+works similar to `process` but receiving all pages at the same time:
+
+```js
+site.process([".html"], (pages) => {
+  console.log("Preparing");
+
+  for (const page of pages) {
+    page.document?.querySelectorAll("a[href^='http']", (a) => {
+      a.setAttribute("target", "_blank");
+    });
+  }
+
+  console.log("Done!");
+});
+```
+
+As you can see, `processAll` is much more flexible than `process`: you not only
+can run code after or before processing the pages but also decide if the code
+must be run in parallel (for async operations or sequentially):
+
+```js
+// Run the code in parallel
+site.process([".html"], (pages) => {
+  return Promise.all(pages.map(asyncFunction));
+});
+```
+
+Due `processAll` can do the same as `process` and more, for simplicity in Lume 2
+the `process` function has changed to behave like `processAll`, and `processAll`
+was removed. The same change has been applied to `preprocess` and
+`preprocessAll` functions.
+
+```js
+// Lume 1
+site.process([".html"], (page) => {
+  modifyPage(page);
+});
+
+// Lume 2
+site.process([".html"], (pages) => {
+  pages.forEach(modifyPage);
+});
+
+// Async functions sequentially:
+site.process([".html"], async (pages) => {
+  for (const page of pages) {
+    await modifyPage(page);
+  }
+});
+
+// Async functions in parallel:
+site.process([".html"], async (pages) => {
+  await Promise.all(pages.map(modifyPage));
+});
+```
+
+Lume has the `concurrent` utility that works similar to `Promise.all` but allows
+to customize the number of processes running at the same time, which is useful
+to avoid memory issues. It's the function used in Lume 1 to run the processors
+in `process` and by default is limited to `200` processes.
+
+```js
+import { concurrent } from "lume/core/utils/concurrent.ts";
+
+site.process([".html"], async (pages) => {
+  await concurrent(pages, modifyPage);
+});
+```
+
 ## Search returns the page data
 
 The [`search` plugin](https://lume.land/plugins/search/) provides the `search`
