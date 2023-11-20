@@ -102,14 +102,14 @@ title: My first post
 basename: my-first-post # Create the URL /posts/my-first-post/
 ```
 
-Same as `url`, if the basename variable is defined automatically if it's
-missing. So you can use it to search pages:
+The basename variable is defined automatically if it's missing. So you can use
+it to search pages:
 
 ```js
 pages = search.pages("basename=index");
 ```
 
-In Lume 1, there is some similar: the `slug` variable in the `page.src`. This
+Lume 1 has something similar with the `slug` variable in the `page.src`. This
 variable was removed, so if you are using it to generate custom URL, you have to
 modify the `url` function. Example:
 
