@@ -543,7 +543,7 @@ bundled in a specific way. The only difference is draft pages are not ignored.
 
 The best way to handle this is by using environment variables, so in Lume 2 you
 can configure Lume to show the draft pages by setting the variable
-`LUME_SHOW_DRAFTS=true`. For convenience, you may want to create a task:
+`LUME_DRAFTS=true`. For convenience, you may want to create a task:
 
 ```json
 {
@@ -551,7 +551,7 @@ can configure Lume to show the draft pages by setting the variable
     "lume": "echo \"import 'lume/cli.ts'\" | deno run --unstable -A -",
     "build": "deno task lume",
     "serve": "deno task lume -s",
-    "dev": "LUME_SHOW_DRAFTS=true deno task lume -s"
+    "dev": "LUME_DRAFTS=true deno task lume -s"
   }
 }
 ```
@@ -560,7 +560,7 @@ Due to this variable is not longer stored in the `site` instance, you can access
 to it everywhere:
 
 ```js
-if (Deno.env.get("LUME_SHOW_DRAFTS") == "true") {
+if (Deno.env.get("LUME_DRAFTS") == "true") {
   // Things to do when the draft posts are visible
 }
 ```
@@ -570,22 +570,21 @@ option to add automatically this environment variable:
 
 ```sh
 lume -s --drafts
-# Runs `LUME_SHOW_DRAFTS=true deno task lume -s`
+# Runs `LUME_DRAFTS=true deno task lume -s`
 ```
 
 ## Removed `--quiet` argument
 
 The `--quiet` flag doesn't output anything to the terminal when building a site.
-In Lume 2 this option was replaced with the environment variable
-`LUME_LOG_LEVEL`. This allows you to configure what level of logs you want to
-see. It uses the [Deno's `std/log` library](https://deno.land/std/log/mod.ts),
-which allows configuring 5 levels: `DEBUG|INFO|WARNING|ERROR|CRITICAL`. By
-default is `INFO`.
+In Lume 2 this option was replaced with the environment variable `LUME_LOG`.
+This allows you to configure what level of logs you want to see. It uses the
+[Deno's `std/log` library](https://deno.land/std/log/mod.ts), which allows
+configuring 5 levels: `DEBUG|INFO|WARNING|ERROR|CRITICAL`. By default is `INFO`.
 
 For example, to only show CRITICAL errors:
 
 ```sh
-LUME_LOG_LEVEL=CRITICAL deno task build
+LUME_LOG=CRITICAL deno task build
 ```
 
 For convenience, [Lume CLI](https://github.com/lumeland/cli) has also the
@@ -594,7 +593,7 @@ automatically this environment variable:
 
 ```sh
 lume -s --error
-# Runs `LUME_LOG_LEVEL=error deno task lume -s`
+# Runs `LUME_LOG=error deno task lume -s`
 ```
 
 ## Removed some configuration functions
