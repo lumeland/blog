@@ -456,10 +456,8 @@ page.
 this plugin has been removed, or rather, replaced with
 [UnoCSS](https://unocss.dev/).
 
-Not all features from WindiCSS are already supported by UnoCSS. For now, the
-plugin can extract class names from the HTML code and generate new CSS code, but
-cannot transform existing CSS code with directives like `@apply`, `@screen` and
-`theme()`. If anyone want to help with this, please let me know.
+UnoCSS plugin is similar to TailwindCSS: it uses the postcss plugin to apply the
+changes and insert the code where the `@unocss` directive is defined.
 
 ## Changed the behavior of plugins with plugins
 
