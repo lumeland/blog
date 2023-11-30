@@ -2,12 +2,12 @@
 title: Lume 2 is finally here!!
 date: 2023-10-10T23:29:44.134Z
 author: Óscar Otero
-draft: true
+_draft: true
 tags:
   - Releases
 ---
 
-A major version of Lume was released. In this new version, I wanted to take the
+A major version of Lume was released. In this new version, I wanted to take this
 opportunity to fix some bad design decisions that seemed like a good idea at the
 time, remove some confusing APIs, and implement a couple of new features.
 
@@ -17,7 +17,7 @@ the trouble!
 
 <!-- more -->
 
-## `vento` is the new default template engine
+## Vento is the new default template engine
 
 The default template engine in Lume 1 is Nunjucks, which is a great and
 battle-tested template engine, this is why it was enabled by default.
@@ -449,6 +449,87 @@ In Lume 2 the `prettyUrls` option is NOT applied if the page is `/404`, so the
 file is saved as `/404.html` instead of `/404/`. Note that you can change this
 behavior by explicitly setting the `url` variable in the front matter of the
 page.
+
+## Changes in `multilanguage` plugin
+
+The `multilanguage` plugin in Lume 1 allows to insert inner translations in the
+page data by using the `.[lang]` suffix. For example:
+
+```yml
+lang: [en, gl, es]
+layout: main.vto
+
+title: The Óscar's blog
+title.gl: O blog de Óscar # galician translation
+title.es: El blog de Óscar # spanish translation
+
+links:
+  - title: My personal site
+    title.gl: O meu sitio persoal # galician translation
+    title.es: Mi sitio personal   # spanish translation
+    url: https://oscarotero.com
+
+  - title: Lume
+    url: https://lume.land
+```
+
+This feature seemed a good idea because you don't have to repeat the `links`
+array only to change the `title` of some links. The problem of this feature is
+Lume needs to traverse the entire data object to find keys with these suffix,
+then duplicate the object for each language, reconstruct the object using only
+the keys of one language without the suffix... It's a lot of stuff that can
+affect to the performance, specially for big sites.
+
+Other problem is sometimes it can produce errors if there are circular
+references. For example, let's say the page has this data:
+
+```js
+export const foo = {};
+foo.foo = foo;
+```
+
+Due the `foo.foo` property is referenced to the `foo` object, this causes the
+_RangeError: Maximum call stack size exceeded_.
+
+In Lume 2, this feature was removed, which makes this plugin much more
+performant and removes a can of potential bugs and errors. Note that it's still
+possible to have values for different languages using the root variables with
+the same name as the language. For example:
+
+```yml
+# available languages in this page
+lang: [en, gl, es]
+
+# default values to all languages
+layout: main.vto
+title: The Óscar's blog
+links:
+- title: My personal site
+  url: https://oscarotero.com
+
+- title: Lume
+  url: https://lume.land
+
+# galician translations
+gl:
+  title: O blog de Óscar
+  links:
+  - title: O meu sitio persoal
+    url: https://oscarotero.com
+
+  - title: Lume
+    url: https://lume.land
+
+# spanish translations
+es:
+  title: El blog de Óscar
+  links:
+  - title: Mi sitio personal
+    url: https://oscarotero.com
+
+  - title: Lume
+    url: https://lume.land
+```
 
 ## Removed WindiCSS plugin and added UnoCSS
 
