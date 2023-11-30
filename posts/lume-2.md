@@ -2,7 +2,7 @@
 title: Lume 2 is finally here!!
 date: 2023-10-10T23:29:44.134Z
 author: Óscar Otero
-_draft: true
+draft: true
 tags:
   - Releases
 ---
