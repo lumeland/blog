@@ -249,6 +249,21 @@ also removed because it's now useless.
 The function `search.tags()` was just a shortcut of `search.values("tags")`. It
 was removed in Lume 2 for simplicity.
 
+## Replaced `imagick` with `image_transform`
+
+The `imagick` plugins in Lume 1 allows to transform the images of your site
+using the [`magick-wasm` package](https://github.com/dlemstra/magick-wasm). In
+Lume 2 this plugin was renamed to `image_transform` and uses
+[Sharp](https://sharp.pixelplumbing.com/) under the hood.
+
+Sharp is more performant, with a nice API and support for SVG format. Both
+plugins works similarly and in most cases you only have to change the data key
+used (`imagick` in the `imagick` plugin, `imageTransform` in the
+`image_transform` plugin).
+
+This change affects also to the `picture` plugin that now uses the
+`image-transform` attribute instead of `imagick`.
+
 ## TypeScript improvements
 
 Although in Lume 1 it's possible to import and use the Lume types, it's not very
@@ -273,21 +288,8 @@ Now you can use the `Lume` namespace anywhere, without needing to import it
 manually:
 
 ```ts
-export default function (data: Lume.PageData, helpers: Lume.PageHelpers) {
+export default function (data: Lume.Data, helpers: Lume.Helpers) {
   return `<h1>${data.title}</h1>`;
-}
-```
-
-The `Lume.PageData` accepts also a generic, so you can extend it with your own
-interface:
-
-```ts
-interface Props {
-  name: string;
-}
-
-export default function (data: Lume.PageData<Props>) {
-  return `<h1>${data.name}</h1>`;
 }
 ```
 
