@@ -4,6 +4,8 @@ date: 2023-10-10T23:29:44.134Z
 author: Óscar Otero
 tags:
   - Releases
+comments:
+  src: https://fosstodon.org/@lume/111545573526479513
 ---
 
 After several months of work, a major version of Lume was released. In this new
@@ -22,7 +24,7 @@ There's
 [a step-by-step guide to migrate to Lume 2](https://lume.land/docs/advanced/migrate-to-lume2/)
 in the documentation.
 
-The documentation for Lume 1 is still visible on
+The documentation for Lume 1 is still visible at
 [v1.lume.land](https://v1.lume.land/).
 
 ## Vento is the new default template engine
