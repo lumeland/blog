@@ -556,9 +556,6 @@ es:
 this plugin has been removed, or rather, replaced with
 [UnoCSS](https://unocss.dev/).
 
-UnoCSS plugin is similar to TailwindCSS: it uses the postcss plugin to apply the
-changes and insert the code where the `@unocss` directive is defined.
-
 See the [UnoCSS docs at lume.land](https://lume.land/plugins/unocss/).
 
 ## Changed the behavior of plugins with plugins
