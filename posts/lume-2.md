@@ -156,7 +156,7 @@ after or before the processor. So we had to add the `processAll` function, that
 works similar to `process` but receiving all pages at the same time:
 
 ```js
-site.process([".html"], (pages) => {
+site.processAll([".html"], (pages) => {
   console.log("Preparing");
 
   for (const page of pages) {
@@ -175,7 +175,7 @@ must be run in parallel (for async operations or sequentially):
 
 ```js
 // Run the code in parallel
-site.process([".html"], (pages) => {
+site.processAll([".html"], (pages) => {
   return Promise.all(pages.map(asyncFunction));
 });
 ```
