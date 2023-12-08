@@ -657,7 +657,7 @@ lume -s --drafts
 ## Removed `--quiet` argument
 
 The `--quiet` flag doesn't output anything to the terminal when building a site.
-In Lume 2 this option was replaced with the environment variable `LUME_LOG`.
+In Lume 2 this option was replaced with the environment variable `LUME_LOGS`.
 This allows you to configure what level of logs you want to see. It uses the
 [Deno's `std/log` library](https://deno.land/std/log/mod.ts), which allows
 configuring 5 levels: `DEBUG|INFO|WARNING|ERROR|CRITICAL`. By default is `INFO`.
@@ -665,7 +665,7 @@ configuring 5 levels: `DEBUG|INFO|WARNING|ERROR|CRITICAL`. By default is `INFO`.
 For example, to only show CRITICAL errors:
 
 ```sh
-LUME_LOG=CRITICAL deno task build
+LUME_LOGS=CRITICAL deno task build
 ```
 
 For convenience, [Lume CLI](https://github.com/lumeland/cli) has also the
@@ -674,7 +674,7 @@ automatically this environment variable:
 
 ```sh
 lume -s --error
-# Runs `LUME_LOG=error deno task lume -s`
+# Runs `LUME_LOGS=error deno task lume -s`
 ```
 
 ## Removed some configuration functions
