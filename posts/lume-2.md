@@ -2,20 +2,28 @@
 title: Lume 2 is finally here!!
 date: 2023-10-10T23:29:44.134Z
 author: Óscar Otero
-draft: true
 tags:
   - Releases
 ---
 
-A major version of Lume was released. In this new version, I wanted to take this
-opportunity to fix some bad design decisions that seemed like a good idea at the
-time, remove some confusing APIs, and implement a couple of new features.
+After several months of work, a major version of Lume was released. In this new
+version, I wanted to take this opportunity to fix some bad design decisions,
+remove some confusing APIs, and implement a couple of new features.
 
-An yes, there are some breaking changes. I tried to make the transition from
+An yes, there are **some breaking changes.** I tried to make the transition from
 Lume 1 to Lume 2 as smoothly as possible, but not always possible. I'm sorry for
 the trouble!
 
 <!-- more -->
+
+## TL/DR
+
+There's
+[a step-by-step guide to migrate to Lume 2](https://lume.land/docs/advanced/migrate-to-lume2/)
+in the documentation.
+
+The documentation for Lume 1 is still visible on
+[v1.lume.land](https://v1.lume.land/).
 
 ## Vento is the new default template engine
 
@@ -124,6 +132,9 @@ export function url(page) {
   return `/articles/${page.data.basename}/`;
 }
 ```
+
+More info at
+[lume.land docs](https://lume.land/docs/creating-pages/urls/#basename).
 
 ## Changes in `process`, `preprocess`, `processAll` and `preprocessAll`
 
@@ -263,6 +274,9 @@ used (`imagick` in the `imagick` plugin, `imageTransform` in the
 
 This change affects also to the `picture` plugin that now uses the
 `image-transform` attribute instead of `imagick`.
+
+See the
+[docs for `image_transform`](https://lume.land/plugins/transform_images/).
 
 ## TypeScript improvements
 
@@ -454,8 +468,9 @@ page.
 
 ## Changes in `multilanguage` plugin
 
-The `multilanguage` plugin in Lume 1 allows to insert inner translations in the
-page data by using the `.[lang]` suffix. For example:
+The [`multilanguage` plugin](https://lume.land/plugins/multilanguage/) in Lume 1
+allows to insert inner translations in the page data by using the `.[lang]`
+suffix. For example:
 
 ```yml
 lang: [en, gl, es]
@@ -541,6 +556,8 @@ this plugin has been removed, or rather, replaced with
 
 UnoCSS plugin is similar to TailwindCSS: it uses the postcss plugin to apply the
 changes and insert the code where the `@unocss` directive is defined.
+
+See the [UnoCSS docs at lume.land](https://lume.land/plugins/unocss/).
 
 ## Changed the behavior of plugins with plugins
 
@@ -722,4 +739,6 @@ site.loadPages([".njk"], { loader, engine });
 
 ## And more changes
 
-Please, read the CHANGELOG.md file if you want an exhaustive list of changes.
+Please, read the
+[CHANGELOG.md file](https://github.com/lumeland/lume/blob/v2.0.0/CHANGELOG.md)
+if you want an exhaustive list of changes.
