@@ -275,7 +275,7 @@ used (`imagick` in the `imagick` plugin, `imageTransform` in the
 `image_transform` plugin).
 
 This change affects also to the `picture` plugin that now uses the
-`image-transform` attribute instead of `imagick`.
+`transform-images` attribute instead of `imagick`.
 
 See the
 [docs for `image_transform`](https://lume.land/plugins/transform_images/).
