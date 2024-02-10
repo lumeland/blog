@@ -13,3 +13,11 @@ mergedKeys:
 menu_links:
   - text: Lume docs
     href: https://lume.land
+
+extra_head: |
+  <style>
+    .post-body img {
+      border: solid 1px var(--color-line);
+      border-radius: var(--border-radius);
+    }
+  </style>
