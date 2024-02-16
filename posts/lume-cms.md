@@ -6,7 +6,7 @@ draft: false
 tags:
   - LumeCMS
 comments:
-  src: ''
+  src: 'https://fosstodon.org/@lume/111942395614299012'
 ---
 **LumeCMS** is a (yet another) CMS to manage site content. Despite its name, it
 can be used with any generator, not only Lume, thanks to its agnostic design. In
