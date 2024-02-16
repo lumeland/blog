@@ -2,13 +2,12 @@
 title: Announcing LumeCMS
 date: '2024-02-16'
 author: Óscar Otero
-draft: true
+draft: false
 tags:
   - LumeCMS
 comments:
   src: ''
 ---
-
 **LumeCMS** is a (yet another) CMS to manage site content. Despite its name, it
 can be used with any generator, not only Lume, thanks to its agnostic design. In
 this post, I want to dig into it and explain how it works.
@@ -171,17 +170,19 @@ the CMS and preview the changes after saving:
 
 ![Image](/img/lumecms-site-editing.png)
 
+You can test it in your computer [cloning this blog repository](https://github.com/lumeland/blog) and running `deno task lume cms`.
+
 Let me know if you want to help create integrations for other frameworks like
 Eleventy, Hugo, etc.
 
 ## Installation
 
-LumeCMS will be available in Lume 2.1.0 and can be run with the command
+LumeCMS will be available in Lume 2.1.0 with the command
 `deno task lume cms`. If you want to test it now, upgrade Lume to the latest
 development version with `deno task lume upgrade --dev`.
 
-If you don't use Lume or don't want to upgrade it, it's possible to import
-LumeCMS from the `https://cdn.jsdelivr.net/gh/lumeland/cms@{version}` URL, so
+If you don't use Lume or don't want to upgrade, it's possible to import
+LumeCMS from [https://cdn.jsdelivr.net/gh/lumeland/cms@v0.2.7/](https://cdn.jsdelivr.net/gh/lumeland/cms@v0.2.7/), so
 it's recommended to configure your import map as follows:
 
 ```json
@@ -195,7 +196,7 @@ it's recommended to configure your import map as follows:
 ### Why don't use deno.land/x repository?
 
 [I've tried](https://deno.land/x/lume_cms) but LumeCMS needs access to some
-files like SVG icons and CSS code by the browser and deno.land/x repository
+files like SVG icons and CSS code from the browser and deno.land/x repository
 returns CORS errors for these formats. A CDN like
 [jsdelivr.com](https://www.jsdelivr.com/), allows both Deno and browser access,
 and it's just as fast.
