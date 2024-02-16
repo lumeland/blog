@@ -1,10 +1,8 @@
 import lumeCMS from "lume/deps/cms.ts";
 
 const cms = lumeCMS({
-  root: Deno.cwd() + "/probas/demo",
   site: {
-    name: "My awesome blog",
-    url: "https://example.com",
+    name: "Lume blog",
   },
 });
 

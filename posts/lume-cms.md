@@ -1,6 +1,6 @@
 ---
 title: Announcing LumeCMS
-date: '2024-02-12'
+date: '2024-02-16'
 author: Óscar Otero
 draft: true
 tags:
@@ -50,12 +50,13 @@ LumeCMS is divided into the following elements:
 
 LumeCMS is very similar to Lume in the way it's configured: Create a
 configuration file, import the LumeCMS main module, create an instance,
-configure the instance and export it. For example:
+configure the instance, and export it. For example:
 
 ```js
 import lumeCMS from "lume_cms/mod.ts";
 import Kv from "lume_cms/src/storage/kv.ts";
 
+// 1. Create the cms instance
 const cms = lumeCMS({
   site: {
     name: "My awesome blog",
@@ -63,38 +64,41 @@ const cms = lumeCMS({
   },
 });
 
-// Create a file system storage to the ./src directory.
+// 2. Create file system and a Kv storages
 cms.storage("my_fs", "src");
 
-// Create a Kv storage to use a Deno.Kv database
-const kv = await Deno.open();
-cms.storage("my_database", new Kv({ kv }));
+cms.storage(
+  "my_database",
+  new Kv({
+    kv: await Deno.open(),
+  }),
+);
 
-// Create a document to edit the homepage (index.md file)
+// 3. Create a document to edit the homepage (index.md file)
 cms.document("homepage", "my_fs:index.md", [
   "title: text",
   "description: textarea",
   "content: markdown",
 ]);
 
-// Create a collection to edit some posts
+// 4. Create "posts" and "people" collections
+// using my_fs and my_database storages
 cms.collection("posts", "my_fs:posts/*.md", [
   "title: text",
   "tags: list",
   "content: markdown",
 ]);
 
-// Create a collection of people and store the data in the Kv database
 cms.collection("people", "my_database:people", [
   "name: text",
   "birthdate: date",
   "bio: markdown",
 ]);
 
-// Configure a folder to upload files
+// 5. Configure a folder to upload files
 cms.upload("my_uploads", "my_fs:uploads");
 
-// Export the cms configuration
+// 6. Export the cms configuration
 export default cms;
 ```
 
@@ -117,30 +121,29 @@ you want to configure other options like label, description, or validation:
 
 ### Run the CMS
 
-You can run the CMS directly in the configuration file but it's recommended to
-use a different file. LumeCMS uses [Hono](https://hono.dev/) under the hood to
-manage all routes and serve static files:
+LumeCMS uses [Hono](https://hono.dev/) under the hood to manage all routes and
+serve static files. To run the CMS, get the Hono instance with `cms.init()` and
+pass it to `Deno.serve()`:
 
 ```ts
 import cms from "./cms_config.ts";
 
-// Init the CMS and return a Hono instance with the app
+// Init the CMS and return an Hono instance with the app
 const app = cms.init();
 
 // Run a local server with your CMS
 Deno.serve(app.fetch);
 ```
 
-Run this file to start the CMS (`deno run --unstable-kv -A run.ts`) and open the
-URL `http://localhost:8000` in your browser. You will see a page like this:
+Run this file to start the CMS and open the URL `http://localhost:8000` in your
+browser. You will see a page like this:
 
 ![screenshot of the cms home](../img/lumecms-home.png)
 
 The `posts` and `people` collections, `homepage` document, and `my_uploads`
 upload folder is available for editing!
 
-If you go into the Homepage, for example, you will see the fields to edit the
-content:
+If you go into the Homepage you will see the fields to edit the content:
 
 ![editing document screenshot](../img/lumecms-document.png)
 
@@ -148,8 +151,8 @@ content:
 
 LumeCMS has an adapter for Lume SSG to automatically configure the site preview
 while you edit it. This integration will be available in the next version of
-Lume by running the command `deno task lume cms`, but it's also possible to use
-manually with the following code:
+Lume by running the command `deno task lume cms`, but it's also possible to
+setup manually with the following code:
 
 ```js
 import lumeAdapter from "lume_cms/adapters/lume.ts";
@@ -163,40 +166,39 @@ const app = lumeAdapter({ site, cms });
 Deno.serve(app.fetch);
 ```
 
-After connecting Lume and LumeCMS, you will see the "Edit this page" button at
-the botton-right corner of the browser window:
-
-![Image](/img/lumecms-site.png)
-
-After clicking in the button, you can edit the page content in the CMS and
-preview the changes after saving:
+After connecting Lume and LumeCMS, you will be able to edit the page content in
+the CMS and preview the changes after saving:
 
 ![Image](/img/lumecms-site-editing.png)
 
-Let me know if you want to help creating integrations for other frameworks like
+Let me know if you want to help create integrations for other frameworks like
 Eleventy, Hugo, etc.
 
 ## Installation
 
-You can import LumeCMS from the
-`https://cdn.jsdelivr.net/gh/lumeland/cms@{version}` URL, so it's recommended to
-configure your import map as follows:
+LumeCMS will be available in Lume 2.1.0 and can be run with the command
+`deno task lume cms`. If you want to test it now, upgrade Lume to the latest
+development version with `deno task lume upgrade --dev`.
+
+If you don't use Lume or don't want to upgrade it, it's possible to import
+LumeCMS from the `https://cdn.jsdelivr.net/gh/lumeland/cms@{version}` URL, so
+it's recommended to configure your import map as follows:
 
 ```json
 {
   "imports": {
-    "lume_cms/": "https://cdn.jsdelivr.net/gh/lumeland/cms@v0.2.0/"
+    "lume_cms/": "https://cdn.jsdelivr.net/gh/lumeland/cms@v0.2.7/"
   }
 }
 ```
 
 ### Why don't use deno.land/x repository?
 
-[I've tried](https://deno.land/x/lume_cms) but LumeCMS needs access to
-client-side files like SVG icons and CSS code and deno.land/x repository returns
-CORS errors for these formats. A CDN like
+[I've tried](https://deno.land/x/lume_cms) but LumeCMS needs access to some
+files like SVG icons and CSS code by the browser and deno.land/x repository
+returns CORS errors for these formats. A CDN like
 [jsdelivr.com](https://www.jsdelivr.com/), allows both Deno and browser access,
-and it's really fast, so it works much better.
+and it's just as fast.
 
 ## Deployment
 
@@ -204,8 +206,7 @@ and it's really fast, so it works much better.
 
 Due Deno Deploy cannot write files, it's not possible to provide a live-preview
 mode. But if you only need a UI to edit the site data, it's possible to use the
-GitHub storage method to send changes directly to the GitHub repository. Instead
-of a file system storage, use the GitHub storage:
+GitHub storage method to send changes directly to the GitHub repository:
 
 ```js
 import lumeCms from "lume_cms/mod.ts";
@@ -244,6 +245,10 @@ To host a CMS including the live-preview feature, you need a hosting with Deno
 CLI installed. I'm planning to create a Docker image and document all the steps
 anytime soon.
 
+## Development
+
 Note that LumeCMS is still in the early stages and bugs and changes are
-expected. If you want to give it a try, your feedback will be appreciated. Thank
-you!
+expected. Go to [the GitHub repository](https://github.com/lumeland/cms) if you
+want to see the code or help with the development.
+
+Thank you!
