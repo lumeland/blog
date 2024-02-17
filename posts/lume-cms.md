@@ -69,7 +69,7 @@ cms.storage("my_fs", "src");
 cms.storage(
   "my_database",
   new Kv({
-    kv: await Deno.open(),
+    kv: await Deno.openKv(),
   }),
 );
 
