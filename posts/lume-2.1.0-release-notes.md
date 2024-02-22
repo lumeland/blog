@@ -2,7 +2,7 @@
 title: Lume 2.1.0 release notes
 date: '2024-02-21'
 author: Óscar Otero
-draft: true
+draft: false
 tags:
   - Releases
 comments:
@@ -110,7 +110,7 @@ site.use(redirects({
 }));
 ```
 
-More info at [lume.land/plugins/redirects](https://lume.land/plugins/redirets/).
+More info at [lume.land/plugins/redirects](https://lume.land/plugins/redirects/).
 
 ## Open Graph Images plugin
 
@@ -216,4 +216,4 @@ The plugin provides options for more advanced configuration. See more info at
   2.1, only the HTML pages are slugified. Use the `extensions` option to change
   this.
 
-And there are many more changes that you can see in the CHANGELOG file.
+And there are many more changes that you can see in the [CHANGELOG file.](https://github.com/lumeland/lume/blob/v2.1.0/CHANGELOG.md)
