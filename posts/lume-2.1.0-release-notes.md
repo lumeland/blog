@@ -9,7 +9,7 @@ comments:
   src: 'https://fosstodon.org/@lume/111976763965094939'
 ---
 The first minor version of Lume 2 has been released, which brings many new features
-like a CMS, some new plugins, and bug fixes.
+like a CMS, some new plugins, improvements, and bug fixes.
 
 <!--more -->
 
