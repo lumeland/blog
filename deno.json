@@ -5,8 +5,7 @@
     "serve": "deno task lume -s"
   },
   "imports": {
-    "lume/": "https://cdn.jsdelivr.net/gh/lumeland/lume@ddae3e7036049e1e77e977eab0ac0b8447221e86/",
-    "https://cdn.jsdelivr.net/gh/lumeland/cms@v0.2.9/": "../cms/"
+    "lume/": "https://cdn.jsdelivr.net/gh/lumeland/lume@4cc75599006df423a14befc06d3ed8493c645b09/"
   },
   "compilerOptions": {
     "types": [
