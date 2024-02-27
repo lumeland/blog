@@ -6,7 +6,7 @@ const cms = lumeCMS({
   },
 });
 
-cms.versioning("main");
+cms.versioning("nmain");
 
 cms.collection("posts", "src:posts/*.md", [
   "title: text",
