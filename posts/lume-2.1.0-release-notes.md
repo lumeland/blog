@@ -8,8 +8,9 @@ tags:
 comments:
   src: 'https://fosstodon.org/@lume/111976763965094939'
 ---
-The first minor version of Lume 2 has been released, which brings many new features
-like a CMS, some new plugins, improvements, and bug fixes.
+
+The first minor version of Lume 2 has been released, which brings many new
+features like a CMS, some new plugins, improvements, and bug fixes.
 
 <!--more -->
 
@@ -21,9 +22,9 @@ about how it works.
 
 LumeCMS is a simple and framework-agnostic CMS that you can use for any kind of
 website. Lume 2.1.0 has a built-in integration to connect your website with the
-CMS and make content updates easier for non-technical people. The CMS is
-still in the early phases and will be improved with time, but it's pretty usable
-right now.
+CMS and make content updates easier for non-technical people. The CMS is still
+in the early phases and will be improved with time, but it's pretty usable right
+now.
 
 To configure a cms, just create a `_cms.ts` file with some configuration like
 the storage method, documents, and collections that you want to edit. For
@@ -62,8 +63,8 @@ website.
 
 ## Redirects plugin
 
-Nobody likes breaking links, they affect the experience of your visitors and
-SEO ranking. If you want to change the URL of a page, is highly recommended to
+Nobody likes breaking links, they affect the experience of your visitors and SEO
+ranking. If you want to change the URL of a page, is highly recommended to
 create a redirect from the old URL to the new one.
 
 The new `redirects` plugin makes this task easier: you only have to edit the
@@ -94,8 +95,8 @@ The plugin automatically generates the redirection from `/about-me/` to
 `/about-oscar/` using one of the available output methods:
 
 - Generate a page `/about-me/` with the tag
-  `<meta http-equiv="refresh" content="0; url="/about-oscar/">`. (The
-  default output).
+  `<meta http-equiv="refresh" content="0; url="/about-oscar/">`. (The default
+  output).
 - Generate a JSON file with all redirects, that you can use with the
   [`redirects` middleware](https://lume.land/docs/core/server/#redirects)
   (useful if you host your site on Deno Deploy)
@@ -110,7 +111,8 @@ site.use(redirects({
 }));
 ```
 
-More info at [lume.land/plugins/redirects](https://lume.land/plugins/redirects/).
+More info at
+[lume.land/plugins/redirects](https://lume.land/plugins/redirects/).
 
 ## Open Graph Images plugin
 
@@ -176,7 +178,8 @@ framework-agnostic, so you can reuse your data with a different static site
 generators, like Hexo, Hugo, or Lume.
 
 This plugin can convert the page data to follow the FFF standard, useful if you
-use this standard with any other SSG and want to migrate to Lume (or vice versa).
+use this standard with any other SSG and want to migrate to Lume (or vice
+versa).
 
 More info at [lume.land/plugins/fff](https://lume.land/plugins/fff/).
 
@@ -216,4 +219,5 @@ The plugin provides options for more advanced configuration. See more info at
   2.1, only the HTML pages are slugified. Use the `extensions` option to change
   this.
 
-And there are many more changes that you can see in the [CHANGELOG file.](https://github.com/lumeland/lume/blob/v2.1.0/CHANGELOG.md)
+And there are many more changes that you can see in the
+[CHANGELOG file.](https://github.com/lumeland/lume/blob/v2.1.0/CHANGELOG.md)

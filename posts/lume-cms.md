@@ -8,6 +8,7 @@ tags:
 comments:
   src: 'https://fosstodon.org/@lume/111942395614299012'
 ---
+
 **LumeCMS** is a (yet another) CMS to manage site content. Despite its name, it
 can be used with any generator, not only Lume, thanks to its agnostic design. In
 this post, I want to dig into it and explain how it works.
@@ -170,20 +171,23 @@ the CMS and preview the changes after saving:
 
 ![Image](/img/lumecms-site-editing.png)
 
-You can test it in your computer [cloning this blog repository](https://github.com/lumeland/blog) and running `deno task lume cms`.
+You can test it in your computer
+[cloning this blog repository](https://github.com/lumeland/blog) and running
+`deno task lume cms`.
 
 Let me know if you want to help create integrations for other frameworks like
 Eleventy, Hugo, etc.
 
 ## Installation
 
-LumeCMS will be available in Lume 2.1.0 with the command
-`deno task lume cms`. If you want to test it now, upgrade Lume to the latest
-development version with `deno task lume upgrade --dev`.
+LumeCMS will be available in Lume 2.1.0 with the command `deno task lume cms`.
+If you want to test it now, upgrade Lume to the latest development version with
+`deno task lume upgrade --dev`.
 
-If you don't use Lume or don't want to upgrade, it's possible to import
-LumeCMS from [https://cdn.jsdelivr.net/gh/lumeland/cms@v0.2.7/](https://cdn.jsdelivr.net/gh/lumeland/cms@v0.2.7/), so
-it's recommended to configure your import map as follows:
+If you don't use Lume or don't want to upgrade, it's possible to import LumeCMS
+from
+[https://cdn.jsdelivr.net/gh/lumeland/cms@v0.2.7/](https://cdn.jsdelivr.net/gh/lumeland/cms@v0.2.7/),
+so it's recommended to configure your import map as follows:
 
 ```json
 {
