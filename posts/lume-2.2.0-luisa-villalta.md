@@ -271,7 +271,7 @@ After updating Lume, if you are using a subdirectory as the source folder, the
 
 ## Removed nesting plugin in PostCSS
 
-The [postcss plugin](https://lume.land/plugins/postcss/) comes with the plugin
+The [postcss plugin](https://lume.land/plugins/postcss/) comes with the plugins
 [postcss-nesting](https://www.npmjs.com/package/postcss-nesting) and
 [autoprefixer](https://www.npmjs.com/package/autoprefixer) enabled by default.
 
@@ -279,7 +279,7 @@ The [postcss plugin](https://lume.land/plugins/postcss/) comes with the plugin
 is now available in all browsers and this plugin is no longer needed, so it's no
 longer enabled by default in Lume.
 
-If you still want to use it, you can import it in the _config.ts file:
+If you still want to use it, you have to import it in the _config.ts file:
 
 ```js
 import lume from "lume/mod.ts";
@@ -294,6 +294,8 @@ site.use(postcss({
 
 export default site;
 ```
+
+---
 
 And there are many more changes that you can see in the
 [CHANGELOG file.](https://github.com/lumeland/lume/blob/v2.2.0/CHANGELOG.md)
