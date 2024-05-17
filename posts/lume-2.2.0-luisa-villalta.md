@@ -2,7 +2,6 @@
 title: Lume 2.2.0 - Luísa Villalta
 date: '2024-05-17'
 author: Óscar Otero
-draft: true
 tags:
   - Releases
 comments:
@@ -295,3 +294,6 @@ site.use(postcss({
 
 export default site;
 ```
+
+And there are many more changes that you can see in the
+[CHANGELOG file.](https://github.com/lumeland/lume/blob/v2.2.0/CHANGELOG.md)
