@@ -1,6 +1,6 @@
 ---
-title: Lume 2.2.0 release notes
-date: '2024-05-15'
+title: Lume 2.2.0 - Luísa Villalta
+date: '2024-05-17'
 author: Óscar Otero
 draft: true
 tags:
@@ -9,19 +9,22 @@ comments:
   src: ''
 ---
 
-A new version of Lume was released! This is a summary of the new features,
-improvements and bug fixes.
+From now on, every new minor version of Lume will be dedicated to a relevant
+galician person. Today —17 May— is the
+[Galician Literature Day](https://en.wikipedia.org/wiki/Galician_Literature_Day)
+and this year it was honored to the great poet
+[**Luísa Villalta**](https://galicianliterature.com/villalta/). This Lume
+version is dedicated to her.
 
 <!--more -->
 
 ## TL/DR
 
-This is a list of things that might break after updating to Lume 2.2.
+Cases requiring some manual changes after updating to Lume 2.2:
 
-- If you have a `_cache` folder, move it to the root directory (if it's not
-  already there).
-- If you use LumeCMS and you get an error, update your import map to
-  `lume/cms/`.
+- If you have a `_cache` folder in your `src` directory,
+  [see this](#_cache-folder-relative-to-root-directory).
+- If you importing LumeCMS from `/lume/cms.ts`, [see this](#cms-import-changes).
 
 ## Esbuild improvements
 
@@ -49,16 +52,16 @@ improvements:
   This has been fixed and it works fine now.
 
 - **Using esbuild without bundler:** Let's say you want to compile the following
-  code with esbuild with the `bundle` option to `false`:
+  code with the `bundle` option to `false`:
 
   ```js
   import foo from "./bar.ts";
   ```
 
-  Esbuild converts the `bar.ts` file to JavaScript, but
-  [it doesn't change the file extension in the import](https://github.com/evanw/esbuild/issues/2435)
-  (looks like this behavior is intended). The Lume plugin tries to fix this.
-  [More info in the issue](https://github.com/lumeland/lume/issues/594).
+  Esbuild converts `bar.ts` to `bar.js`, but
+  [it doesn't change the file extension in the import](https://github.com/evanw/esbuild/issues/2435).
+  The Lume plugin tries to fix this.
+  [More info](https://github.com/lumeland/lume/issues/594).
 
 ## CMS import changes
 
@@ -256,16 +259,16 @@ in Lume 3 (in the distant future).
 ## `_cache` folder relative to root directory
 
 The `_cache` folder is created by some plugins like
-[`transform_images`](https://lume.land/plugins/transform_images/). It was
-created relative to the source folder, this means if your source folder is
-`/src/` the cache folder is `/src/_cache/`.
+[`transform_images`](https://lume.land/plugins/transform_images/) in the source
+folder. For example, if your source folder is `/src/` the cache folder is
+`/src/_cache/`.
 
-As of Lume 2.2.0, this folder is created in the root directory (the same
+As of Lume 2.2.0, this folder is created **in the root directory** (the same
 directory where the `_config.ts` file is). This makes its location more
 predictable, especially to add it to `.gitignore`.
 
-After updating Lume, make sure to move your `_cache` folder outside the source
-folder.
+After updating Lume, if you are using a subdirectory as the source folder, move
+your `_cache` folder to the root.
 
 ## Removed nesting plugin in PostCSS
 
