@@ -259,15 +259,15 @@ available in Lume 2 but probably be removed in Lume 3 (in the distant future).
 
 The `_cache` folder is created by some plugins like
 [`transform_images`](https://lume.land/plugins/transform_images/) in the source
-folder. For example, if your source folder is `/src/` the cache folder is
-`/src/_cache/`.
+folder. For example, if your source folder is `./src/` the cache folder is
+`./src/_cache/`.
 
 As of Lume 2.2.0, this folder is created **in the root directory** (the same
 directory where the `_config.ts` file is). This makes its location more
 predictable, especially to add it to `.gitignore`.
 
-After updating Lume, if you are using a subdirectory as the source folder, move
-your `_cache` folder to the root.
+After updating Lume, if you are using a subdirectory as the source folder, the
+`_cache` folder should be moved to the root.
 
 ## Removed nesting plugin in PostCSS
 
