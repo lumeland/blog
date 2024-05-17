@@ -251,9 +251,9 @@ work:
 ```
 
 Lume has support for Nunjucks which is a good replacement because has a very
-similar syntax to Liquid and allows you to run functions, I decided to deprecate
-the Liquid plugin. It will still be available in Lume 2 but probably be removed
-in Lume 3 (in the distant future).
+similar syntax to Liquid and allows you to run functions, so I decided to
+deprecate the Liquid plugin and recommend Nunjucks instead. It will still be
+available in Lume 2 but probably be removed in Lume 3 (in the distant future).
 
 ## `_cache` folder relative to root directory
 
