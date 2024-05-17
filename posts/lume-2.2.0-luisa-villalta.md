@@ -5,7 +5,7 @@ author: Óscar Otero
 tags:
   - Releases
 comments:
-  src: ''
+  src: 'https://fosstodon.org/@lume/112456294506815477'
 ---
 
 From now on, every new minor version of Lume will be dedicated to a relevant
