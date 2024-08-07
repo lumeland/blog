@@ -12,11 +12,11 @@ extension) is parsed in order to extract additional data. This feature makes
 possible that, for instance, if the basename starts with `yyyy-mm-dd_*`, Lume
 extract this value
 [to set the page date](https://lume.land/docs/creating-pages/page-files/#page-date),
-and remove it from the final name. For example the file
-`2020-06-21_hello-world.md` generates the page `/hello-world/`.
+and remove it from the final name, so the file `2020-06-21_hello-world.md`
+generates the page `/hello-world/`.
 
-As of Lume 2.3.0, you can configure additional parsers thanks to the new
-function `site.parseBasename`.
+As of Lume 2.3.0, you can add additional parsers with the new function
+`site.parseBasename`.
 
 Let's say we have want to use a variable named `order` to sort pages in a menu,
 and we want to extract this value from the basename. For example the file
@@ -48,10 +48,68 @@ a string with the new basename, that will be used to generate the final URL.
 >
 > Keep in mind that the `data` object passed to this function does not contain
 > the final data of the page yet, it's just a temporary object that will be
-> merged later with the page data (a.k.a. the front matter). The front matter
-> can override a variable defined in this function.
+> merged later with the page data (a.k.a. the front matter). **The front matter
+> can override a variable defined in the basename parser.**
 
 The `parseBasename` function is used not only for files, but also folders. This
 allows to extract values from a folder name and store them as
 [shared data](https://lume.land/docs/creating-pages/shared-data/), so they are
 available to all pages inside.
+
+## Reload after modifying the `_config.ts` file
+
+Until now, if you modify the `_config.ts` file during the server mode, you have
+to stop the process and start it again to see the changes. This is very
+inconvenient, especially in early phases of development, when you may want to
+try different plugins or making changes in the Lume configuration.
+
+For now on, the building process is run inside a Worker. This change allows to
+stop the build and restart it again without stopping the main process (under the
+hood, it's done by closing the Worker and creating a new one).
+
+For now, the rebuild is triggered every time a change in the `_config` file is
+detected. In next versions we can add additional triggers.
+
+## New plugin `SRI`
+
+<abbr>SRI</abbr> (Subresource Integrity) is a browser feature to protect your
+site and your users from compromised code loaded from external CDN. It verifies
+the code loaded by the browser is exactly the same code that you got during the
+build process, without unexpected manipulations. You can
+[learn more about SRI in the MDN article](https://developer.mozilla.org/en-US/blog/securing-cdn-using-sri-why-how/).
+
+Lume had
+[an experimental SRI plugin](https://github.com/lumeland/experimental-plugins)
+that has been moved the main repo, forming part of the official plugins
+collection:
+
+```ts
+import lume from "lume/mod.ts";
+import sri from "lume/plugins/sri.ts";
+
+const site = lume();
+site.use(sri());
+
+export default site;
+```
+
+The plugin search for `<script>` and `<link rel="stylesheet">` elements in your
+pages that load resources from other domains and add the `integrity` and
+`crossorigin` attributes automatically. For example, if you have this code:
+
+```html
+<script src="https://code.jquery.com/jquery-3.7.0.slim.min.js"></script>
+```
+
+The plugin outputs the following:
+
+```html
+<script
+  src="https://code.jquery.com/jquery-3.7.0.slim.min.js"
+  integrity="sha256-tG5mcZUtJsZvyKAxYLVXrmjKBVLd6VpVccqz/r4ypFE="
+  crossorigin="anonymous"></script>
+```
+
+Note that SRI only works with URLs that always returns the same code, so you
+must use URLs that are guaranteed to never change. Learn
+[how to use SRI with jsDelivr](https://www.jsdelivr.com/using-sri-with-dynamic-files).
