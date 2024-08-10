@@ -1,9 +1,18 @@
 ---
-title: Lume 2.3.0 - TBD
+title: Lume 2.3.0 - Rosalía de Castro
 draft: true
-tags: []
+tags:
+  - Releases
 comments: {}
 ---
+
+Lume 2.3.0 is dedicated to
+[Rosalía de Castro](https://en.wikipedia.org/wiki/Rosal%C3%ADa_de_Castro), the
+most important Galician poet and novelist. Her poems book _Cantares Gallegos_
+established the beginning of the resurgence (or _Rexurdimento_) of the Galician
+language.
+
+<!--more -->
 
 ## New function `parseBasename`
 
@@ -40,9 +49,9 @@ site.parseBasename((basename, data) => {
 });
 ```
 
-As you can see, the function is simple: it receives the filename (without
-extension) and an object to store the extracted values. The function must return
-a string with the new basename, that will be used to generate the final URL.
+As you can see, the function is simple: it receives the basename and an object
+to store the extracted values. The function must return a string with the new
+basename, that will be used to generate the final URL.
 
 > [!note]
 >
