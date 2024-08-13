@@ -1,5 +1,5 @@
 ---
-title: Lume 2.3.0 - Rosalía de Castro
+title: Lume 2.3.0 - Andrés do Barro
 draft: true
 tags:
   - Releases
@@ -7,10 +7,11 @@ comments: {}
 ---
 
 Lume 2.3.0 is dedicated to
-[Rosalía de Castro](https://en.wikipedia.org/wiki/Rosal%C3%ADa_de_Castro), the
-most important Galician poet and novelist. Her poems book _Cantares Gallegos_
-established the beginning of the resurgence (or _Rexurdimento_) of the Galician
-language.
+[Andrés do Barro](https://en.wikipedia.org/wiki/Andr%C3%A9s_do_Barro), a
+Galician singer and songwriter who was one of the first artist who achieved
+international success singing in Galego. Among his songs we can find
+[Pandeirada](https://www.youtube.com/watch?v=4feqklaMDR8) and
+[O trén](https://www.youtube.com/watch?v=CUAOwBknH5I).
 
 <!--more -->
 
@@ -79,6 +80,34 @@ the hood, it's done by closing the Worker and creating a new one).
 For now, the rebuild is triggered every time a change in the `_config` file is
 detected. In the next versions, we can add additional triggers.
 
+## New sorting methods `asc-locale` and `desc-locale`
+
+When searching pages using the
+[`search` helper](https://lume.land/plugins/search/), you can sort them by any
+field, for example, the title:
+
+```js
+const pages = search.pages("type=post", "title=asc");
+```
+
+Under the hood, Lume sort the pages with
+[array sort](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array/sort)
+using basic comparison operators (`>` and `<`):
+
+```js
+pages.sort((a, b) => a == 0 ? 0 : a.title > b.title ? 1 : -1);
+```
+
+This works fine in many cases, but not when you have strings with accents,
+different cases, etc. In these cases
+[localeCompare](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/localeCompare)
+works much better. In this version we have introduced two new locale methods:
+`asc-locale` and `desc-locale`. So the previous example can be improved with:
+
+```js
+const pages = search.pages("type=post", "title=asc-locale");
+```
+
 ## New plugin `SRI`
 
 <abbr>SRI</abbr> (Subresource Integrity) is a browser feature to protect your
@@ -120,14 +149,72 @@ Note that SRI only works with URLs that always return the same code, so you must
 use URLs that are guaranteed never to change. Learn
 [how to use SRI with jsDelivr](https://www.jsdelivr.com/using-sri-with-dynamic-files).
 
-## `nav.nextPage()` and `nav.previousPage()` functions
+## `nav` plugin changes
 
 The [nav plugin](https://lume.land/plugins/nav/) is useful to create menus of
-multiple levels. In this version the functions `nav.nextPage()` and
-`navPreviousPage()` have been added, to ease the navigation to the next and
-previous page.
+multiple levels. In this version, this plugin got several improvements and a
+**small BREAKING CHANGE** (sorry for that).
 
-For example, let's say we have a menu with the following structure:
+### BREAKING CHANGE: Changed the tree data interface
+
+The `nav.menu()` function returns an object tree taking into account the URL of
+the pages. Every object in the tree is a page or a directory and can have the
+following properties:
+
+- `item.slug` The name of the page or folder.
+- `item.data` If the element is a page, this is the data object of the page. If
+  it's a folder, this value is undefined.
+- `item.children` An array of sub-pages and sub-folders.
+
+This structure doesn't fit well to order the elements, specially the sub-folder
+items. In the new structure, the `slug` property has been removed and this value
+is stored in `data.basename`.
+
+This change affects to how this tree is iterated in your template. For instance,
+if in Lume 2.2 we have the following code:
+
+```js
+if (item.data) {
+  // item.data exists, it's a page
+  return `<a href="{{ item.data.url }}">{{ item.data.title }}</a>`;
+} else {
+  // It's a folder
+  return `<strong>{{ item.slug }}</strong>`;
+}
+```
+
+With the changes in Lume 2.3 the code must be changed to:
+
+```js
+if (item.data.url) {
+  // item.data.url exists, it's a page
+  return `<a href="{{ item.data.url }}">{{ item.data.title }}</a>`;
+} else {
+  // It's a folder
+  return `<strong>{{ item.data.basename }}</strong>`;
+}
+```
+
+Now both pages and folders items store the `basename` in the same place
+(`data.basename`), and it's easy to sort the elements alphabetically:
+
+```js
+const menu = nav.menu("/", "", "basename=asc");
+```
+
+And even use the new locale sorting methods:
+
+```js
+const menu = nav.menu("/", "", "basename=asc-locale");
+```
+
+### Added functions to get the next and previous pages
+
+In this version the functions `nav.nextPage()` and `navPreviousPage()` have been
+added, to ease the navigation to the next and previous page.
+
+For example, let's say we have created the following tree structure with the
+function `nav.menu()`:
 
 ```
 docs
@@ -137,9 +224,6 @@ docs
   |__ plugins
         |__ prettier
 ```
-
-This menu can be created with the function `nav.menu()` which returns a tree
-object with all pages based on their URLs.
 
 The new function `nav.nextPage` returns the next page relative to the provided
 URL. For example:
