@@ -4,12 +4,13 @@ draft: true
 tags:
   - Releases
 comments: {}
+date: '2024-09-01'
 ---
 
 Lume 2.3.0 is dedicated to
 [Andrés do Barro](https://en.wikipedia.org/wiki/Andr%C3%A9s_do_Barro), a
-Galician singer and songwriter who was one of the first artist who achieved
-international success singing in Galego. Among his songs we can find
+Galician singer and songwriter who was one of the first artists who achieved
+international success singing in Galego. Among his songs, we can find
 [Pandeirada](https://www.youtube.com/watch?v=4feqklaMDR8) and
 [O trén](https://www.youtube.com/watch?v=CUAOwBknH5I).
 
@@ -19,7 +20,7 @@ international success singing in Galego. Among his songs we can find
 
 When Lume loads a page file, the basename (the filename after removing the
 extension) is parsed to extract additional data. This feature makes it possible
-that, for instance, if the basename starts with `yyyy-mm-dd_*`, Lume extract
+that, for instance, if the basename starts with `yyyy-mm-dd_*`, Lume extracts
 this value
 [to set the page date](https://lume.land/docs/creating-pages/page-files/#page-date),
 and remove it from the final name, so the file `2020-06-21_hello-world.md`
@@ -66,7 +67,7 @@ allows to extract values from a folder name and store them as
 [shared data](https://lume.land/docs/creating-pages/shared-data/), so they are
 available to all pages inside.
 
-## Reload after modifying the `_config.ts` file
+## Restart after modifying the `_config.ts` and `_cms.ts` files
 
 Until now, if you modify the `_config.ts` file during the server mode, you must
 stop the process and start it again to see the changes. This is very
@@ -75,10 +76,14 @@ to try different plugins or make changes to the Lume configuration.
 
 From now on, the building process is run inside a Worker. This change allows us
 to stop the build and restart it again without stopping the main process (under
-the hood, it's done by closing the Worker and creating a new one).
+the hood, it is done by closing the Worker and creating a new one).
 
 For now, the rebuild is triggered every time a change in the `_config` file is
 detected. In the next versions, we can add additional triggers.
+
+In CMS mode (with `deno task cms`), the process is also restarted if the
+`_cms.ts` file is modified, which is useful when you are configuring the
+documents and collections.
 
 ## New sorting methods `asc-locale` and `desc-locale`
 
@@ -90,7 +95,7 @@ field, for example, the title:
 const pages = search.pages("type=post", "title=asc");
 ```
 
-Under the hood, Lume sort the pages with
+Under the hood, Lume sorts the pages with
 [array sort](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array/sort)
 using basic comparison operators (`>` and `<`):
 
@@ -101,7 +106,7 @@ pages.sort((a, b) => a == 0 ? 0 : a.title > b.title ? 1 : -1);
 This works fine in many cases, but not when you have strings with accents,
 different cases, etc. In these cases
 [localeCompare](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/localeCompare)
-works much better. In this version we have introduced two new locale methods:
+works much better. In this version, we have introduced two new locale methods:
 `asc-locale` and `desc-locale`. So the previous example can be improved with:
 
 ```js
@@ -151,22 +156,22 @@ use URLs that are guaranteed never to change. Learn
 
 ## `nav` plugin changes
 
-The [nav plugin](https://lume.land/plugins/nav/) is useful to create menus of
+The [nav plugin](https://lume.land/plugins/nav/) is useful for creating menus at
 multiple levels. In this version, this plugin got several improvements and a
 **small BREAKING CHANGE** (sorry for that).
 
 ### BREAKING CHANGE: Changed the tree data interface
 
-The `nav.menu()` function returns an object tree taking into account the URL of
-the pages. Every object in the tree is a page or a directory and can have the
-following properties:
+The `nav.menu()` function returns an object tree using the pages' URL. Every
+object in the tree is a page or a directory and can have the following
+properties:
 
 - `item.slug` The name of the page or folder.
 - `item.data` If the element is a page, this is the data object of the page. If
   it's a folder, this value is undefined.
 - `item.children` An array of sub-pages and sub-folders.
 
-This structure doesn't fit well to order the elements, specially the sub-folder
+This structure doesn't fit well to order the elements, especially the sub-folder
 items. In the new structure, the `slug` property has been removed and this value
 is stored in `data.basename`.
 
@@ -183,7 +188,7 @@ if (item.data) {
 }
 ```
 
-With the changes in Lume 2.3 the code must be changed to:
+With the changes in Lume 2.3, the code must be changed to:
 
 ```js
 if (item.data.url) {
@@ -195,7 +200,7 @@ if (item.data.url) {
 }
 ```
 
-Now both pages and folders items store the `basename` in the same place
+Now both pages and folder items store the `basename` in the same place
 (`data.basename`), and it's easy to sort the elements alphabetically:
 
 ```js
@@ -211,12 +216,12 @@ const menu = nav.menu("/", "", "basename=asc-locale");
 ### Added functions to get the next and previous pages
 
 In this version the functions `nav.nextPage()` and `navPreviousPage()` have been
-added, to ease the navigation to the next and previous page.
+added, to ease the navigation to the next and previous pages.
 
 For example, let's say we have created the following tree structure with the
 function `nav.menu()`:
 
-```
+```txt
 docs
   |__ getting-started
         |__ installation
@@ -254,15 +259,17 @@ The `nav.previousPage()` works similarly but in reverse order.
 
 - Plugins and middlewares can be imported using named imports, in addition to
   the default exports:
+
   ```js
   import basePath from "lume/plugins/base_path.ts";
   // it's the same as
   import { basePath } from "lume/plugins/base_path.ts";
   ```
+
 - In server/watch mode, if a page is removed, it was removed in the `dest`
-  folder. From now on, the page folder is also removed. For example, removing
+  folder. From now on, the page folder will also removed. For example, removing
   the file `/about-us/index.html` removes also the folder`/about-us/` if it's
   empty.
-- Fixed some bugs of the file watcher on Windows.
+- Fixed some bugs in the file watcher on Windows.
 
-See the complete changelog file at:...
+See the complete changelog file at:

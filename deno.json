@@ -7,7 +7,7 @@
   },
   "imports": {
     "lume/": "https://deno.land/x/lume@v2.2.4/",
-    "lume/cms/": "https://cdn.jsdelivr.net/gh/lumeland/cms@0.5.8/",
+    "lume/cms/": "https://cdn.jsdelivr.net/gh/lumeland/cms@v0.5.9/",
     "blog/": "https://deno.land/x/lume_theme_simple_blog@v0.15.5/"
   },
   "compilerOptions": {
