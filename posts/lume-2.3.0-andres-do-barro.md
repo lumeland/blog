@@ -10,7 +10,7 @@ date: '2024-09-01'
 Lume 2.3.0 is dedicated to
 [Andrés do Barro](https://en.wikipedia.org/wiki/Andr%C3%A9s_do_Barro), a
 Galician singer and songwriter who was one of the first artists who achieved
-international success singing in Galego. Among his songs, we can find
+success singing in Galego out of Galicia. Among his songs, we can find
 [Pandeirada](https://www.youtube.com/watch?v=4feqklaMDR8) and
 [O trén](https://www.youtube.com/watch?v=CUAOwBknH5I).
 
@@ -23,44 +23,43 @@ extension) is parsed to extract additional data. This feature makes it possible
 that, for instance, if the basename starts with `yyyy-mm-dd_*`, Lume extracts
 this value
 [to set the page date](https://lume.land/docs/creating-pages/page-files/#page-date),
-and remove it from the final name, so the file `2020-06-21_hello-world.md`
+and remove it from the final name, so the file `/2020-06-21_hello-world.md`
 generates the page `/hello-world/`.
 
 As of Lume 2.3.0, you can add additional parsers with the new function
 `site.parseBasename`.
 
 Let's say we want to use a variable named `order` to sort pages in a menu, and
-we want to extract this value from the basename. For example the file
-`12.hello-world.md` outputs the page `/hello-world/` and sets `12` as the
-`order` variable. We can create a function to parse the basename, save the order
-value, and remove it from the final URL:
+we want to extract this value from the file name. For example the file
+`/12.hello-world.md` outputs the page `/hello-world/` and sets `12` as the
+`order` variable. We can achieve this with the following function:
 
 ```js
-site.parseBasename((basename, data) => {
+site.parseBasename((basename) => {
   // Regexp to detect the order pattern
   const match = basename.match(/(\d+)\.(.+)/);
 
   if (match) {
-    const [, order, newBasename] = match;
-    data.order = parseInt(order); // Save the order value in the page data
-    return newBasename; // Return the new basename without the order prefix.
-  }
+    const [, order, basename] = match;
 
-  data.order = 0; // Set the default order to 0
-  return basename; // Return the basename without modifications
+    // Return the order value and the new basename without the prefix
+    return {
+      order: parseInt(order),
+      basename,
+    };
+  }
 });
 ```
 
-As you can see, the function is simple: it receives the basename and an object
-to store the extracted values. The function must return a string with the new
-basename, that will be used to generate the final URL.
+As you can see, the function is simple: it receives the basename and return an
+object with the parsed values. Note that the returned object contains the
+basename without the prefix, in order to be removed from the final URL.
 
 > [!note]
 >
-> Keep in mind that the `data` object passed to this function does not contain
-> the final data of the page yet, it's just a temporary object that will be
-> merged later with the page data (a.k.a. the front matter). **The front matter
-> can override a variable defined in the basename parser.**
+> The object returned by the basename parser will be merged later with the page
+> data (a.k.a. the front matter). **The front matter can override a variable
+> defined in the basename parser.**
 
 The `parseBasename` function is used not only for files but also folders. This
 allows to extract values from a folder name and store them as
@@ -136,8 +135,8 @@ site.use(sri());
 export default site;
 ```
 
-The plugin search for `<script>` and `<link rel="stylesheet">` elements in your
-pages that load resources from other domains and add the `integrity` and
+The plugin searches for `<script>` and `<link rel="stylesheet">` elements in
+your pages that load resources from other domains and add the `integrity` and
 `crossorigin` attributes automatically. For example, if you have this code:
 
 ```html
@@ -163,17 +162,17 @@ multiple levels. In this version, this plugin got several improvements and a
 ### BREAKING CHANGE: Changed the tree data interface
 
 The `nav.menu()` function returns an object tree using the pages' URL. Every
-object in the tree is a page or a directory and can have the following
-properties:
+object in the tree is a page or a directory and in previous Lume versions, it
+could have the following properties:
 
 - `item.slug` The name of the page or folder.
 - `item.data` If the element is a page, this is the data object of the page. If
   it's a folder, this value is undefined.
 - `item.children` An array of sub-pages and sub-folders.
 
-This structure doesn't fit well to order the elements, especially the sub-folder
-items. In the new structure, the `slug` property has been removed and this value
-is stored in `data.basename`.
+These properties didn't fit well to order the elements, especially the
+sub-folder items. In the new structure, the `slug` property has been removed and
+this value is stored in `data.basename`.
 
 This change affects to how this tree is iterated in your template. For instance,
 if in Lume 2.2 we have the following code:
@@ -266,10 +265,6 @@ The `nav.previousPage()` works similarly but in reverse order.
   import { basePath } from "lume/plugins/base_path.ts";
   ```
 
-- In server/watch mode, if a page is removed, it was removed in the `dest`
-  folder. From now on, the page folder will also removed. For example, removing
-  the file `/about-us/index.html` removes also the folder`/about-us/` if it's
-  empty.
-- Fixed some bugs in the file watcher on Windows.
+- Several bug fixes and improvements have made to the watcher and live reload.
 
 See the complete changelog file at:
