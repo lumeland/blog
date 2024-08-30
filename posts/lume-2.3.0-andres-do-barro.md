@@ -1,10 +1,10 @@
 ---
 title: Lume 2.3.0 - Andrés do Barro
-draft: true
+draft: false
 tags:
   - Releases
 comments: {}
-date: '2024-09-01'
+date: '2024-08-30'
 ---
 
 Lume 2.3.0 is dedicated to
@@ -15,6 +15,10 @@ success singing in Galego out of Galicia. Among his songs, we can find
 [O trén](https://www.youtube.com/watch?v=CUAOwBknH5I).
 
 <!--more -->
+
+## TL/DR
+
+If you are using the `nav` plugin, [see this](#nav-plugin-changes).
 
 ## New function `parseBasename`
 
@@ -55,16 +59,8 @@ As you can see, the function is simple: it receives the basename and return an
 object with the parsed values. Note that the returned object contains the
 basename without the prefix, in order to be removed from the final URL.
 
-> [!note]
->
-> The object returned by the basename parser will be merged later with the page
-> data (a.k.a. the front matter). **The front matter can override a variable
-> defined in the basename parser.**
-
-The `parseBasename` function is used not only for files but also folders. This
-allows to extract values from a folder name and store them as
-[shared data](https://lume.land/docs/creating-pages/shared-data/), so they are
-available to all pages inside.
+See more info in the
+[documentation page](https://lume.land/docs/core/basename-parsers/).
 
 ## Restart after modifying the `_config.ts` and `_cms.ts` files
 
@@ -149,15 +145,18 @@ The plugin outputs the following:
 <script src="https://code.jquery.com/jquery-3.7.0.slim.min.js" integrity="sha256-tG5mcZUtJsZvyKAxYLVXrmjKBVLd6VpVccqz/r4ypFE=" crossorigin="anonymous"></script>
 ```
 
-Note that SRI only works with URLs that always return the same code, so you must
-use URLs that are guaranteed never to change. Learn
-[how to use SRI with jsDelivr](https://www.jsdelivr.com/using-sri-with-dynamic-files).
+See more info
+[in the plugin documentation page](https://lume.land/plugins/sri/).
 
 ## `nav` plugin changes
 
+> [!important]
+>
+> In this version, the nav plugin got a **small BREAKING CHANGE** (sorry for
+> that).
+
 The [nav plugin](https://lume.land/plugins/nav/) is useful for creating menus at
-multiple levels. In this version, this plugin got several improvements and a
-**small BREAKING CHANGE** (sorry for that).
+multiple levels.
 
 ### BREAKING CHANGE: Changed the tree data interface
 
@@ -267,4 +266,5 @@ The `nav.previousPage()` works similarly but in reverse order.
 
 - Several bug fixes and improvements have made to the watcher and live reload.
 
-See the complete changelog file at:
+And there are many more changes that you can see in the
+[CHANGELOG file](https://github.com/lumeland/lume/blob/v2.3.0/CHANGELOG.md).
