@@ -170,8 +170,9 @@ could have the following properties:
 - `item.children` An array of sub-pages and sub-folders.
 
 These properties didn't fit well to order the elements, especially the
-sub-folder items. In the new structure, the `slug` property has been removed and
-this value is stored in `data.basename`.
+sub-folder items. In the new structure, ~~the `slug` property has been removed~~
+(**Edit:** it was restored in Lume 2.3.1 due some bugs) and this value is stored
+in `data.basename`.
 
 This change affects to how this tree is iterated in your template. For instance,
 if in Lume 2.2 we have the following code:
