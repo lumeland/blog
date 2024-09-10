@@ -195,7 +195,7 @@ if (item.data.url) {
   return `<a href="{{ item.data.url }}">{{ item.data.title }}</a>`;
 } else {
   // It's a folder
-  return `<strong>{{ item.data.basename }}</strong>`;
+  return `<strong>{{ item.slug }}</strong>`;
 }
 ```
 
