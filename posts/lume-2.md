@@ -489,7 +489,7 @@ title.es: El blog de Óscar # spanish translation
 links:
   - title: My personal site
     title.gl: O meu sitio persoal # galician translation
-    title.es: Mi sitio personal   # spanish translation
+    title.es: Mi sitio personal # spanish translation
     url: https://oscarotero.com
 
   - title: Lume
@@ -527,31 +527,31 @@ lang: [en, gl, es]
 layout: main.vto
 title: The Óscar's blog
 links:
-- title: My personal site
-  url: https://oscarotero.com
-
-- title: Lume
-  url: https://lume.land
-
-# galician translations
-gl:
-  title: O blog de Óscar
-  links:
-  - title: O meu sitio persoal
+  - title: My personal site
     url: https://oscarotero.com
 
   - title: Lume
     url: https://lume.land
+
+  # galician translations
+gl:
+  title: O blog de Óscar
+  links:
+    - title: O meu sitio persoal
+      url: https://oscarotero.com
+
+    - title: Lume
+      url: https://lume.land
 
 # spanish translations
 es:
   title: El blog de Óscar
   links:
-  - title: Mi sitio personal
-    url: https://oscarotero.com
+    - title: Mi sitio personal
+      url: https://oscarotero.com
 
-  - title: Lume
-    url: https://lume.land
+    - title: Lume
+      url: https://lume.land
 ```
 
 ## Removed WindiCSS plugin and added UnoCSS

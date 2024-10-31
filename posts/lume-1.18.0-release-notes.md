@@ -38,7 +38,7 @@ Once installed, the plugin will search for all HTML elements with the `imagick`
 attribute and will convert the images to the specified formats. For example:
 
 ```html
-<img src="/flowers.jpg" imagick="avif webp jpg 300@2">
+<img src="/flowers.jpg" imagick="avif webp jpg 300@2" />
 ```
 
 The `imagick` attribute of this image contains the desired formats (`avif`,
@@ -48,10 +48,19 @@ The output HTML code is:
 
 ```html
 <picture>
-  <source srcset="/flowers-300w.avif, /flowers-300w@2.avif 2x" type="image/avif">
-  <source srcset="/flowers-300w.webp, /flowers-300w@2.webp 2x" type="image/webp">
-  <source srcset="/flowers-300w.jpg, /flowers-300w@2.jpg 2x" type="image/jpeg">
-  <img src="/flowers.jpg">
+  <source
+    srcset="/flowers-300w.avif, /flowers-300w@2.avif 2x"
+    type="image/avif"
+  />
+  <source
+    srcset="/flowers-300w.webp, /flowers-300w@2.webp 2x"
+    type="image/webp"
+  />
+  <source
+    srcset="/flowers-300w.jpg, /flowers-300w@2.jpg 2x"
+    type="image/jpeg"
+  />
+  <img src="/flowers.jpg" />
 </picture>
 ```
 

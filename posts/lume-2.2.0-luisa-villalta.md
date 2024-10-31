@@ -206,11 +206,11 @@ metas:
 This configuration generates the following code:
 
 ```html
-<meta name="title" content="Lume is awesome">
-<meta name="twitter:label1" content="Reading time">
-<meta name="twitter:data1" content="1 minute">
-<meta name="twitter:label2" content="Written by">
-<meta name="twitter:data2" content="Dark Vader">
+<meta name="title" content="Lume is awesome" />
+<meta name="twitter:label1" content="Reading time" />
+<meta name="twitter:data1" content="1 minute" />
+<meta name="twitter:label2" content="Written by" />
+<meta name="twitter:data2" content="Dark Vader" />
 ```
 
 ## Feed plugin accepts images
@@ -245,7 +245,7 @@ work:
 ```html
 <ul>
   {% for item in search.pages('post') %}
-    <li>{{item.title}}</li>
+  <li>{{item.title}}</li>
   {% endfor %}
 </ul>
 ```

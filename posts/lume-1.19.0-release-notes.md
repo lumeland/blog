@@ -81,19 +81,19 @@ the `img`:
 
 ```html
 <!-- Source code -->
-<img src="/images/test.jpg" imagick="jpg webp 600">
+<img src="/images/test.jpg" imagick="jpg webp 600" />
 
 <!-- Previous output: -->
 <picture>
-  <source srcset="/images/test-600w.webp" type="image/webp">
-  <source srcset="/images/test-600w.jpg" type="image/jpeg">
-  <img src="/images/test.jpg">
+  <source srcset="/images/test-600w.webp" type="image/webp" />
+  <source srcset="/images/test-600w.jpg" type="image/jpeg" />
+  <img src="/images/test.jpg" />
 </picture>
 
 <!-- New output: -->
 <picture>
-  <source srcset="/images/test-600w.webp" type="image/webp">
-  <img src="/images/test-600w.jpg">
+  <source srcset="/images/test-600w.webp" type="image/webp" />
+  <img src="/images/test-600w.jpg" />
 </picture>
 ```
 
@@ -103,17 +103,17 @@ In the previous version, the `source` elements were created in the same order as
 defined in the `imagick` attribute. For example:
 
 ```html
-<img src="/images/test.jpg" imagick="jpg webp avif 600">
+<img src="/images/test.jpg" imagick="jpg webp avif 600" />
 ```
 
 This outputs the `source` elements in the same order (`jpg`, `webp` and `avif`):
 
 ```html
 <picture>
-  <source srcset="/images/test-600w.jpg" type="image/jpeg">
-  <source srcset="/images/test-600w.webp" type="image/webp">
-  <source srcset="/images/test-600w.avif" type="image/avif">
-  <img src="/images/test.jpg">
+  <source srcset="/images/test-600w.jpg" type="image/jpeg" />
+  <source srcset="/images/test-600w.webp" type="image/webp" />
+  <source srcset="/images/test-600w.avif" type="image/avif" />
+  <img src="/images/test.jpg" />
 </picture>
 ```
 
@@ -125,9 +125,9 @@ supported). So the new output is:
 
 ```html
 <picture>
-  <source srcset="/images/test-600w.avif" type="image/avif">
-  <source srcset="/images/test-600w.webp" type="image/webp">
-  <img src="/images/test-600w.jpg">
+  <source srcset="/images/test-600w.avif" type="image/avif" />
+  <source srcset="/images/test-600w.webp" type="image/webp" />
+  <img src="/images/test-600w.jpg" />
 </picture>
 ```
 
@@ -139,13 +139,13 @@ different formats:
 
 ```html
 <!-- Source code -->
-<img src="/images/test.jpg" imagick="avif jpg webp">
+<img src="/images/test.jpg" imagick="avif jpg webp" />
 
 <!-- Ouputs: -->
 <picture>
-  <source srcset="/images/test.avif" type="image/avif">
-  <source srcset="/images/test.webp" type="image/webp">
-  <img src="/images/test.jpg">
+  <source srcset="/images/test.avif" type="image/avif" />
+  <source srcset="/images/test.webp" type="image/webp" />
+  <img src="/images/test.jpg" />
 </picture>
 ```
 
@@ -155,16 +155,16 @@ If the image has only one format, no `picture` element will be created:
 
 ```html
 <!-- Source code -->
-<img src="/images/test.jpg" imagick="avif 300">
+<img src="/images/test.jpg" imagick="avif 300" />
 
 <!-- Previous output: -->
 <picture>
-  <source srcset="/images/test-300.avif" type="image/avif">
-  <img src="/images/test.jpg">
+  <source srcset="/images/test-300.avif" type="image/avif" />
+  <img src="/images/test.jpg" />
 </picture>
 
 <!-- New ouput: -->
-<img src="/images/test-300.avif">
+<img src="/images/test-300.avif" />
 ```
 
 ### Support for `size` attribute
@@ -173,19 +173,31 @@ The plugin now supports the `size` attribute:
 
 ```html
 <!-- Source code -->
-<img src="img.png" imagick="avif png 100@2" sizes="(width < 700px) 100px, 200px">
+<img
+  src="img.png"
+  imagick="avif png 100@2"
+  sizes="(width < 700px) 100px, 200px"
+/>
 
 <!-- Previous output: -->
 <picture>
-  <source srcset="img-100w.avif, img-100w@2.avif 2x" type="image/avif">
-  <source srcset="img-100w.png, img-100w@2.png 2x" type="image/png">
+  <source srcset="img-100w.avif, img-100w@2.avif 2x" type="image/avif" />
+  <source srcset="img-100w.png, img-100w@2.png 2x" type="image/png" />
   <img src="img.png" />
 </picture>
 
 <!-- New output: -->
 <picture>
-  <source srcset="img-100w.avif, img-100w@2.avif 2x" type="image/avif" sizes="(width < 700px) 100px, 200px">
-  <img src="img-100w.png" srcset="img-100w@2.png 2x" sizes="(width < 700px) 100px, 200px">
+  <source
+    srcset="img-100w.avif, img-100w@2.avif 2x"
+    type="image/avif"
+    sizes="(width < 700px) 100px, 200px"
+  />
+  <img
+    src="img-100w.png"
+    srcset="img-100w@2.png 2x"
+    sizes="(width < 700px) 100px, 200px"
+  />
 </picture>
 ```
 
