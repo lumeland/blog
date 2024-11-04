@@ -6,7 +6,7 @@ tags:
 comments: {}
 ---
 
-Lume 2.4 is dedicated to
+Ola 👋! Lume 2.4 is dedicated to
 [Maruja Mallo,](https://en.wikipedia.org/wiki/Maruja_Mallo) an extraordinary
 surrealist painter born in Galicia in 1902 who gained international fame.
 
@@ -16,8 +16,8 @@ surrealist painter born in Galicia in 1902 who gained international fame.
 
 ## New plugin: `check_urls`
 
-Broken links are one of the biggest issues on the Web. In one of the latest
-studies, they detected that
+Broken links are one of the biggest issues on the Web. In a recent study, they
+detected that
 [27.6% of the top 10 million sites are dead](https://medium.com/@tonywangcn/27-6-of-the-top-10-million-sites-are-dead-6bc7805efa85).
 And for those sites that are still alive, they are likely to change the URLs at
 some point, after a redesign or content updates.
@@ -79,8 +79,8 @@ site.use(checkUrls({
 ## New plugin: `icons`
 
 Nowadays, most websites are using icons to a greater or lesser extent. The
-`icons` plugin allows to use easily icons from some of the most popular SVG icon
-libraries. The installation can't be easier:
+`icons` plugin allows to use easily some of the most popular SVG icon libraries.
+The installation can't be easier:
 
 ```js
 import lume from "lume/mod.ts";
@@ -116,7 +116,7 @@ Alternatively, you can set the variation in the second argument of the filter:
 <img src="{{ "acorn" |> icon("phosphor", "duotone") }}">
 ```
 
-Note that use [`inline` plugin](https://lume.land/plugins/inline/) to inline the
+You can use [`inline` plugin](https://lume.land/plugins/inline/) to inline the
 SVG code in the HTML.
 
 ```html
@@ -240,6 +240,65 @@ server.use(precompress());
 server.start();
 ```
 
+## `modify_urls` supports CSS files
+
+The [`modify_urls` plugin](https://lume.land/plugins/modify_urls/) now supports
+CSS files. This is not important only for this plugin but also for other plugins
+that use `modify_urls` under the hood, like
+[`base_path`](https://lume.land/plugins/base_path/) and
+[`relative_urls`](https://lume.land/plugins/relative_urls/).
+
+### Example with `base_path`
+
+`base_path` is one of Lume's most useful plugins because it adds a prefix to all
+absolute URLs of your site. This is important if your site is hosted in a
+subdirectory.
+
+For example, let's say you want to host your blog in the location
+`https://my-site.com/blog/` and you have this HTML code:
+
+```html
+<a href="/posts/hello-world/">Hello world</a>
+```
+
+The plugin automatically fixes the URL to add the `/blog/` prefix:
+
+```html
+<a href="/blog/posts/hello-world/">Hello world</a>
+```
+
+Until now, the plugin only transformed URLs in HTML pages. If your site has this
+CSS code:
+
+```css
+.background {
+  background-image: url("/img/bg.png");
+}
+```
+
+The background image will fail because the `/blog/` prefix is missing. As of
+Lume 2.4.0, this plugin can transform also CSS files. This option is disabled by
+default, it requires to configure it in the _config.ts file:
+
+```js
+site.use(basePath({
+  extensions: [".html", ".css"],
+}));
+```
+
+Now not only HTML pages but also CSS files will be processed.
+
+> [!important]
+>
+> Keep in mind that Lume only processes files that are loaded. To transform CSS
+> files they must be loaded before. If you're using any styling plugin like
+> [`postcss`](https://lume.land/plugins/postcss/),
+> [`lightningcss`](https://lume.land/plugins/lightningcss/), or
+> [`sass`](https://lume.land/plugins/sass/), you don't need to do anything else.
+> But if you are copying the css files with `site.copy([".css"])` or
+> `site.copy("/styles")` they won't be processed. To fix it, you have to use
+> `site.loadAssets([".css"])`.
+
 ## Fallbacks for `metas` and `feed` plugins
 
 Some plugins like `metas` and `feed` allow to
@@ -291,12 +350,16 @@ site.use(feed({
 
 ## Other changes
 
-In this version, we have fixed some bugs related to Windows support, CJK
-characters, several improvements to
-[`esbuild` plugin](https://lume.land/plugins/esbuild/), and updated all
-dependencies to their latest version.
+- Several improvements to [`esbuild` plugin](https://lume.land/plugins/esbuild/)
+  by [Into the V0id](https://github.com/into-the-v0id).
+- Added the new variable `fediverse` to the
+  [`metas` plugin](https://lume.land/plugins/metas/), to generate the
+  `<meta name="fediverse:creator" content="...">` tag
+  [added to Mastodon](https://blog.joinmastodon.org/2024/07/highlighting-journalism-on-mastodon/).
+- Fixed some bugs related to Windows support and CJK characters.
+- Updated all dependencies to their latest version.
 
-See the
+And more changes. See the
 [CHANGELOG file](https://github.com/lumeland/lume/blob/v2.4.0/CHANGELOG.md) for
 more details.
 
