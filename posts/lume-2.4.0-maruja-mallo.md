@@ -27,7 +27,7 @@ checking all links in your website (not only to HTML pages but also files like
 images, JavaScript or CSS). This plugin already existed for some time as
 [experimental plugin](https://github.com/lumeland/experimental-plugins) thanks
 to [iacore](https://github.com/iacore), but it was moved to the main Lume repo
-and was improved with additional features and improvements.
+and was improved with additional features.
 
 The basic way to use it is like any other plugin. No big surprises here!
 
@@ -73,14 +73,14 @@ site.use(checkUrls({
 
 > [!warning]
 >
-> This option can make the build slower, so probably it's a good idea to enable
-> it only occasionally.
+> This option can make the build slower, specially if you have many external
+> links, so probably it's a good idea to enable it only occasionally.
 
 ## New plugin: `icons`
 
 Nowadays, most websites are using icons to a greater or lesser extent. The
-`icons` plugin allows to use easily some of the most popular SVG icon libraries.
-The installation can't be easier:
+`icons` plugin allows to use some of the most popular SVG icon libraries. The
+installation can't be easier:
 
 ```js
 import lume from "lume/mod.ts";
@@ -154,7 +154,7 @@ option, not only for privacy and GDPR compliance, but also
 [for performance](https://github.com/HTTPArchive/almanac.httparchive.org/pull/607).
 
 The `google_fonts` plugin downloads the optimized font files from Google fonts
-automatically into the `/folder` directory (configurable) and generates the
+automatically into the `/fonts` directory (configurable) and generates the
 `/fonts.css` file (also configurable) with the `@font-face` declarations.
 
 To use it, just register the plugin passing the sharing URL of your font
@@ -187,8 +187,8 @@ site.use(googleFonts({
 ```
 
 In the example above, the **Playfair Display** font is renamed to "display" and
-**Roboto** to "text", so this allows the use of the fonts in the CSS code in
-this way:
+**Roboto** to "text", so this allows the use of the fonts in the CSS code with
+these names:
 
 ```css
 h1 {
@@ -216,6 +216,7 @@ import lume from "lume/mod.ts";
 import brotli from "lume/plugins/brotli.ts";
 
 const site = lume();
+
 site.use(brotli());
 
 export default site;
@@ -242,9 +243,9 @@ server.start();
 
 ## `modify_urls` supports CSS files
 
-The [`modify_urls` plugin](https://lume.land/plugins/modify_urls/) now supports
-CSS files. This is not important only for this plugin but also for other plugins
-that use `modify_urls` under the hood, like
+The [`modify_urls` plugin](https://lume.land/plugins/modify_urls/) now can
+search and modify urls in CSS files. This is not important only for this plugin
+but also for other plugins that use `modify_urls` under the hood, like
 [`base_path`](https://lume.land/plugins/base_path/) and
 [`relative_urls`](https://lume.land/plugins/relative_urls/).
 
