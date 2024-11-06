@@ -12,7 +12,6 @@ Ola 👋!
 This new version of Lume is dedicated to
 [Maruja Mallo,](https://en.wikipedia.org/wiki/Maruja_Mallo) an extraordinary
 surrealist painter born in Galicia in 1902 who gained international fame.
-
 [Learn more about Maruja](https://edspace.american.edu/marujamalloheadsofwomen/maruja-mallo-biography/).
 
 <!-- more -->
