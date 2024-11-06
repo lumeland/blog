@@ -1,12 +1,15 @@
 ---
 title: Lume 2.4.0 - Maruja Mallo
-draft: true
+draft: false
 tags:
   - Releases
 comments: {}
+date: '2024-11-06T00:00:00.000Z'
 ---
 
-Ola 👋! Lume 2.4 is dedicated to
+Ola 👋!
+
+This new version of Lume is dedicated to
 [Maruja Mallo,](https://en.wikipedia.org/wiki/Maruja_Mallo) an extraordinary
 surrealist painter born in Galicia in 1902 who gained international fame.
 
@@ -16,11 +19,11 @@ surrealist painter born in Galicia in 1902 who gained international fame.
 
 ## New plugin: `check_urls`
 
-Broken links are one of the biggest issues on the Web. In a recent study, they
-detected that
+Broken links are one of the biggest issues on the Web. A recent study detected
+that
 [27.6% of the top 10 million sites are dead](https://medium.com/@tonywangcn/27-6-of-the-top-10-million-sites-are-dead-6bc7805efa85).
 And for those sites that are still alive, they are likely to change the URLs at
-some point, after a redesign or content updates.
+some point, after a redesign or content updates, causing a lot of broken links.
 
 The new plugin `check_urls` will help you to keep your links healthy, by
 checking all links in your website (not only to HTML pages but also files like
@@ -75,6 +78,9 @@ site.use(checkUrls({
 >
 > This option can make the build slower, specially if you have many external
 > links, so probably it's a good idea to enable it only occasionally.
+
+Learn more about this plugin
+[in the documentation page](https://lume.land/plugins/check_urls/).
 
 ## New plugin: `icons`
 
@@ -145,6 +151,9 @@ extensible with more.
 - [Simpleicons](https://simpleicons.org/)
 - [Tabler](https://tabler.io/icons)
 
+Learn more about this plugin
+[in the documentation page](https://lume.land/plugins/icons/).
+
 ## New plugin `google_fonts`
 
 Another common asset used to build sites is webfonts.
@@ -199,6 +208,9 @@ body {
 }
 ```
 
+[Go to the documentation page](https://lume.land/plugins/google_fonts/) to learn
+more about the Google Fonts plugin!
+
 ## New plugins `brotli` and `gzip`
 
 Thanks to [Into the V0id](https://github.com/into-the-v0id) for adding these two
@@ -209,7 +221,7 @@ addition to the `/index.html` page, the plugins generate also `/index.html.gz`
 (for Gzip) and `/index.html.br` (for Brotli).
 
 I think it's not necessary to show how to activate the plugin, but just to
-demonstrate how easy and predictable Lume is:
+demonstrate how predictable and "boring" Lume is:
 
 ```js
 import lume from "lume/mod.ts";
@@ -224,9 +236,10 @@ export default site;
 
 ### New `precompress` middleware
 
-`brotli` and `gzip` plugins can be combined with the new `precompress`
-middleware if you're using [Lume server](https://lume.land/docs/core/server/) to
-serve your static files (for example in Deno Deploy). This middleware checks the
+`brotli` and `gzip` plugins can be combined with
+[the new `precompress` middleware](https://lume.land/docs/core/server/#precompress)
+if you're using [Lume server](https://lume.land/docs/core/server/) to serve your
+static files (for example in Deno Deploy). This middleware checks the
 `Accept-Encoding` header and if the browser accepts `br` or `gzip` values, it
 will serve the precompressed file.
 
@@ -240,6 +253,10 @@ server.use(precompress());
 
 server.start();
 ```
+
+Learn more about these plugins in the
+[brotli](https://lume.land/plugins/brotli/) and
+[gzip](https://lume.land/plugins/gzip/) documentation pages.
 
 ## `modify_urls` supports CSS files
 
@@ -287,7 +304,13 @@ site.use(basePath({
 }));
 ```
 
-Now not only HTML pages but also CSS files will be processed.
+Now not only HTML pages but also CSS files will be processed:
+
+```css
+.background {
+  background-image: url("/blog/img/bg.png");
+}
+```
 
 > [!important]
 >
@@ -358,6 +381,12 @@ site.use(feed({
   `<meta name="fediverse:creator" content="...">` tag
   [added to Mastodon](https://blog.joinmastodon.org/2024/07/highlighting-journalism-on-mastodon/).
 - Fixed some bugs related to Windows support and CJK characters.
+- New option `placeholder` in the
+  [`unocss` plugin](https://lume.land/plugins/unocss/) to insert the generated
+  code in a specific place.
+- New option `placeholder` in the
+  [components configuration](https://lume.land/docs/core/components/) to insert
+  the generated CSS and JavaScript code in a specific place.
 - Updated all dependencies to their latest version.
 
 And more changes. See the
