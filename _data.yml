@@ -6,6 +6,8 @@ metas:
   description: A blog to follow the updates of Lume, the static site generator for Deno
   twitter: "@misteroom"
   lang: en
+  generator: true
+  fediverse: "@lume@fosstodon.org"
 
 mergedKeys:
   metas: object
