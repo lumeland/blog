@@ -7,6 +7,7 @@ comments:
   src: 'https://fosstodon.org/@lume/113051244608919361'
 date: '2024-08-30'
 ---
+
 Lume 2.3.0 is dedicated to
 [Andrés do Barro](https://en.wikipedia.org/wiki/Andr%C3%A9s_do_Barro), a
 Galician singer and songwriter who was one of the first artists who achieved

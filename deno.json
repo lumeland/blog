@@ -7,11 +7,16 @@
   },
   "imports": {
     "lume/": "https://deno.land/x/lume@v2.4.3/",
-    "lume/cms/": "https://cdn.jsdelivr.net/gh/lumeland/cms@v0.7.7/",
-    "blog/": "https://deno.land/x/lume_theme_simple_blog@v0.15.8/"
+    "lume/cms/": "https://cdn.jsdelivr.net/gh/lumeland/cms@v0.8.1/",
+    "blog/": "https://deno.land/x/lume_theme_simple_blog@v0.15.10/"
   },
   "compilerOptions": {
-    "types": ["lume/types.ts"]
+    "types": [
+      "lume/types.ts"
+    ]
   },
-  "exclude": ["./_site", "./_bin"]
+  "exclude": [
+    "./_site",
+    "./_bin"
+  ]
 }
