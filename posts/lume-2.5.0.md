@@ -1,12 +1,24 @@
 ---
-title: 'Lume 2.5.0'
+title: Lume 2.5.0
 draft: true
 tags:
   - Releases
 comments: {}
 ---
 
-Ola 👋!
+_Feliz aninovo 🎄!_
+
+New year and new Lume version! This time, I'd like to dedicate it to Pedro Días
+and Muño Vandilaz, who married on April 16, 1061, almost a thousand years ago.
+This is the first same-sex marriage documented in Galicia (and the rest of
+Spain).
+
+The wedding took place in a small Catholic chapel. It's surprising to see how
+homophobic prejudices have changed since then. If you want to read more about
+this event take a look at
+[this Qnews article (English)](https://qnews.com.au/on-this-day-april-16-pedro-diaz-and-muno-vandilaz/)
+or
+[gCiencia post (Galician)](https://www.gciencia.com/tribuna/unha-voda-entre-dous-homes-no-ourense-do-seculo-xi/).
 
 <!-- more -->
 
@@ -111,15 +123,15 @@ export const jsonLd: Lume.Data["jsonLd"] = {
 ## New plugin `purgecss`
 
 [PurgeCSS](https://purgecss.com/) is a utility to remove unused CSS code, making
-your CSS files smaller and improving the site performance. The tool provides a
-Postcss plugin so, in theory it can also be used in Lume. Now it has its own
+your CSS files smaller to improve the site performance. The tool provides a
+Postcss plugin so, in theory, it can also be used in Lume. Now it has its own
 plugin (big thanks to [_into-the-v0id_](https://github.com/into-the-v0id)) which
 has some advantages:
 
 - Scan generated HTML pages by Lume
 - Scan bundled JS dependencies (bootstrap, etc)
-- Only include CSS that is actually necessary (don't include drafts or
-  conditional HTML that does not make it into the build)
+- Only include CSS that is necessary (don't include drafts or conditional HTML
+  that does not make it into the build)
 
 ```js
 import lume from "lume/mod.ts";
@@ -134,15 +146,15 @@ export default site;
 ## New `router` middleware
 
 Lume is a static site generator (and always will be). But sometimes you need
-some server side logic to handle small things. For example, to handle the data
-sent by a user from an HTML form, or maybe you need a small API to provide
-dynamic data.
+some server-side logic to handle small things. For example, to handle the data a
+user sends from an HTML form, or maybe you need a small API to provide dynamic
+data.
 
 For sites requiring front and back, you have great options like
-[Fresh](https://fresh.deno.dev/) or [Hono](https://hono.dev/). Buf if you only
-need a couple of entry points, you may consider using something simpler like
-`router` middleware, which is a minimal router that works great with the Lume's
-server class.
+[Fresh](https://fresh.deno.dev/), [Astro](https://astro.build/) or
+[Hono](https://hono.dev/). But if you only need a couple of entry points, you
+may consider using something simpler like `router` middleware, which is a
+minimal router that works great with the Lume's server.
 
 ```js
 import Server from "lume/core/server.ts";
@@ -167,8 +179,8 @@ That's all. Now the `/hello/laura` request will return a `Hello laura` response!
 
 The router uses the standard
 [URLPattern](https://developer.mozilla.org/en-US/docs/Web/API/URLPattern) under
-the hood, creates an object with all variables captured in the path, and pass it
-as the first argument of the route handler.
+the hood that creates an object with all variables captured in the path and
+passes it as the first argument of the route handler.
 
 In addition to the captured variables, you have the `request` property with the
 Request instance:
@@ -192,10 +204,10 @@ Some plugins like [`google_fonts`](https://lume.land/plugins/google_fonts/),
 [`code_highlight`](https://lume.land/plugins/code_highlight/) can generate CSS
 code. The way this code is generated is different for each plugin.
 
-Google fonts plugin has the `cssFile` option to configure the filename to output
-the CSS code. If the css file doesn't exist, it's created. And if it already
-exists, the code is appended at the end. You can use the `placeholder` option to
-insert the code at some point in the middle of the file.
+Google Fonts plugin has the `cssFile` option to configure the filename to output
+the CSS code. If the css file doesn't exist, it's created. If it already exists,
+the code is appended at the end. You can use the `placeholder` option to insert
+the code at some point in the middle of the file.
 
 ```js
 site.use(googleFonts({
@@ -233,7 +245,7 @@ The Google fonts approach is simpler and more straightforward.
 
 In order to make Lume more consistent across all plugins, I want to unify the
 way the CSS code is generated everywhere. That's why the `theme.path` option of
-Prism and Code Highlight plugins is now deprecated and the new `theme.cssFile`
+Prism and Code Highlight plugins are now deprecated and the new `theme.cssFile`
 and `theme.placeholder` options were added.
 
 ```js
