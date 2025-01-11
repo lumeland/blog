@@ -2,11 +2,11 @@
 title: Lume 2.5.0 - Pedro Días and Muño Vandilaz
 tags:
   - Releases
-comments: {}
+comments:
+  src: 'https://fosstodon.org/@lume/113809933279141292'
 date: '2025-01-11T00:00:00.000Z'
 draft: false
 ---
-
 **_Feliz aninovo_ 🎄!**
 
 New year and new Lume version! This time, I'd like to dedicate it to Pedro Días
