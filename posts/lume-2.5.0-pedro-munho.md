@@ -4,6 +4,7 @@ tags:
   - Releases
 comments:
   src: 'https://fosstodon.org/@lume/113809933279141292'
+  bluesky: 'https://bsky.app/profile/lume.land/post/3lfhsmfri6l2y'
 date: '2025-01-11T00:00:00.000Z'
 draft: false
 ---
