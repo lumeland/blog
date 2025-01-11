@@ -1,12 +1,13 @@
 ---
-title: Lume 2.5.0
-draft: true
+title: Lume 2.5.0 - Pedro Días and Muño Vandilaz
 tags:
   - Releases
 comments: {}
+date: '2025-01-11T00:00:00.000Z'
+draft: false
 ---
 
-_Feliz aninovo 🎄!_
+**_Feliz aninovo_ 🎄!**
 
 New year and new Lume version! This time, I'd like to dedicate it to Pedro Días
 and Muño Vandilaz, who married on April 16, 1061, almost a thousand years ago.
@@ -120,6 +121,9 @@ export const jsonLd: Lume.Data["jsonLd"] = {
 };
 ```
 
+More info in the
+[plugin documentation page](https://lume.land/plugins/json_ld/).
+
 ## New plugin `purgecss`
 
 [PurgeCSS](https://purgecss.com/) is a utility to remove unused CSS code, making
@@ -143,6 +147,9 @@ site.use(purgecss());
 export default site;
 ```
 
+Go to the [plugin documentation page](https://lume.land/plugins/purgecss/) for
+more info.
+
 ## New `router` middleware
 
 Lume is a static site generator (and always will be). But sometimes you need
@@ -154,7 +161,7 @@ For sites requiring front and back, you have great options like
 [Fresh](https://fresh.deno.dev/), [Astro](https://astro.build/) or
 [Hono](https://hono.dev/). But if you only need a couple of entry points, you
 may consider using something simpler like `router` middleware, which is a
-minimal router that works great with the Lume's server.
+minimal router that works great with Lume's server.
 
 ```js
 import Server from "lume/core/server.ts";
@@ -163,7 +170,7 @@ import Router from "lume/middlewares/router.ts";
 // Create the router
 const router = new Router();
 
-router.get("/hello/:name", { name }) => {
+router.get("/hello/:name", ({ name }) => {
   return new Response(`Hello ${name}`);
 });
 
@@ -186,7 +193,7 @@ In addition to the captured variables, you have the `request` property with the
 Request instance:
 
 ```js
-router.get("/search", { request }) => {
+router.get("/search", ({ request }) => {
   const { searchParams } = new URL(request.url);
 
   const query = searchParams.get("query");
@@ -196,6 +203,66 @@ router.get("/search", { request }) => {
 
 Note that to use this middleware in production, you need a hosting service
 running Deno like [Deno Deploy](https://deno.com/deploy) or similar.
+
+## New `plaintext` plugin
+
+Sometimes you have your content in Markdown or HTML, but also need a plain text
+version. Let's see the following example:
+
+```vto
+---
+title: Welcome to **my site**
+---
+<!doctype html>
+<html>
+  <head>
+    <title>{{ title }}</title>
+  </head>
+
+  <body>
+    <h1>{{ title |> md(true) }}</h1>
+  </body>
+</html>
+```
+
+The `title` variable uses Markdown syntax to render
+`Welcome to <strong>my site</strong>`. But this also affects the `<title>`
+element of the page which contains the asterisks.
+
+The new `plaintext` plugin registers the `plaintext` filter, that not only
+removes any Markdown and HTML syntax but also linebreaks and extra spaces:
+
+```vto
+---
+title: Welcome to **my site**
+---
+<!doctype html>
+<html>
+  <head>
+    <title>{{ title |> plaintext }}</title>
+  </head>
+
+  <body>
+    <h1>{{ title |> md(true) }}</h1>
+  </body>
+</html>
+```
+
+The plugin is disabled by default so you need to import it to your _config.ts
+file:
+
+```js
+import lume from "lume/mod.ts";
+import plaintext from "lume/plugins/plaintext.ts";
+
+const site = lume();
+site.use(plaintext());
+
+export default site;
+```
+
+More info in the
+[plugin documentation page](https://lume.land/plugins/plaintext/).
 
 ## Better control of the generated CSS code
 
@@ -217,9 +284,9 @@ site.use(googleFonts({
 }));
 ```
 
-Prism and Code Highlight plugins output the theme's CSS code in a different way.
-The `theme` option has the `path` property but it's not the **output** css file
-but the **source file**:
+Prism and Code Highlight plugins output the theme's CSS code differently. The
+`theme` option has the `path` property but it's not the **output** css file but
+the **source file**:
 
 ```js
 site.use(prism({
@@ -241,7 +308,7 @@ The problem with this approach is it requires two steps: first, configure the
 source file name in the plugin, and then import the file in your CSS file (or
 copy it with `site.copy()`).
 
-The Google fonts approach is simpler and more straightforward.
+The Google fonts approach is more straightforward.
 
 In order to make Lume more consistent across all plugins, I want to unify the
 way the CSS code is generated everywhere. That's why the `theme.path` option of
@@ -269,11 +336,12 @@ introduced in Lume 2.4.
 - Added `ui.globalVariable` option to
   [Pagefind](https://lume.land/plugins/pagefind/) plugin to store the pagefind
   instance in a global variable for future manipulation.
-- Hot reload inline script includes the integrity hash, to avoid some CSP
-  issues.
+- Hot reload inline script includes the integrity hash, to avoid CSP issues.
 - Files with extension `.d.ts` are ignored by Lume, to avoid generating empty
   files.
 - Updated the default browser versions supported by
   [LightningCSS](https://lume.land/plugins/lightningcss/) plugin.
 
-And several fixes. See the CHANGELOG.md file for more details.
+See
+[the CHANGELOG.md file](https://github.com/lumeland/lume/blob/v2.5.0/CHANGELOG.md)
+to see a list of all changes with more detail.
