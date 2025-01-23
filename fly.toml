@@ -1,0 +1,29 @@
+# fly.toml app configuration file generated for lume-blog on 2025-01-23T10:17:49Z
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'lume-blog'
+primary_region = 'mad'
+
+[build]
+
+[env]
+  PORT = '8080'
+
+[processes]
+  app = 'run -A ./'
+
+[http_service]
+  internal_port = 8000
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+[[vm]]
+  memory = '1gb'
+  cpu_kind = 'shared'
+  cpus = 1
+  memory_mb = 512
