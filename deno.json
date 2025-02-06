@@ -6,8 +6,8 @@
     "cms": "deno task lume cms"
   },
   "imports": {
-    "lume/": "https://deno.land/x/lume@v2.5.0/",
-    "lume/cms/": "https://cdn.jsdelivr.net/gh/lumeland/cms@v0.9.0/",
+    "lume/": "https://deno.land/x/lume@v2.5.1/",
+    "lume/cms/": "https://cdn.jsdelivr.net/gh/lumeland/cms@v0.9.2/",
     "blog/": "https://deno.land/x/lume_theme_simple_blog@v0.15.10/"
   },
   "compilerOptions": {
