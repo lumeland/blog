@@ -338,12 +338,8 @@ of components more ergonomic, specially for cases with a lot of CSS and JS code.
 
 Now you can use the component anywhere:
 
-```js
-{
-  {
-    await comp.Button({ content: "click here" });
-  }
-}
+```html
+{{ await comp.Button({ content: "click here" }) }}
 ```
 
 ## Tailwind 4
