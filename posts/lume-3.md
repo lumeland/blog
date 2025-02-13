@@ -7,88 +7,52 @@ tags:
 comments: {}
 ---
 
-## About loaded and copied files
+## The main problem
 
-When Lume builds a site, some files are **loaded** and others **copied**.
+The function `site.copy()` allows to copy files from the `src` folder without
+reading the content, which is faster and consumes less memory. But it has a big
+drawback: the copied files are not processed.
 
-Files with extensions `.vto`, `.md`, or `.page.ts` are loaded because Lume needs
-to read the content to generate HTML pages. They are known as _Page files_.
-
-Files added using the function `site.copy()` are just copied from the `src`
-folder to `dest` without reading the content, which is faster and consumes less
-memory. These files are known as _Static files_.
-
-However, there are some files that must be loaded or copied, depending on the
-configuration. For example, CSS files are loaded if you use a plugin like
-Postcss, because the content needs to be processed. In this case, the plugin
-internally runs `site.loadAssets([".css"])`, to instruct Lume that the files
-with extension `.css` need to be loaded but not to generate HTML pages but
-assets.
-
-One of the most recurrent issues is when a file is configured to be copied and
-loaded. For example:
-
-```js
-site.copy([".css"]);
-site.use(postcss());
-```
-
-In this configuration, the build copies all CSS files and you may expect these
-files to be transformed with the postcss plugin. However due to the `.css` files
-being copied, not loaded, **the plugin doesn't process them**.
-
-Another example, a bit less obvious is when you have a folder with different
-files, some of them need to be processed and others don't:
+For example, let's say you have the following configuration:
 
 ```js
 site.copy("/assets");
 site.use(postcss());
 ```
 
-In this case, we are copying all files in the `/assets` folder. This folder can
-contain CSS files that, as you may guess, won't be processed by Postcss.
+When Lume build the site, the files inside the `/assets` folder are copied
+as-is. If the folder contains CSS files, they **won't be processed by Postcss**.
+Learn more about
+[this issue on GitHub](https://github.com/lumeland/lume/issues/571).
 
-This behavior is confusing, but fixing it is a breaking change, so this is the
-main reason version 3 was released. Lume should be clever enough to don't
-delegate the decision of whether a file must be loaded or copied to you.
+This behavior is confusing, but fixing it is a breaking change. And that's the
+main reason of Lume 3 to exist: It should be clever enough to don't delegate the
+decision of whether a file must be loaded or copied to you.
 
-## Introducing `add()`
+## The solution: `site.add()`
 
-In Lume 3 all this logic was refactored and the functions `site.loadAssets()`
-and `site.copy()` were replaced with a single function: `site.add()`.
+In Lume 3 `site.loadAssets()` and `site.copy()` functions were removed and now
+you have a new single function for everything: `site.add()`.
 
-The `add()` function simply instructs Lume that you want to include this file in
+The `add()` function simply says to Lume that you want to include some files in
 your site, but without specifying how this file must be treated. Lume will load
 the file if it needs to (for example, if it needs to be processed), or will copy
 it if no transformation needs to be made.
 
-This simplifies a lot the configuration, especially in those cases where copied
-and loaded files are mixed in the same folder.
-
-`site.add()` has the same syntax as the old `site.copy()`, so you can add all
-CSS files that are loaded and processed by Postcss:
+To upgrade from Lume 2 to Lume 3, just replace all `site.copy()` functions to
+`site.add` since both functions have the same syntax.
 
 ```js
-site.add([".css"]);
+site.add("/assets");
+
+// Run Postcss. CSS files in /assets will be processed!
 site.use(postcss());
 ```
 
-You can add also specific files and folders, and even change the destination
-folder:
-
-```js
-// Add all files in /assets to the root of dest folder.
-site.add("/assets", ".");
-
-// Run Postcss. Any CSS file in /assets will be processed!
-site.use(postcss());
-```
-
-### Replacing `copyRemainingFiles()`
+### Removed `site.copyRemainingFiles()`
 
 In Lume 2 there was the `site.copyRemainingFiles()` function as a way to manage
-complex situations like this. For example, let's say you have the following
-structure:
+complex situations. For example, let's say you have the following structure:
 
 ```txt
 |_ articles/
