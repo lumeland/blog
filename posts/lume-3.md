@@ -458,4 +458,31 @@ google_fonts, icons, prism, robots, sitemap, and slugify_urls.
 
 ## esbuild uses `esbuild-deno-loader` to resolve dependencies
 
+Deno is becoming a complicated runtime, especially for everything related with
+module resolution. It supports three completely different types of packages
+(HTTP, NPM and JSR), with different behaviors, inconsistencies and
+incompatibilities between them. In addition to the usual complexity of NPM, in
+Deno a package can be located in different places, depending on the variable
+`nodeModulesDir`, if the file `package.json` is found, if the `node_modules`
+folder exists, etc. JSR is not much better, because the resolution of a package
+depends on the combination of `imports`, `exports` and `patch` keys in different
+`deno.json` and `deno.jsonc` files. And the addition of workspaces adds a new
+layer of complexity.
+
+In Lume 2, the `esbuild` plugin delegates all this complexity to
+[esm.sh](https://esm.sh/), that can transform any NPM and JSR package to simple
+HTTP imports that are easier to manage. But this solution has its own complexity
+in form of multiple configuration options (`deps`, `pin`, `alias`, `standalone`,
+`exports`, etc) and there are many packages that don't work well after passing
+them through esm.sh.
+
+In Lume 3 the `esbuild` plugin uses the
+[esbuild-deno-loader](https://jsr.io/@luca/esbuild-deno-loader) plugin created
+by Luca Casonato, member of the Deno team. This will make the bundlering of your
+code more reliable and compatible with how Deno works.
+
 ## basename variable
+
+## remove extensions option from many plugins
+
+## remove name option from many plugins
