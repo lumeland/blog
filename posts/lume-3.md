@@ -486,3 +486,9 @@ code more reliable and compatible with how Deno works.
 ## remove extensions option from many plugins
 
 ## remove name option from many plugins
+
+## removed automatic doctype
+
+## removed on_demand plugin
+
+## removed liquid plugin
