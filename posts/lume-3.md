@@ -471,7 +471,7 @@ layer of complexity.
 
 In Lume 2, the `esbuild` plugin delegates all this complexity to
 [esm.sh](https://esm.sh/), that can transform any NPM and JSR package to simple
-HTTP imports that are easier to manage. But this solution has its own complexity
+HTTP imports that are easier to manage. But this solution has its own problems
 in form of multiple configuration options (`deps`, `pin`, `alias`, `standalone`,
 `exports`, etc) and there are many packages that don't work well after passing
 them through esm.sh.
@@ -481,14 +481,127 @@ In Lume 3 the `esbuild` plugin uses the
 by Luca Casonato, member of the Deno team. This will make the bundlering of your
 code more reliable and compatible with how Deno works.
 
-## basename variable
+## `basename` improvements
 
-## remove extensions option from many plugins
+In Lume 2, the `basename` variable allows to change the name of a file or
+directory. When missing, it's automatically defined by Lume using the page
+filename. For example, the page `/posts/first-post.md` has the basene
+`first-post`.
 
-## remove name option from many plugins
+In Lume 3 this variable uses the final URL of the page, instead of the source
+filename. For example, if the `/post/first-post.md` page generates a different
+URL (say `/post/welcome-to-my-blog/`) the `basename` is `welcome-to-my-blog`.
 
-## removed automatic doctype
+Other change introduced in Lume 3 is the variable no longer accept "index" as
+the value. For example, the basename for the `/post/hello-world/index.md` is
+`hello-world` (the folder name) instead of `index` (the filename).
 
-## removed on_demand plugin
+These changes will make this variable more consistent across all pages, no
+matter how the URL is generated. It's specially important for the `nav` plugin
+that uses this variable to sort pages alphabetically.
 
-## removed liquid plugin
+## Removed plugins
+
+2 plugins were removed in Lume 3: `liquid` and `on_demand`.
+
+Liquid allows to use [LiquidJS](https://liquidjs.com/) as a template engine to
+build the pages. The syntax is very similar to Nunjucks and the library is
+actively maintained but it has a big limitation: it's not possible to invoke
+functions. This makes this template engine useless in Lume because it's not
+possible to use helpers like `search` or `nav` to search pages or build the
+navigation. The plugins was deprecated for long time and it was removed in
+Lume 3.
+
+`on_demand` plugin was mainly a experiment to see if it was possible to add some
+dynamic behavior to Lume sites. But it never worked well, the implementation was
+a bit hacky to make it work on Deno Deploy and it was too limited. Lume has the
+[router](https://lume.land/plugins/router/) for simple use cases. And for
+complex cases, maybe you have to use a different framework. The purpose of Lume
+never was to become into a all-in-one solution for everything.
+
+## Removed customized options
+
+The following removals aim to improve the stability and interoperability between
+plugins.
+
+### Extensions option
+
+In Lume 2, some plugins have the `extensions` option to configure which files do
+you want to process. You rarely need to modify this option because Lume provides
+sensible defaults. For example, the default value for
+[Postcss](https://lume.land/plugins/postcss/) plugin is `[".css"]`:
+
+```js
+site.use(postcss({
+  extensions: [".css"], // <- You don't need this
+}));
+```
+
+In most cases, this option doesn't make sense, because you can set any value but
+the plugin expects a specific format, like HTML pages to use DOM api or CSS code
+to process:
+
+```js
+site.use(postcss({
+  extensions: [".html"], // This breaks the build
+}));
+```
+
+In Lume 3, this option was removed in many plugins:
+
+- purgecss, postcss and lightningcss always process `.css` files.
+- sass always process `.scss` and `.sass` files.
+- svgo always process `.svg` files.
+- check_urls, base_path, code_highlight, fff, inline, json_ld, katex, metas,
+  multilanguage, og_images, prism, relative_urls, filter_pages always affects to
+  `.html` pages.
+
+### Name option
+
+There are other plugins that register filters or helpers that you can use in
+your pages. In Lume 2 you could customize the name of these helpers. For
+example, is possible to use a different key to store the data for the `metas`
+plugin:
+
+```js
+site.use(metas({
+  name: "opengraph",
+}));
+```
+
+Or the filter name of the `date` plugin:
+
+```
+site.use(date({
+  name: "get_date"
+}))
+```
+
+Changing the default name of the plugins have two problems:
+
+- The types declared by the plugin doesn't change, so even if you change the key
+  `metas` to `opengraph`, `Lume.Data.metas` still exist.
+- This breaks the interoperability between plugins. For example, `picture` and
+  `transform_images` depends on the same key name. If you change it only for one
+  plugin, the other won't work.
+
+In Lume 3, the `name` option was removed in the following plugins and it's not
+possible to change it for something else: `date`, `json_ld`, `metas`, `nav`,
+`paginate`, `picture`, `reading_info`, `search`, `transform_images`, `url` and
+`postcss`.
+
+### Other options
+
+- cache option in `transform_images`, `favicon` and `og_images`
+- `attribute` option in `inline`.
+
+## Other changes
+
+### Removed automatic doctype
+
+Lume 2 automatically added the `<!doctype html>` to all HTML pages if it's
+missing. The original reason is that JSX doesn't allow to add this directive, so
+it was difficult to create HTML pages only with JSX. But some users don't want
+this behavior because they want to create files with fragments of HTML. Lume 3
+comes with SSX as the JSX library that allows to add this directive so this
+behavior is not longer needed.
