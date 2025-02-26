@@ -9,9 +9,9 @@ comments: {}
 
 ## The main problem
 
-The function `site.copy()` allows you to copy files from the `src` folder
+The `site.copy()` function allows you to copy files from the `src` folder
 without reading the content, which is faster and consumes less memory. But it
-has a big drawback: the files copied are not processed.
+has one big drawback: the files are not processed.
 
 For example, let's say you have the following configuration:
 
@@ -20,22 +20,22 @@ site.copy("/assets");
 site.use(postcss());
 ```
 
-When Lume builds the site, the files inside the `/assets` folder are copied
+When Lume builds your site, the files inside the `/assets` folder are copied
 as-is. If the folder contains CSS files, they **won't be processed by Postcss**.
 Learn more about
 [this issue on GitHub](https://github.com/lumeland/lume/issues/571).
 
 This behavior is confusing and many people reported this as a bug. And they are
-right: Lume should be clever enough to don't delegate to you the decision of
-whether a file must be loaded or copied.
+right: Lume should be clever enough to not delegate the decision of whether a
+file must be loaded or copied.
 
 ## The solution: `site.add()`
 
-In Lume 3 `site.loadAssets()`, `site.copyRemainingFiles()` and `site.copy()`
-functions were removed and now you have a new single function for everything:
-`site.add()`.
+In Lume 3, the `site.loadAssets()`, `site.copyRemainingFiles()` and
+`site.copy()` functions were removed, and now there is a single function for
+everything: `site.add()`.
 
-The `add()` function simply says to Lume that you want to include some files in
+The `add()` function simply tells Lume that you want to include some files in
 your site, but without specifying how this file must be treated. Lume will load
 the file if it needs to (for example, if it needs to be processed), or will copy
 it if no transformations are needed.
@@ -45,7 +45,7 @@ site.add("/assets");
 site.use(postcss()); // CSS files in /assets will be processed too!
 ```
 
-To upgrade from Lume 2 to Lume 3, just replace `site.loadAssets()`,
+To upgrade from Lume 2 to Lume 3, just replace the `site.loadAssets()`,
 `site.copyRemainingFiles()`, and `site.copy()` functions with `site.add()`.
 
 For example:
@@ -66,8 +66,8 @@ site.add("/articles");
 
 ### Copy remote files
 
-`site.add()` not only can add files from the `src` folder but also remote files.
-In Lume 2 this was possible using the `remoteFile` function:
+`site.add()` can add files from the `src` folder as well as remote files. In
+Lume 2, this was possible with the `remoteFile` function:
 
 ```js
 // Lume 2
@@ -88,7 +88,7 @@ The `site.add()` function also accepts `npm` specifiers:
 site.add("npm:normalize.css", "/styles/normalize.css");
 ```
 
-Internally, it uses jsDelivr to download the file. In this example,
+Internally, this uses jsDelivr to download the file. In this example,
 `npm:normalize.css` is transformed to
 `https://cdn.jsdelivr.net/npm/normalize.css`. Note that only one file is copied,
 not all package files.
@@ -110,18 +110,18 @@ site.use(postcss());
 ```
 
 In some cases, this is what you want. But if you don't want to load all CSS
-files, this behavior makes Lume load everything and you have to use the
+files, this behavior makes Lume load everything, and you have to use the
 `site.ignore()` function or move the unwanted files to a folder starting with
 `_`.
 
 In addition to that, this behavior is not fully transparent. You have to read
-the documentation to know what the plugin is doing exactly.
+the documentation to know what the plugin is doing.
 
-In short, this approach causes more harm than benefit.
+In short, this approach causes more harm than good.
 
 In Lume 3, thanks to the `site.add()` function, it's very easy to add new files
 (and only the files that you want), so plugins **no longer load files by
-default**. You have to explicitly add them, which is more clear and intuitive:
+default**. You have to explicitly add them, which is more intuitive:
 
 ```js
 // Lume 2
@@ -141,32 +141,32 @@ site.add("main.ts");
 site.use(esbuild()); // Only main.ts is bundled
 ```
 
-This change affects to the following plugins: `svgo`, `transform_images`,
-`picture`, `postcss`, `sass`, `tailwindcss`, `unocss`, `esbuild` and `terser`.
+This change affects the `svgo`, `transform_images`, `picture`, `postcss`,
+`sass`, `tailwindcss`, `unocss`, `esbuild` and `terser` plugins.
 
 ## One JSX library
 
 Lume started supporting `JSX` as a template engine thanks to the `jsx` plugin
-that uses React under the hood. Some versions later the plugin `jsx_preact` was
-added to use Preact, a smaller and more performant alternative to React.
+that uses React under the hood. Later, the `jsx_preact` plugin was added to use
+Preact, a smaller and more performant alternative to React.
 
 Having two JSX plugins for the same purpose is useless and adds unnecessary
-complexity (for example combined with MDX plugin).
+complexity (for example, combined with the MDX plugin).
 
 Moreover, both libraries are frontend-first libraries, with features like hooks,
-event callbacks, hydration, etc, that are not supported at building time and
-some people were confused about what they can do or not in Lume.
+event callbacks, hydration, etc, that are not supported at build time, so some
+people were confused about what they can or cannot do in Lume.
 
 Lume 3 has only one JSX library, and it's not React or Preact. It's
 [SSX](https://github.com/oscarotero/ssx/), a TypeScript library created
 specifically for static sites which is faster than React and Preact
 ([See Benchmarks](https://github.com/oscarotero/ssx/actions/runs/13022300332/job/36325328553#step:7:22))
-and more ergonomic. It allows to create of asynchronous components, insert raw
+and more ergonomic. It allows creating asynchronous components, inserting raw
 code like `<!doctype html>`, and comes with great documentation including all
 HTML elements and attributes, with links to MDN.
 
 And because Lume has only one JSX library, the MDX plugin works automatically
-without needing to use the JSX plugin before.
+without needing to enable a specific JSX plugin before.
 
 > [!note]
 >
@@ -177,9 +177,10 @@ without needing to use the JSX plugin before.
 
 ### Async components
 
-One of the main limitations of Lume components was they were synchronous. The
-reason is to support JSX components that were synchronous in React and Preact.
-With SSX, we don't have this limitation anymore and all components are async.
+One of the main limitations of Lume 2's components was that they were
+synchronous. This was to support JSX components that were synchronous with React
+and Preact. With SSX, we don't have this limitation anymore, and all components
+are async.
 
 For example, you can create a component in JSX that returns a promise:
 
@@ -229,10 +230,10 @@ css: |
 ```
 
 The problem with this approach is the CSS and JS code is not treated as CSS and
-JS code by the code editor. There's no syntax highlight.
+JS code by your code editor, so there's no syntax highlighting.
 
-In Lume 3 it's possible to create a component in a folder, with the CSS and JS
-code in different files. To do that, you have to keep the following structure:
+In Lume 3, it's possible to create a component in a folder, with the CSS and JS
+code in different files. To do that, you use the following structure:
 
 ```txt
 |_ _components/
@@ -243,7 +244,7 @@ code in different files. To do that, you have to keep the following structure:
 ```
 
 Any folder containing a `comp.*` file will be loaded as a component using the
-folder name as the component name. And the files `style.css` and `script.js`
+folder name as the component name, and the `style.css` and `script.js` files
 will be loaded as the CSS and JS code for the component. This makes the creation
 of components more ergonomic, especially for cases with a lot of CSS and JS
 code.
@@ -279,9 +280,9 @@ Or with a custom title
 
 ## Global cssFile and jsFile
 
-As said, Lume components can output CSS and JS code. But there are some plugins
-that output code too. For example, `google_fonts` generates the CSS code needed
-to load the fonts, `prism` and `code_highlight` export the CSS code with the
+As mentioned, Lume components can output CSS and JS code. However, some plugins
+output code too. For example, `google_fonts` generates the CSS code needed to
+load the fonts, `prism` and `code_highlight` export the CSS code with the
 themes, etc.
 
 In Lume 2, you have to configure how to export the generated code for every
@@ -310,7 +311,7 @@ site.use(unocss({
 
 The `tailwindcss` plugin was upgraded to use
 [Tailwind 4](https://tailwindcss.com/blog/tailwindcss-v4). The new version is
-faster than v3 and no longer needs postcss to work. There are many changes in
+faster than v3 and no longer needs Postcss to work. There are many changes in
 the configuration (especially the CSS-first configuration) so take a look at the
 [upgrade guide](https://tailwindcss.com/docs/upgrade-guide) if you want to
 upgrade your projects from v3 to v4.
@@ -325,7 +326,7 @@ site.use(tailwindcss());
 site.add("style.css");
 ```
 
-If you don't want to upgrade to v4 it's still possible to continue using
+If you don't want to upgrade to v4, it's still possible to continue using
 Tailwind 3 with the postcss plugin:
 
 ```js
@@ -340,8 +341,8 @@ site.use(
 
 ## Processors improvements
 
-`site.process()` and `site.preprocess()` are among the most used features of
-Lume. Lume 3 brings some improvements here to make them easier to use.
+`site.process()` and `site.preprocess()` are among Lume's most used features.
+Lume 3 brings some improvements here to make them easier to use.
 
 ### `page.document` no longer returns undefined
 
@@ -363,8 +364,7 @@ site.process([".html"], (pages) => {
 ```
 
 In Lume 3, `page.document` always returns a `Document` instance or throws an
-exception if the page cannot be parsed. This allows us to omit the type
-checking:
+exception if the page cannot be parsed. This allows us to omit the type check:
 
 ```js
 site.process([".html"], (pages) => {
@@ -376,10 +376,10 @@ site.process([".html"], (pages) => {
 
 ### New page properties
 
-The `page.content`, which returns the content of the page, can be a string or a
-`Uint8Array`, depending on how this page has been loaded. For example, HTML, CSS
-or JS pages have the content as string but images or other binary files are
-loaded as `Uint8Array`.
+The `page.content` variable containing the content of the page can be a string
+or a `Uint8Array`, depending on how this page has been loaded. For example,
+HTML, CSS or JS pages have the content as a string, but images or other binary
+files are loaded as `Uint8Array`.
 
 To process these files in Lume 2 you have to check the content type:
 
@@ -400,7 +400,7 @@ by the same properties of the
 [Request](https://developer.mozilla.org/en-US/docs/Web/API/Request#instance_methods)
 object). As you may guess, `page.text` allows to work with the page content as
 strings, making the conversions automatic, and `page.bytes` does the same but
-for `Uin8Array`.
+for `Uint8Array`.
 
 ```js
 site.process([".css"], (pages) => {
@@ -412,7 +412,7 @@ site.process([".css"], (pages) => {
 
 ### Omit `*` wildcard
 
-In Lume 2, the `*` wildcard allows to process all pages:
+In Lume 2, the `*` wildcard allows you to process all pages:
 
 ```js
 site.process("*", (pages) => {
@@ -431,7 +431,7 @@ site.process((pages) => {
 ## The order of some plugins is now more important
 
 In Lume 2, the order in which some plugins are registered doesn't matter. Let's
-see this example from `sitemap` plugin:
+see this example from the `sitemap` plugin:
 
 ```js
 site.use(sitemap()); // Generate the sitemap file
@@ -444,8 +444,8 @@ internally, the sitemap plugin is executed using the "beforeSave" event, which
 is triggered at the end, just before saving all files to the _site folder. So
 internally the basePath plugin is executed before.
 
-This was designed in this way, so you don't have to think about the order of the
-plugins when using it. But this behavior has two problems:
+This was designed so you don't have to think about the order of the plugins when
+using them. But this behavior has two problems:
 
 - There are many plugins in which the order matters. For example, if you combine
   SASS and Postcss you have to process the SCSS files first and pass the result
@@ -453,14 +453,14 @@ plugins when using it. But this behavior has two problems:
   important or not.
 - It's not possible to use a processor to modify the output of these plugins.
   For example, if you want to compress the sitemap file with brotli or gzip, is
-  not possible because the sitemap will be executed always later.
+  not possible because the sitemap will be always be run later.
 
-To make Lume less magic and more transparent and intuitive, many plugins using
-events were changed to use processors, which respect the order in which they are
-registered in the _config.ts file.
+To make Lume more transparent and intuitive, many plugins using events were
+changed to use processors, which respect the order in which they are registered
+in the _config.ts file.
 
-The affected plugins are: code_highlight, decap_cms, favicon, feed,
-google_fonts, icons, prism, robots, sitemap, and slugify_urls.
+The affected plugins are: `code_highlight`, `decap_cms`, `favicon`, `feed`,
+`google_fonts`, `icons`, `prism`, `robots`, `sitemap`, and `slugify_urls`.
 
 ## esbuild uses `esbuild-deno-loader` to resolve dependencies
 
@@ -476,20 +476,20 @@ different `deno.json` and `deno.jsonc` files. And the addition of workspaces
 adds a new layer of complexity.
 
 In Lume 2, the `esbuild` plugin delegates all this complexity to
-[esm.sh](https://esm.sh/), that can transform any NPM and JSR package to simple
-HTTP imports that are easier to manage. But this solution has its problems in
-form of multiple configuration options (`deps`, `pin`, `alias`, `standalone`,
-`exports`, etc) and there are many packages that don't work well after passing
-them through esm.sh.
+[esm.sh](https://esm.sh/), which transforms any NPM or JSR package to simple
+HTTP imports that are easier to manage. But this solution has its problems with
+multiple configuration options (`deps`, `pin`, `alias`, `standalone`, `exports`,
+etc) and there are many packages that don't work well after passing them through
+esm.sh.
 
 In Lume 3 the `esbuild` plugin uses the
 [esbuild-deno-loader](https://jsr.io/@luca/esbuild-deno-loader) plugin created
-by Luca Casonato, member of the Deno team. This will make the bundling of your
-code more reliable and compatible with how Deno works.
+by Luca Casonato, a member of the Deno team. This will make your bundled code
+more reliable and compatible with how Deno works.
 
 ## `basename` improvements
 
-In Lume 2, the `basename` variable allows to change the name of a file or
+In Lume 2, the `basename` variable allows changing the name of a file or
 directory. When missing, it's automatically defined by Lume using the page
 filename. For example, the page `/posts/first-post.md` has the basename
 `first-post`.
@@ -534,27 +534,26 @@ generator (`/items/computer/`, `/items/mug/`, `/items/spoon/`).
 In addition to `jsx_preact`, two more plugins were removed in Lume 3: `liquid`
 and `on_demand`.
 
-Liquid allows us to use [LiquidJS](https://liquidjs.com/) as a template engine
-to build pages. The syntax is very similar to Nunjucks and the library is
-actively maintained but it has a big limitation: it's not possible to invoke
-functions. This makes this template engine useless in Lume because it's not
-possible to use helpers like `search` or `nav` to search pages or build the
-navigation. The plugin was deprecated for long time and it was removed in
-Lume 3.
+Liquid lets you using [LiquidJS](https://liquidjs.com/) as a template engine to
+build pages. The syntax is very similar to Nunjucks and the library is actively
+maintained but it has a big limitation: it's not possible to invoke functions.
+This makes this template engine useless in Lume because it's not possible to use
+helpers like `search` or `nav` to search pages or build the navigation. The
+plugin has been deprecated for a while, and it was removed in Lume 3.
 
 The `on_demand` plugin was mainly an experiment to see if it was possible to add
 some dynamic behavior to Lume sites. But it never worked well, the
-implementation was a bit hacky to make it work on Deno Deploy and it was too
+implementation was a bit hacky to make it work on Deno Deploy, and it was too
 limited. Lume has the [router](https://lume.land/plugins/router/) for simple use
-cases. And for complex cases, maybe you have to use a different framework. The
+cases, and for complex cases, maybe you have to use a different framework. The
 purpose of Lume never was to become into one-size-fits-all solution.
 
-## Removed some customizations
+## Removed some customization
 
 The following removals aim to improve the stability and interoperability between
 plugins.
 
-### Extensions option
+### `extensions` option
 
 In Lume 2, some plugins have the `extensions` option to configure which files
 you want to process. You rarely need to modify this option because Lume provides
@@ -583,14 +582,14 @@ In Lume 3, this option was removed in many plugins:
 - sass always processes `.scss` and `.sass` files.
 - svgo always processes `.svg` files.
 - check_urls, base_path, code_highlight, fff, inline, json_ld, katex, metas,
-  multilanguage, og_images, prism, relative_urls, filter_pages always affects to
+  multilanguage, og_images, prism, relative_urls, filter_pages always process
   `.html` pages.
 
 ### Name option
 
 There are other plugins that register filters or helpers that you can use in
 your pages. In Lume 2 you could customize the name of these elements. For
-example, is possible to use a different key to store the data for the `metas`
+example, it's possible to use a different key to store the data for the `metas`
 plugin:
 
 ```js
@@ -612,23 +611,23 @@ Changing the default name of the plugins have two problems:
 - The types declared by the plugin don't change, so even if you change the key
   `metas` to `opengraph`, `Lume.Data.metas` still exist.
 - This breaks the interoperability between plugins. For example, `picture` and
-  `transform_images` depend on the same key name. If you change it only for one
+  `transform_images` depend on the same key name. If you change it for only one
   plugin, the other won't work.
 
-In Lume 3, the `name` option was removed in the following plugins and it's not
-possible to change it for something else: `date`, `json_ld`, `metas`, `nav`,
-`paginate`, `picture`, `reading_info`, `search`, `transform_images`, `url` and
-`postcss`.
+In Lume 3, the `name` option was removed in the following plugins, so it's no
+longer possible to change it to something else: `date`, `json_ld`, `metas`,
+`nav`, `paginate`, `picture`, `reading_info`, `search`, `transform_images`,
+`url` and `postcss`.
 
 ### Other options
 
 - cache option in `transform_images`, `favicon` and `og_images`
 - `attribute` option in `inline`.
-- Components are always in the `comp` variable. The option to customize the
+- Components are always in the `comp` variable. The option to customize this
   variable name has been removed.
 
-Most Lume users don't change these options so probably these removals don't
-affect to upgrade to Lume 3.
+Most Lume users don't change these options, so most likely these removals don't
+affect your upgrade to Lume 3.
 
 ## Other changes
 
@@ -641,9 +640,9 @@ info
 
 ### Removed automatic doctype
 
-Lume 2 automatically added the `<!doctype html>` to all HTML pages if it's
-missing. The original reason is that JSX doesn't allow to add this directive, so
-it was difficult to create HTML pages only with JSX. However, some users don't
-want this behavior because they want to create files with fragments of HTML. In
-Lume 3 is possible to add the `doctype` directive in JSX (thanks to SSX) so this
+Lume 2 automatically added `<!doctype html>` to any HTML pages that were missing
+it. The original reason was because JSX doesn't allow adding this directive, so
+it was difficult to create HTML pages with only JSX. However, some users don't
+want this behavior because they create files with fragments of HTML. In Lume 3,
+it is possible to add the `doctype` directive in JSX (thanks to SSX) so this
 behavior is no longer needed.
