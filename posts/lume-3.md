@@ -631,6 +631,21 @@ affect your upgrade to Lume 3.
 
 ## Other changes
 
+### Temporal API enabled by default
+
+The [Temporal proposal](https://github.com/tc39/proposal-temporal) provides
+standard objects and functions for working with dates and times. It's being
+implemented in all browsers and it's supported by Deno with the
+`unstable-temporal` flag. Lume 2 uses
+[a polyfill](https://www.npmjs.com/package/@js-temporal/polyfill), but Lume 3
+uses the Deno implementation, which requires to enable it in `deno.json` file:
+
+```json
+{
+  "unstable": ["temporal"]
+}
+```
+
 ### Deno LTS support
 
 As of Lume 3, Lume will support at least the most recent Deno LTS version (and
