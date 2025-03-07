@@ -529,6 +529,44 @@ This function generates a page per item. Instead of returning an object with the
 `url` property, it returns the `basename` so it's appended to the URL of the
 generator (`/items/computer/`, `/items/mug/`, `/items/spoon/`).
 
+## Date detection from filepath is disabled by default
+
+Lume 2 detects automatically the `date` value from the files and folders paths
+and remove it. For example, the file `/posts/2020-06-21_hello-world.md` outputs
+the page `/posts/hello-world/` (without the date).
+
+Some people don't want this behavior and prefer to keep the date in the output
+URL. Following the Lume's philosophy of having a light core and provide extra
+features through plugins, this feature was removed from the core and the new
+`extract_date` plugin was created to enable it.
+
+```js
+import lume from "lume/mod.ts";
+import extractDate from "lume/plugins/extract_date.ts";
+
+const site = lume();
+
+site.use(extractDate());
+
+export default site;
+```
+
+By default the plugin provides the same behavior of Lume 2, but it's possible to
+extract the date without removing it from the URL:
+
+```js
+import lume from "lume/mod.ts";
+import extractDate from "lume/plugins/extract_date.ts";
+
+const site = lume();
+
+site.use(extractDate({
+  remove: false, // Keep the date
+}));
+
+export default site;
+```
+
 ## Removed plugins
 
 In addition to `jsx_preact`, two more plugins were removed in Lume 3: `liquid`
