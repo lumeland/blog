@@ -144,7 +144,9 @@ site.use(esbuild()); // Only main.ts is bundled
 This change affects the `svgo`, `transform_images`, `picture`, `postcss`,
 `sass`, `tailwindcss`, `unocss`, `esbuild` and `terser` plugins.
 
-## One JSX library
+## JSX
+
+### One JSX plugin
 
 Lume started supporting `JSX` as a template engine thanks to the `jsx` plugin
 that uses React under the hood. Later, the `jsx_preact` plugin was added to use
@@ -157,7 +159,7 @@ Moreover, both libraries are frontend-first libraries, with features like hooks,
 event callbacks, hydration, etc, that are not supported at build time, so some
 people were confused about what they can or cannot do in Lume.
 
-Lume 3 has only one JSX library, and it's not React or Preact. It's
+Lume 3 has only one JSX pluging, and it doesn't use React or Preact but
 [SSX](https://github.com/oscarotero/ssx/), a TypeScript library created
 specifically for static sites which is faster than React and Preact
 ([See Benchmarks](https://github.com/oscarotero/ssx/actions/runs/13022300332/job/36325328553#step:7:22))
@@ -172,6 +174,41 @@ without needing to enable a specific JSX plugin before.
 >
 > With the `esbuild` plugin you still can use React or Preact in Lume but for
 > what they were created for: the frontend.
+
+### `.page` subextension for JSX and TSX pages
+
+Lume needs the `.page` subextension added to some extensions like `.ts`, `.js`,
+or `.json` to differentiate between files to generate pages from files to be
+loaded by the browser. For example, `index.page.js` is a file that generates the
+`index.html` page, but `index.js` is a JavaScript file to be loaded and executed
+by the browser.
+
+Lume 2 loads all `.jsx` and `.tsx` files as page files. This mean that to use
+any JSX library on the frontend (like React or Preact) to implement some
+interactivity, you need to configure the `esbuild` plugin to load files with a
+different extension (for example `.client.jsx`).
+
+In Lume 3 this was changed and the JSX plugin only load `.page.tsx` and
+`.page.jsx` files by default. This frees up the extensions `.jsx` and `.tsx` to
+be used for browser-side stuff (after passing them throught the `esbuild`
+plugin).
+
+```txt
+Lume 2
+/index.jsx
+
+Lume 3
+/index.page.jsx
+```
+
+If you want to keep the Lume 2 behavior (because your don't need this
+differentiation), just configure the plugin to remove the subextension:
+
+```js
+site.use(jsx({
+  pageSubExtension: "", // Back to Lume 2 behavior
+}));
+```
 
 ## Improved Lume components
 
@@ -248,6 +285,9 @@ folder name as the component name, and the `style.css` and `script.js` files
 will be loaded as the CSS and JS code for the component. This makes the creation
 of components more ergonomic, especially for cases with a lot of CSS and JS
 code.
+
+Additionally, it's possible to add a `script.ts` file instead `script.js` to use
+TypeScript. Lume will compile it to JavaScript automatically.
 
 ### Default data in components
 
