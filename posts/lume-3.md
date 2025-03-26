@@ -289,6 +289,64 @@ code.
 Additionally, it's possible to add a `script.ts` file instead `script.js` to use
 TypeScript. Lume will compile it to JavaScript automatically.
 
+### Better interoperability
+
+In Lume 2 components created with text-based engines, like Vento didn't work
+well for JSX templates. For example, let's say we have the following Vento
+component:
+
+```vto
+<button>{{ content }}</button>
+```
+
+and we want to use it in a JSX page:
+
+```jsx
+export default function ({ comp }) {
+  return <comp.Button>Click here</comp.Button>;
+}
+```
+
+Due JSX escapes the string values, the output code is this:
+
+```html
+&lt;button&gt;Click here&lt;/button&gt;
+```
+
+To fix it, we need to create a container element with the
+`dangerouslySetInnerHTML` attribute:
+
+```jsx
+export default function ({ comp }) {
+  return (
+    <div
+      dangerouslySetInnerHTML={{
+        __html: <comp.Button>Click here</comp.Button>,
+      }}
+    />
+  );
+}
+```
+
+In Lume 3, thanks to SSX this is no longer necessary. Components are fully
+interoperable and you can insert JSX components in Vento and viceversa. And to
+make them even more interchangeable, the `content` and `children` variables are
+equivalent.
+
+```jsx
+export default function ({ comp }) {
+  return (
+    <>
+      // This works
+      <comp.Button>Click here</comp.Button>
+
+      // This also works
+      <comp.Button content="Click here" />
+    </>
+  );
+}
+```
+
 ### Default data in components
 
 In Lume 3, components can have extra data that will be used as default values.
