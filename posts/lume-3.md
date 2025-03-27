@@ -556,7 +556,7 @@ using them. But this behavior has two problems:
   important or not.
 - It's not possible to use a processor to modify the output of these plugins.
   For example, if you want to compress the sitemap file with brotli or gzip, is
-  not possible because the sitemap will be always be run later.
+  not possible because the sitemap will be always generated at the end.
 
 To make Lume more transparent and intuitive, many plugins using events were
 changed to use processors, which respect the order in which they are registered
