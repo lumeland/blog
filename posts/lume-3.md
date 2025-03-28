@@ -7,6 +7,31 @@ tags:
 comments: {}
 ---
 
+Intro
+
+<!-- more -->
+
+> [!note]
+>
+> **TL/DR:** There's
+> [a step-by-step guide to migrate to Lume 3](https://lume.land/docs/advanced/migrate-to-lume3/)
+> in the documentation. And the documentation for Lume 2 is still visible at
+> [v2.lume.land](https://v2.lume.land/).
+
+To many developers, including myself, breaking changes can be frustrating.
+Software updates that force you to revisit a project just to ensure it continues
+working as before often feel like a waste of time. This is one of the reasons I
+enjoy working with Web APIs—they are stable, reliable, and designed to just work
+[without introducing unnecessary disruptions](https://csswizardry.com/2025/01/build-for-the-web-build-on-the-web-build-with-the-web/).
+
+I strive to bring a similar philosophy to Lume by minimizing breaking changes
+whenever possible. In fact, I initially had no plans to release a new major
+version of Lume. However, after receiving numerous reports about certain
+behaviors and limitations, I realized it was necessary to revisit some design
+decisions. This effort aims to finally deliver the simple, intuitive static site
+generator I have always envisioned, hoping that Lume 4 won't be necesary in a
+long time, or never.
+
 ## The main problem
 
 The `site.copy()` function allows you to copy files from the `src` folder
@@ -159,7 +184,7 @@ Moreover, both libraries are frontend-first libraries, with features like hooks,
 event callbacks, hydration, etc, that are not supported at build time, so some
 people were confused about what they can or cannot do in Lume.
 
-Lume 3 has only one JSX pluging, and it doesn't use React or Preact but
+Lume 3 has only one JSX plugin, and it doesn't use React or Preact but
 [SSX](https://github.com/oscarotero/ssx/), a TypeScript library created
 specifically for static sites which is faster than React and Preact
 ([See Benchmarks](https://github.com/oscarotero/ssx/actions/runs/13022300332/job/36325328553#step:7:22))
@@ -175,38 +200,33 @@ without needing to enable a specific JSX plugin before.
 > With the `esbuild` plugin you still can use React or Preact in Lume but for
 > what they were created for: the frontend.
 
-### `.page` subextension for JSX and TSX pages
+### `.page` Subextension for JSX and TSX Pages
 
-Lume needs the `.page` subextension added to some extensions like `.ts`, `.js`,
-or `.json` to differentiate between files to generate pages from files to be
-loaded by the browser. For example, `index.page.js` is a file that generates the
-`index.html` page, but `index.js` is a JavaScript file to be loaded and executed
-by the browser.
+Lume requires the `.page` subextension for certain file types like `.ts`, `.js`,
+or `.json` to distinguish between files used to generate pages and those
+intended for browser execution. For instance, `index.page.js` generates the
+`index.html` page, while `index.js` is a JavaScript file executed by the
+browser.
 
-Lume 2 loads all `.jsx` and `.tsx` files as page files. This mean that to use
-any JSX library on the frontend (like React or Preact) to implement some
-interactivity, you need to configure the `esbuild` plugin to load files with a
-different extension (for example `.client.jsx`).
-
-In Lume 3 this was changed and the JSX plugin only load `.page.tsx` and
-`.page.jsx` files by default. This frees up the extensions `.jsx` and `.tsx` to
-be used for browser-side stuff (after passing them throught the `esbuild`
+Starting with Lume 3, the `.page` subextension is also applied to `.jsx` and
+`.tsx` files. This change allows the `.jsx` and `.tsx` extensions to be
+exclusively used for browser-side code (after processing with the `esbuild`
 plugin).
 
 ```txt
-Lume 2
-/index.jsx
+Lume 2:
+- /index.jsx
 
-Lume 3
-/index.page.jsx
+Lume 3:
+- /index.page.jsx
 ```
 
-If you want to keep the Lume 2 behavior (because your don't need this
-differentiation), just configure the plugin to remove the subextension:
+If you prefer the Lume 2 behavior (where this differentiation is not required),
+you can configure the plugin to remove the `.page` subextension:
 
 ```js
 site.use(jsx({
-  pageSubExtension: "", // Back to Lume 2 behavior
+  pageSubExtension: "", // Reverts to Lume 2 behavior
 }));
 ```
 
@@ -246,7 +266,7 @@ export default async function ({ comp }) {
 Or Vento:
 
 ```html
-<p>{{ await comp.Salute({ id: 23}) }}</p>
+<p>{{ comp.Salute({ id: 23}) }}</p>
 ```
 
 ### Folder components
@@ -541,7 +561,7 @@ site.use(sitemap()); // Generate the sitemap file
 site.use(basePath()); // Add the base path to all URLs
 ```
 
-The sitemap plugin is registered before basePath, so you may guess the sitemap
+The sitemap plugin is registered before basePath, so you may think the sitemap
 file is generated before adding the base path prefix to all URLs. But
 internally, the sitemap plugin is executed using the "beforeSave" event, which
 is triggered at the end, just before saving all files to the _site folder. So
@@ -802,3 +822,21 @@ it was difficult to create HTML pages with only JSX. However, some users don't
 want this behavior because they create files with fragments of HTML. In Lume 3,
 it is possible to add the `doctype` directive in JSX (thanks to SSX) so this
 behavior is no longer needed.
+
+### More changes
+
+As always, you can see
+[the CHANGELOG.md file](https://github.com/lumeland/lume/blob/v3.0.0/CHANGELOG.md)
+for a complete list of all changes with more details.
+
+## Thanks!
+
+All this work wouldn't be possible without the help from all people that
+contribute to Lume. Thanks to everyone that
+[sponsor Lume](https://opencollective.com/lume)
+[or directly me](https://github.com/sponsors/oscarotero). Thanks also to people
+that have been testing Lume 3 in the latest months or even using it in real
+projects, reporting bugs and providing feedback (specially
+[Tim Post](https://timthepost.deno.dev/) and [Rick Cogley](https://cogley.jp/)),
+and thanks to [Pyrox](https://pyrox.dev/) for reviewing the grammar of this
+post.
