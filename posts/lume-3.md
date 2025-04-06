@@ -192,8 +192,24 @@ and more ergonomic. It allows creating asynchronous components, inserting raw
 code like `<!doctype html>`, and comes with great documentation including all
 HTML elements and attributes, with links to MDN.
 
-And because Lume has only one JSX library, the MDX plugin works automatically
-without needing to enable a specific JSX plugin before.
+Lume 3 uses `lume/jsx-runtime` import source for all JSX and MDX files. So you
+only have to configure the `compilerOptions` setting of `deno.json` as following
+(other options have been omited for brevity):
+
+```json
+{
+  "imports": {
+    "lume/jsx-runtime": "https://deno.land/x/ssx@v0.1.8/jsx-runtime.ts"
+  },
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "lume"
+  }
+}
+```
+
+This allows to upgrade the library (or even replace it with something else)
+easily.
 
 > [!note]
 >
