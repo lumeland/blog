@@ -758,9 +758,11 @@ In Lume 3, this option was removed in many plugins:
 - purgecss, postcss, and lightningcss always process `.css` files.
 - sass always processes `.scss` and `.sass` files.
 - svgo always processes `.svg` files.
-- check_urls, base_path, code_highlight, fff, inline, json_ld, katex, metas,
-  multilanguage, og_images, prism, relative_urls, filter_pages always process
-  `.html` pages.
+- check_urls, base_path, relative_urls and modify_urls process `.css` and
+  `.html` files.
+- filter_pages processes all extensions.
+- code_highlight, fff, inline, json_ld, katex, metas, multilanguage, og_images,
+  and prism always process `.html` pages.
 
 ### Name option
 
