@@ -18,9 +18,10 @@ sung by anonymous women, we can now enjoy this musical heritage performed by
 contemporary musicians with innovative arrangements.
 
 Some examples include
-[Xosé Lois Romero & Aliboria](https://www.youtube.com/watch?v=Ge9Uu8SeGDE),
-[Berrogüetto](https://www.youtube.com/watch?v=czMGYX0C2zE), and
-[Xabier Díaz & Adufeiras de Salitre](https://www.youtube.com/watch?v=CwjZd5ak7xA).
+[Xabier Díaz & Adufeiras de Salitre](https://www.youtube.com/watch?v=CwjZd5ak7xA),
+[Xosé Lois Romero & Aliboria](https://www.youtube.com/watch?v=Ge9Uu8SeGDE), and
+[Berrogüetto](https://www.youtube.com/watch?v=czMGYX0C2zE).
+
 For more disruptive artists, check out
 [Tanxugueiras](https://www.youtube.com/watch?v=qjCeKRoGS8s) or
 [Baiuca](https://www.youtube.com/watch?v=9ZM0kou3BPQ).
