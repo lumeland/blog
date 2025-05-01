@@ -1,5 +1,5 @@
 ---
-title: Lume 3
+title: Lume 3 was released
 author: Óscar Otero
 draft: true
 tags:
@@ -7,7 +7,23 @@ tags:
 comments: {}
 ---
 
-Intro
+After launching Lume 2 almost a year and a half ago, a new major version of Lume
+is here!
+
+This version is dedicated to all Galician _cantareiras_ and
+_pandereteiras_—women who sing and play the tambourine (or _pandeireta_), one of
+the most important instruments in Galician traditional music. Thanks to the
+_recollidas_, where musicians and musicologists recorded these traditional songs
+sung by anonymous women, we can now enjoy this musical heritage performed by
+contemporary musicians with innovative arrangements.
+
+Some examples include
+[Xosé Lois Romero & Aliboria](https://www.youtube.com/watch?v=Ge9Uu8SeGDE),
+[Berrogüetto](https://www.youtube.com/watch?v=czMGYX0C2zE), and
+[Xabier Díaz & Adufeiras de Salitre](https://www.youtube.com/watch?v=CwjZd5ak7xA).
+For more disruptive artists, check out
+[Tanxugueiras](https://www.youtube.com/watch?v=qjCeKRoGS8s) or
+[Baiuca](https://www.youtube.com/watch?v=9ZM0kou3BPQ).
 
 <!-- more -->
 
