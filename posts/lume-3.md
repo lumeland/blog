@@ -20,7 +20,8 @@ contemporary musicians with innovative arrangements.
 Some examples include
 [Xabier Díaz & Adufeiras de Salitre](https://www.youtube.com/watch?v=CwjZd5ak7xA),
 [Xosé Lois Romero & Aliboria](https://www.youtube.com/watch?v=Ge9Uu8SeGDE), and
-[Berrogüetto](https://www.youtube.com/watch?v=czMGYX0C2zE).
+[Berrogüetto](https://www.youtube.com/watch?v=czMGYX0C2zE) (apologies for the
+video quality, but I really love that song).
 
 For more disruptive artists, check out
 [Tanxugueiras](https://www.youtube.com/watch?v=qjCeKRoGS8s) or
