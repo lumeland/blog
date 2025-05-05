@@ -138,14 +138,14 @@ Deno.serve(app.fetch);
 Run this file to start the CMS and open the URL `http://localhost:8000` in your
 browser. You will see a page like this:
 
-![screenshot of the cms home](../img/lumecms-home.png)
+![screenshot of the cms home](../uploads/lumecms-home.png)
 
 The `posts` and `people` collections, `homepage` document, and `my_uploads`
 upload folder is available for editing!
 
 If you go into the Homepage you will see the fields to edit the content:
 
-![editing document screenshot](../img/lumecms-document.png)
+![editing document screenshot](../uploads/lumecms-document.png)
 
 ## Lume integration
 
@@ -169,7 +169,7 @@ Deno.serve(app.fetch);
 After connecting Lume and LumeCMS, you will be able to edit the page content in
 the CMS and preview the changes after saving:
 
-![Image](/img/lumecms-site-editing.png)
+![Image](/uploads/lumecms-site-editing.png)
 
 You can test it in your computer
 [cloning this blog repository](https://github.com/lumeland/blog) and running

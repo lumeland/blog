@@ -187,6 +187,12 @@ site.use(esbuild()); // Only main.ts is bundled
 This change affects the `svgo`, `transform_images`, `picture`, `postcss`,
 `sass`, `tailwindcss`, `unocss`, `esbuild` and `terser` plugins.
 
+To help with this transition, Lume 3 comes with a
+[lint plugin](https://docs.deno.com/runtime/reference/lint_plugins/) that warns
+you when the order of some plugins is not correct.
+
+![Image](/uploads/lint.png)
+
 ## JSX
 
 ### One JSX plugin
@@ -619,6 +625,10 @@ in the _config.ts file.
 The affected plugins are: `code_highlight`, `decap_cms`, `favicon`, `feed`,
 `google_fonts`, `icons`, `prism`, `robots`, `sitemap`, and `slugify_urls`.
 
+To help with this transition, Lume 3 comes with a
+[lint plugin](https://docs.deno.com/runtime/reference/lint_plugins/) to warn
+when the order of some plugins is not correct.
+
 ## esbuild uses `esbuild-deno-loader` to resolve dependencies
 
 Deno is becoming a complicated runtime, especially for everything related to
@@ -864,6 +874,69 @@ behavior is no longer needed.
 As always, you can see
 [the CHANGELOG.md file](https://github.com/lumeland/lume/blob/v3.0.0/CHANGELOG.md)
 for a complete list of all changes with more details.
+
+## One last thing
+
+While the development server is running, Lume 3 features a debug bar that
+provides valuable insights, including warnings and issues flagged by plugins.
+
+![Image](/uploads/debugbar.png)
+
+The Lume debug bar can be extended easily by plugins or directly in the
+`_config.ts`. For example, let's create a simple tab to list all pages without
+title:
+
+```js
+function createTab() {
+  // Create a collection in the debug bar
+  const collection = site.debugBar?.collection("Pages without title");
+
+  // The debug bar is enabled if the collection was created
+  if (collection) {
+    collection.icon = "file";
+
+    // Add items to the collection
+    collection.items = site.pages
+      .filter((page) => page.outputPath.endsWith(".html")) // Only HTML pages
+      .filter((page) => !page.data.title) // No title
+      .map((page) => ({
+        title: page.data.url,
+        actions: [
+          {
+            text: "Visit",
+            href: page.data.url,
+          },
+        ],
+      }));
+  }
+}
+
+// Run this function after building and updating the site
+site.addEventListener("afterBuild", createTab);
+site.addEventListener("afterUpdate", createTab);
+```
+
+That's it! Our custom tab is now part of the Lume debug bar, and it has already
+identified two pages without titles!
+
+![Image](/uploads/custom-debug-tab.png)
+
+The Lume debug bar is still an experimental feature, but it has been very well
+received since its introduction in our Discord community. Developers are already
+working on plugins to enhance the debug bar with features like HTML validator
+reports, accessibility checks, and SEO analysis.
+
+Keep in mind that the debug bar is only visible when running Lume with
+`deno task serve`. It is not included in production builds. If you wish to
+disable this feature completely, you can do so by editing the `_config.ts` file:
+
+```js
+const site = lume({
+  server: {
+    debugBar: false, // disable the debug bar
+  },
+});
+```
 
 ## Thanks!
 
