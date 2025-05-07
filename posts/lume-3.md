@@ -9,6 +9,7 @@ comments:
   bluesky: 'https://bsky.app/profile/did:plc:lqbfqodxim3n27heuou7do3g/post/3loluxs3cma2x'
 date: '2025-05-07T00:00:00.000Z'
 ---
+
 After launching Lume 2 almost a year and a half ago, a new major version of Lume
 is here!
 
@@ -150,7 +151,8 @@ not all package files.
 > `site.remoteFile` is still required in Lume 3 for files not directly exported
 > to the dest folder, like `_data`, `_components` or `_includes` files.
 
-More info in the [documentation page](https://lume.land/docs/configuration/add-files/).
+More info in the
+[documentation page](https://lume.land/docs/configuration/add-files/).
 
 ## Plugins no longer load files automatically
 
@@ -197,12 +199,6 @@ site.use(esbuild()); // Only main.ts is bundled
 
 This change affects the `svgo`, `transform_images`, `picture`, `postcss`,
 `sass`, `tailwindcss`, `unocss`, `esbuild` and `terser` plugins.
-
-To help with this transition, Lume 3 comes with a
-[lint plugin](https://docs.deno.com/runtime/reference/lint_plugins/) that warns
-you when the order of some plugins is not correct.
-
-![Image](/uploads/lint.png)
 
 ## JSX
 
@@ -641,8 +637,10 @@ The affected plugins are: `code_highlight`, `decap_cms`, `favicon`, `feed`,
 `google_fonts`, `icons`, `prism`, `robots`, `sitemap`, and `slugify_urls`.
 
 To help with this transition, Lume 3 comes with a
-[lint plugin](https://docs.deno.com/runtime/reference/lint_plugins/) to warn
-when the order of some plugins is not correct.
+[lint plugin](https://docs.deno.com/runtime/reference/lint_plugins/) that warns
+you when the order of some plugins is not correct.
+
+![Image](/uploads/lint.png)
 
 ## esbuild uses `esbuild-deno-loader` to resolve dependencies
 
