@@ -9,7 +9,6 @@ comments:
   bluesky: 'https://bsky.app/profile/did:plc:lqbfqodxim3n27heuou7do3g/post/3loluxs3cma2x'
 date: '2025-05-07T00:00:00.000Z'
 ---
-
 After launching Lume 2 almost a year and a half ago, a new major version of Lume
 is here!
 
@@ -218,7 +217,6 @@ people were confused about what they can or cannot do in Lume.
 Lume 3 has only one JSX plugin, and it doesn't use React or Preact but
 [SSX](https://github.com/oscarotero/ssx/), a TypeScript library created
 specifically for static sites which is faster than React and Preact
-([See Benchmarks](https://github.com/oscarotero/ssx/actions/runs/13022300332/job/36325328553#step:7:22))
 and more ergonomic. It allows creating asynchronous components, inserting raw
 code like `<!doctype html>`, and comes with great documentation including all
 HTML elements and attributes, with links to MDN.
