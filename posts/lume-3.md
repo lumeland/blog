@@ -4,7 +4,8 @@ author: Óscar Otero
 draft: false
 tags:
   - Releases
-comments: {}
+comments:
+  src: 'https://fosstodon.org/@lume/114467614312656125'
 ---
 
 After launching Lume 2 almost a year and a half ago, a new major version of Lume
@@ -148,6 +149,9 @@ not all package files.
 > `site.remoteFile` is still required in Lume 3 for files not directly exported
 > to the dest folder, like `_data`, `_components` or `_includes` files.
 
+More info in the
+[documentation page](https://lume.land/docs/configuration/add-files/).
+
 ## Plugins no longer load files automatically
 
 In Lume 2, some plugins configure Lume to load files with a certain extension
@@ -276,6 +280,8 @@ site.use(jsx({
   pageSubExtension: "", // Reverts to Lume 2 behavior
 }));
 ```
+
+More info in [the plugin documentation](https://lume.land/plugins/jsx/).
 
 ## Improved Lume components
 
@@ -508,6 +514,8 @@ site.use(
   }),
 );
 ```
+
+More info in the [plugin documentation](https://lume.land/plugins/tailwindcss/).
 
 ## Processors improvements
 
