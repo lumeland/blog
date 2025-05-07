@@ -1,7 +1,7 @@
 ---
-title: Lume 3 was released
+title: Lume 3 was released - Adolfina Casás
 author: Óscar Otero
-draft: true
+draft: false
 tags:
   - Releases
 comments: {}
@@ -10,12 +10,18 @@ comments: {}
 After launching Lume 2 almost a year and a half ago, a new major version of Lume
 is here!
 
+![Adolfina Casás](/uploads/adolfina-casas.jpeg)
+
 This version is dedicated to all Galician _cantareiras_ and
 _pandereteiras_—women who sing and play the tambourine (or _pandeireta_), one of
-the most important instruments in Galician traditional music. Thanks to the
-_recollidas_, where musicians and musicologists recorded these traditional songs
-sung by anonymous women, we can now enjoy this musical heritage performed by
-contemporary musicians with innovative arrangements.
+the most important instruments in Galician traditional music. One of these
+cantareiras was Adolfina Casás Rama (1912-2009), an ancestor of my friend Miriam
+Casás. She worked in agriculture, where she often sang. She was known for her
+wit and the variety of styles employed.
+
+Thanks to the _recollidas_, where musicians and musicologists recorded these
+traditional songs sung by anonymous women, we can now enjoy this musical
+heritage performed by contemporary musicians with innovative arrangements.
 
 Some examples include
 [Xabier Díaz & Adufeiras de Salitre](https://www.youtube.com/watch?v=CwjZd5ak7xA),
@@ -29,12 +35,7 @@ For more disruptive artists, check out
 
 <!-- more -->
 
-> [!note]
->
-> **TL/DR:** There's
-> [a step-by-step guide to migrate to Lume 3](https://lume.land/docs/advanced/migrate-to-lume3/)
-> in the documentation. And the documentation for Lume 2 is still visible at
-> [v2.lume.land](https://v2.lume.land/).
+## Why Lume 3?
 
 To many developers, including myself, breaking changes can be frustrating.
 Software updates that force you to revisit a project just to ensure it continues
@@ -49,6 +50,12 @@ behaviors and limitations, I realized it was necessary to revisit some design
 decisions. This effort aims to finally deliver the simple, intuitive static site
 generator I have always envisioned, hoping that Lume 4 won't be necesary in a
 long time, or never.
+
+> [!note]
+>
+> **TL/DR:** There's
+> [a step-by-step guide to migrate to Lume 3](https://lume.land/docs/advanced/migrate-to-lume3/)
+> in the documentation.
 
 ## The main problem
 

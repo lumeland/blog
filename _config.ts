@@ -13,5 +13,4 @@ import "https://deno.land/x/vento@v1.12.14/prism-vento.js";
 
 export default lume({ location: new URL("https://lume.land/blog/") })
   .use(blog())
-  .copy([".png"])
   .use(basePath());

@@ -6,17 +6,28 @@
     "cms": "deno task lume cms"
   },
   "imports": {
-    "lume/": "https://deno.land/x/lume@v2.5.3/",
-    "lume/cms/": "https://cdn.jsdelivr.net/gh/lumeland/cms@v0.10.4/",
-    "blog/": "https://deno.land/x/lume_theme_simple_blog@v0.15.10/"
+    "lume/": "https://deno.land/x/lume@v3.0.0/",
+    "lume/cms/": "https://cdn.jsdelivr.net/gh/lumeland/cms@0.11.5/",
+    "blog/": "https://deno.land/x/lume_theme_simple_blog@v0.16.0/",
+    "lume/jsx-runtime": "https://deno.land/x/ssx@v0.1.9/jsx-runtime.ts"
   },
   "compilerOptions": {
     "types": [
       "lume/types.ts"
-    ]
+    ],
+    "jsx": "react-jsx",
+    "jsxImportSource": "lume"
   },
   "exclude": [
     "./_site",
     "./_bin"
-  ]
+  ],
+  "unstable": [
+    "temporal"
+  ],
+  "lint": {
+    "plugins": [
+      "https://deno.land/x/lume@v3.0.0/lint.ts"
+    ]
+  }
 }
