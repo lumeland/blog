@@ -9,6 +9,7 @@ comments:
   bluesky: 'https://bsky.app/profile/did:plc:lqbfqodxim3n27heuou7do3g/post/3loluxs3cma2x'
 date: '2025-05-07T00:00:00.000Z'
 ---
+
 After launching Lume 2 almost a year and a half ago, a new major version of Lume
 is here!
 
@@ -216,10 +217,10 @@ people were confused about what they can or cannot do in Lume.
 
 Lume 3 has only one JSX plugin, and it doesn't use React or Preact but
 [SSX](https://github.com/oscarotero/ssx/), a TypeScript library created
-specifically for static sites which is faster than React and Preact
-and more ergonomic. It allows creating asynchronous components, inserting raw
-code like `<!doctype html>`, and comes with great documentation including all
-HTML elements and attributes, with links to MDN.
+specifically for static sites which is faster than React and Preact and more
+ergonomic. It allows creating asynchronous components, inserting raw code like
+`<!doctype html>`, and comes with great documentation including all HTML
+elements and attributes, with links to MDN.
 
 Lume 3 uses `lume/jsx-runtime` import source for all JSX and MDX files. So you
 only have to configure the `compilerOptions` setting of `deno.json` as following
@@ -684,29 +685,6 @@ These changes will make this variable more consistent across all pages, no
 matter how the URL is generated. It's especially important for the `nav` plugin
 that uses this variable to sort pages alphabetically.
 
-Another interesting use case for `basename` is the ability to generate pages
-with the basename instead of returning the complete URL, which is now possible
-in Lume 3. Let's see an example:
-
-```ts
-// /items.page.ts
-
-export default function* () {
-  const items = ["computer", "mug", "spoon"];
-
-  for (const item of items) {
-    yield {
-      content: `Content for ${item}`,
-      basename: item,
-    };
-  }
-}
-```
-
-This function generates a page per item. Instead of returning an object with the
-`url` property, it returns the `basename` so it's appended to the URL of the
-generator (`/items/computer/`, `/items/mug/`, `/items/spoon/`).
-
 ## Date detection from filepath is disabled by default
 
 Lume 2 detects automatically the `date` value from the files and folders paths
@@ -818,10 +796,10 @@ site.use(metas({
 
 Or the filter name of the `date` plugin:
 
-```
+```js
 site.use(date({
-  name: "get_date"
-}))
+  name: "get_date",
+}));
 ```
 
 Changing the default name of the plugins have two problems:
@@ -837,7 +815,7 @@ longer possible to change it to something else: `date`, `json_ld`, `metas`,
 `nav`, `paginate`, `picture`, `reading_info`, `search`, `transform_images`,
 `url` and `postcss`.
 
-### Other options
+### Other options removed
 
 - cache option in `transform_images`, `favicon` and `og_images`
 - `attribute` option in `inline`.
@@ -866,9 +844,9 @@ uses the Deno implementation, which requires to enable it in `deno.json` file:
 
 ### Deno LTS support
 
-As of Lume 3, Lume will support at least the most recent Deno LTS version (and
-probably some older versions too). Lume 3.0 supports Deno 2.1 and greater. More
-info
+As of version 3, Lume will support at least the most recent Deno LTS version
+(and probably some older versions too). Lume 3.0 supports Deno 2.1 and greater.
+More info
 [about Deno LTS releases](https://docs.deno.com/runtime/fundamentals/stability_and_releases/#long-term-support-(lts)).
 
 ### Removed automatic doctype
@@ -878,7 +856,7 @@ it. The original reason was because JSX doesn't allow adding this directive, so
 it was difficult to create HTML pages with only JSX. However, some users don't
 want this behavior because they create files with fragments of HTML. In Lume 3,
 it is possible to add the `doctype` directive in JSX (thanks to SSX) so this
-behavior is no longer needed.
+behavior is no longer needed and was removed.
 
 ### More changes
 
