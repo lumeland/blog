@@ -6,8 +6,8 @@ tags:
   - Releases
 comments:
   src: 'https://fosstodon.org/@lume/114467614312656125'
+date: '2025-05-07T00:00:00.000Z'
 ---
-
 After launching Lume 2 almost a year and a half ago, a new major version of Lume
 is here!
 
@@ -149,8 +149,7 @@ not all package files.
 > `site.remoteFile` is still required in Lume 3 for files not directly exported
 > to the dest folder, like `_data`, `_components` or `_includes` files.
 
-More info in the
-[documentation page](https://lume.land/docs/configuration/add-files/).
+More info in the [documentation page](https://lume.land/docs/configuration/add-files/).
 
 ## Plugins no longer load files automatically
 
