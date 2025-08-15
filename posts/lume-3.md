@@ -117,7 +117,10 @@ site.add("/assets", ".");
 site.add("/articles");
 ```
 
-> **Update:** Some users have reported that `site.copy()` remains useful in specific scenarios. For instance, if you need to copy a CSS file without processing it. As a result, the `site.copy()` function was reintroduced in Lume 3.0.1 to address these edge cases.
+> **Update:** Some users have reported that `site.copy()` remains useful in
+> specific scenarios. For instance, if you need to copy a CSS file without
+> processing it. As a result, the `site.copy()` function was reintroduced in
+> Lume 3.0.1 to address these edge cases.
 
 ### Copy remote files
 

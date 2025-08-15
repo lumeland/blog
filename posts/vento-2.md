@@ -7,10 +7,11 @@ tags:
   - Vento
 comments: {}
 ---
+
 Vento was born two years ago as an experiment to create a modern, ergonomic, and
-async-friendly template engine for JavaScript. Initially, it was a Deno-only project,
-intended to become the default template engine for Lume. But as soon as the NPM package was available, other
-projects started to use it.
+async-friendly template engine for JavaScript. Initially, it was a Deno-only
+project, intended to become the default template engine for Lume. But as soon as
+the NPM package was available, other projects started to use it.
 
 <!-- more -->
 
@@ -23,7 +24,8 @@ During this period, a number of people got involved in the development.
   [tree-sitter](https://github.com/ventojs/tree-sitter-vento) parser to bring
   support for Neovim and similar editors.
 - [Noel Forte](https://github.com/noelforte) created the
-  [11ty plugin](https://github.com/noelforte/eleventy-plugin-vento) that made Vento popular in the 11ty ecosystem.
+  [11ty plugin](https://github.com/noelforte/eleventy-plugin-vento) that made
+  Vento popular in the 11ty ecosystem.
 - [Deniz Akşimşek](https://github.com/dz4k) created the
   [Zed plugin](https://github.com/dz4k/zed-vento), and
   [Illyrius](https://github.com/illyrius666) brought
@@ -49,7 +51,8 @@ several
 sparking some interesting discussions about Vento's philosophy and future
 directions. The most demanding challenge, for which we made different POC, was
 to find an alternative approach to analyze the JavaScript code without using
-meriyah or any other dependency. This would speed up the compilation and remove all Vento dependencies.
+meriyah or any other dependency. This would speed up the compilation and remove
+all Vento dependencies.
 
 Thanks to this change, the local footprint was reduced from
 [1.8MB](https://pkg-size.dev/ventojs@1) to
@@ -129,7 +132,11 @@ try {
 }
 ```
 
-Note that the error handler doesn't work consistently, due the differences between runtimes to provide useful data from the error stack. For example, it works pretty well on Deno, but Node and Bun cannot recover the exact location of some errors so it's not possible to provide detailed info. There may be also some differences between browsers.
+Note that the error handler doesn't work consistently, due the differences
+between runtimes to provide useful data from the error stack. For example, it
+works pretty well on Deno, but Node and Bun cannot recover the exact location of
+some errors so it's not possible to provide detailed info. There may be also
+some differences between browsers.
 
 ### Removed sync mode
 

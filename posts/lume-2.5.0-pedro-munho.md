@@ -215,7 +215,7 @@ version. Let's see the following example:
 ---
 title: Welcome to **my site**
 ---
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head>
     <title>{{ title }}</title>
@@ -238,7 +238,7 @@ removes any Markdown and HTML syntax but also linebreaks and extra spaces:
 ---
 title: Welcome to **my site**
 ---
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head>
     <title>{{ title |> plaintext }}</title>
