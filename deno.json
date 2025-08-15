@@ -6,10 +6,10 @@
     "cms": "deno task lume cms"
   },
   "imports": {
-    "lume/": "https://deno.land/x/lume@v3.0.4/",
+    "lume/": "https://deno.land/x/lume@v3.0.6/",
     "lume/cms/": "https://cdn.jsdelivr.net/gh/lumeland/cms@0.12.5/",
-    "blog/": "https://deno.land/x/lume_theme_simple_blog@v0.16.1/",
-    "lume/jsx-runtime": "https://deno.land/x/ssx@v0.1.10/jsx-runtime.ts"
+    "blog/": "https://deno.land/x/lume_theme_simple_blog@v1.16.2/",
+    "lume/jsx-runtime": "https://deno.land/x/ssx@v0.1.12/jsx-runtime.ts"
   },
   "compilerOptions": {
     "types": [
@@ -28,7 +28,7 @@
   ],
   "lint": {
     "plugins": [
-      "https://deno.land/x/lume@v3.0.4/lint.ts"
+      "https://deno.land/x/lume@v3.0.6/lint.ts"
     ]
   }
 }
