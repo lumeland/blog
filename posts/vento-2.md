@@ -10,8 +10,8 @@ comments: {}
 
 Vento was born two years ago as an experiment to create a modern, ergonomic, and
 async-friendly template engine for JavaScript. Initially, it was a Deno-only
-project, intended to become the default template engine for Lume. But as soon as
-the NPM package was available, other projects started to use it.
+project, intended to become the default template engine for **Lume**. But as
+soon as the NPM package was available, other projects started to use it.
 
 <!-- more -->
 
@@ -48,11 +48,11 @@ started to get involved in the
 [Sublime Text plugin](https://github.com/ventojs/sublime-vento) and created
 several
 [pull requests to the Vento repository](https://github.com/ventojs/vento/pulls?q=is%3Apr+is%3Aclosed+author%3Avrugtehagel),
-sparking some interesting discussions about Vento's philosophy and future
-directions. The most demanding challenge, for which we made different POC, was
-to find an alternative approach to analyze the JavaScript code without using
-meriyah or any other dependency. This would speed up the compilation and remove
-all Vento dependencies.
+leading to some interesting discussions about Vento's philosophy and its future
+direction. The most demanding challenge, for which we made different proofs of
+concept, was to find an alternative approach to analyze the JavaScript code
+without using meriyah or any other dependency. This would speed up the
+compilation and remove all Vento dependencies.
 
 Thanks to this change, the local footprint was reduced from
 [1.8MB](https://pkg-size.dev/ventojs@1) to
@@ -77,47 +77,48 @@ cases that now have a different behavior.
 
 ### New variable resolution
 
-In Vento 1, when you run `{{ somevariable }}`, the compiler converts it
-automatically to `{{ it.somevariable }}`. This means that you can define a
-variable directly in the `it` global variable. For example, this would print
-"foo":
+In Vento 1, when you run `Hello {{ name }}`, the compiler converts it
+automatically to `Hello {{ it.name }}`. This means that, **technically,** you
+could define a variable directly in the `it` global variable. For example, this
+would print _"Hello World"_:
 
 ```vto
-{{> it.somevariable = "foo" }}
-{{ somevariable }}
+{{> it.name = "World" }}
+Hello {{ name }}
 ```
 
-Vento 2 uses a different approach. Now the compiler analyzes the keywords used
-in order to define the variables preventively. For example, the following
-template:
+Vento 2 uses a different approach:
 
 ```vto
-{{ somevariable }}
+Hello {{ name }}
 ```
 
-Is converted to this (code simplified for clarity):
+When Vento compiles this template, all variables used are initialized
+preventively at the begining like this:
 
 ```js
-// At the beginning of the template
-var { somevariable } = it;
-
-// Anywhere in the template
-__output.content += somevariable;
+var { name } = it;
 ```
 
-As you can see, the `it.` prefix is no longer added automatically. Instead,
-variables are destructured from `it` at compile time, so assigning to
-`it.somevariable` does not affect `somevariable` directly. This means the
-previous example would not work as expected.
-
-However, this is a rare edge case that is unlikely to affect most users.
+The variable is not replaced with `it.name` automatically everywhere. If you
+edit the value of `it.name` in your code directly, it won't affect `name`.
+However, users never should edit the `it` variable directly, but use
+`{{ set name = "other value" }}`. So this change is unlikely to affect most
+users.
 
 ### New error handler
 
 Any error produced while compiling or running the templates is now converted to
 a `VentoError` class. This class contains all the information required to report
-the exact point where the error originates. In order to pretty-print errors, you
-can use the `printError` helper:
+the exact point where the error originates. For example, the following template
+produce an error because we are invoking a function from a `null` variable:
+
+```vto
+{{ set name = null }}
+{{ name.foo() }}
+```
+
+In order to run and pretty-print errors, you can use the `printError` helper:
 
 ```js
 import vento from "vento/mod.ts";
@@ -132,23 +133,67 @@ try {
 }
 ```
 
-Note that the error handler doesn't work consistently, due the differences
-between runtimes to provide useful data from the error stack. For example, it
+This outputs the following:
+
+```
+TypeError: Cannot read properties of null (reading 'foo')
+test/main.vto:2:1
+ 1 | {{ set name = null }}
+ 2 | {{ name.foo() }}
+   | ^
+   | __exports.content += (name.foo()) ?? "";
+   |                              ^ Cannot read properties of null (reading 'foo')
+```
+
+The error displays the tag where the error occurs and it can show also the error
+in the compiled code (the final JavaScript code) to give more context.
+
+Note that the error handler doesn't work consistently accross all runtimes, due
+their differences providing useful data from the error stack. For example, it
 works pretty well on Deno, but Node and Bun cannot recover the exact location of
-some errors so it's not possible to provide detailed info. There may be also
-some differences between browsers.
+some errors so it's not possible to provide detailed info in some cases. There
+may be also some differences between browsers.
+
+I hope to improve this in next versions.
 
 ### Removed sync mode
 
-Vento is async by default, it's one of its main selling points. But it also had
-a `runStringSync` function to run arbitrary strings in a synchronous context.
-For example: `env.runStringSync("Hello {{ name }}", { name: "World"})`.
+Vento is **async** by default, it's one of its main selling points. There was
+also the function `runStringSync` to run arbitrary strings in a synchronous
+context though. For example:
+`env.runStringSync("Hello {{ name }}", { name: "World"})`.
 
 This mode was originally created because Lume needed it. However, the
-synchronous mode doesn't fit well with how Vento works natively. Having both
+synchronous mode doesn't fit well with how Vento works internally. Having both
 sync and async modes makes everything more complicated, and the sync mode breaks
-if your template has any async tag, like `{{ include }}`, or runs any async
+if your template has async tags, like `{{ include }}`, or runs any async
 function or filter.
 
 Since Lume no longer needs this feature, the function was removed in Vento 2,
 and now all templates are run consistently in an async context.
+
+### New `slot` tag
+
+The [`layout` tag](https://vento.js.org/syntax/layout/) allows to render a
+template passing extra content. This is great for layouts expecting only one
+piece of content. But if the layout requires more pieces, you have to pass them
+as variables:
+
+```vto
+{{ layout "article.vto" { header: "<h1>This is the title</h1>" } }}
+  <p>This is the content</p>
+{{ /layout }}
+```
+
+The new `slot` tag allows to capture and store the content in different
+variables, similar to what web components do.
+
+```vto
+{{ layout "article.vto" }}
+  {{ slot header }}
+    <h1>This is the title</h1>
+  {{ /slot }}
+
+  <p>This is the content</p>
+{{ /layout }}
+```
