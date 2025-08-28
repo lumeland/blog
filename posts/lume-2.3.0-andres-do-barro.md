@@ -4,8 +4,8 @@ draft: false
 tags:
   - Releases
 comments:
-  src: 'https://fosstodon.org/@lume/113051244608919361'
-date: '2024-08-30'
+  src: "https://fosstodon.org/@lume/113051244608919361"
+date: "2024-08-30"
 ---
 
 Lume 2.3.0 is dedicated to

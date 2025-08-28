@@ -1,12 +1,12 @@
 ---
 title: Lume 2.1.0 release notes
-date: '2024-02-21'
+date: "2024-02-21"
 author: Óscar Otero
 draft: false
 tags:
   - Releases
 comments:
-  src: 'https://fosstodon.org/@lume/111976763965094939'
+  src: "https://fosstodon.org/@lume/111976763965094939"
 ---
 
 The first minor version of Lume 2 has been released, which brings many new

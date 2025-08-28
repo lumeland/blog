@@ -7,7 +7,7 @@ tags:
   - Releases
 comments: {}
 author: Óscar Otero
-date: '2025-08-07T00:00:00.000Z'
+date: "2025-08-07T00:00:00.000Z"
 ---
 
 It's been a while (one year and a half!) since

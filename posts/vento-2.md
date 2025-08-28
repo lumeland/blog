@@ -40,7 +40,7 @@ important role in converting Vento into the template engine that it already is.
 Everything started with
 [this post](https://vrugtehagel.nl/posts/my-doubts-about-vento/) where
 Vrugtehagel exposed some issues detected in Vento. He was kind enough to send me
-an email to let me know about this post, and that constructive feedback was very
+an email to let me know about the post whose constructive feedback was very
 helpful and I addressed some of the issues mentioned.
 
 However, Vrugtehagel not only limited himself to providing feedback, but he also
@@ -51,8 +51,8 @@ several
 leading to some interesting discussions about Vento's philosophy and its future
 direction. The most demanding challenge, for which we made different proofs of
 concept, was to find an alternative approach to analyze the JavaScript code
-without using meriyah or any other dependency. This would speed up the
-compilation and remove all Vento dependencies.
+without using meriyah or any other dependency. This would make the compilation
+faster and remove all Vento dependencies.
 
 Thanks to this change, the local footprint was reduced from
 [1.8MB](https://pkg-size.dev/ventojs@1) to
@@ -79,32 +79,32 @@ cases that now have a different behavior.
 
 In Vento 1, when you run `Hello {{ name }}`, the compiler converts it
 automatically to `Hello {{ it.name }}`. This means that, **technically,** you
-could define a variable directly in the `it` global variable. For example, this
-would print _"Hello World"_:
+could define a variable directly in the `it` global variable and would be
+accessible without the prefix. For example, the following code would print
+_"Hello World"_:
 
 ```vto
 {{> it.name = "World" }}
 Hello {{ name }}
 ```
 
-Vento 2 uses a different approach:
+Vento 2 uses a different approach. When Vento compiles the following template:
 
 ```vto
 Hello {{ name }}
 ```
 
-When Vento compiles this template, all variables used are initialized
-preventively at the begining like this:
+all variables used are initialized preventively at the begining like this:
 
 ```js
 var { name } = it;
 ```
 
-The variable is not replaced with `it.name` automatically everywhere. If you
-edit the value of `it.name` in your code directly, it won't affect `name`.
-However, users never should edit the `it` variable directly, but use
-`{{ set name = "other value" }}`. So this change is unlikely to affect most
-users.
+The variable is not replaced with `it.name` automatically everywhere but the
+real variable `name` is created instead. If you edit the value of `it.name` in
+your code directly, it won't affect `name`. However, users never should edit the
+`it` variable directly, but use `{{ set name = "other value" }}`. So this change
+is unlikely to affect most users.
 
 ### New error handler
 
@@ -154,13 +154,13 @@ works pretty well on Deno, but Node and Bun cannot recover the exact location of
 some errors so it's not possible to provide detailed info in some cases. There
 may be also some differences between browsers.
 
-I hope to improve this in next versions.
+I hope to improve this in next versions. PR are very appreciated!
 
 ### Removed sync mode
 
-Vento is **async** by default, it's one of its main selling points. There was
-also the function `runStringSync` to run arbitrary strings in a synchronous
-context though. For example:
+Vento is **async** by default, it's one of its main selling points. In Vento 1
+there was also the function `runStringSync` to run arbitrary strings in a
+synchronous context. For example:
 `env.runStringSync("Hello {{ name }}", { name: "World"})`.
 
 This mode was originally created because Lume needed it. However, the
@@ -197,3 +197,32 @@ variables, similar to what web components do.
   <p>This is the content</p>
 {{ /layout }}
 ```
+
+### Browser support
+
+As said, Vento 2 works also on browsers, without any compilation step, thanks to
+not having dependencies and using only standard APIs. You can download the NPM
+package or use a CDN like jsDelivr:
+
+```js
+import vento from "https://cdn.jsdelivr.net/npm/ventojs@2.0.0/web.js";
+
+const env = vento({
+  includes: import.meta.resolve("./templates"),
+});
+
+const result = await env.run("main.vto");
+console.log(result.content);
+```
+
+Note that instead of importing the `mod.js` module, you have to import `web.js`.
+The only difference is that `web.js` uses the `URL` loader by default to load
+templates using `fetch`. The `includes` option defines the base URL to load all
+templates.
+
+## Update now
+
+Vento 2 is available on NPM (for Node-like runtimes) and HTTP imports (for
+browsers and Deno). See the
+[CHANGELOG file](https://github.com/ventojs/vento/blob/v2.0.0/CHANGELOG.md) for
+the full list of changes.

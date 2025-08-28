@@ -4,9 +4,9 @@ draft: false
 tags:
   - Releases
 comments:
-  src: 'https://fosstodon.org/@lume/113437864311153292'
-  bluesky: 'https://bsky.app/profile/lume.land/post/3laempdc2ql2b'
-date: '2024-11-06T00:00:00.000Z'
+  src: "https://fosstodon.org/@lume/113437864311153292"
+  bluesky: "https://bsky.app/profile/lume.land/post/3laempdc2ql2b"
+date: "2024-11-06T00:00:00.000Z"
 ---
 
 Ola 👋!

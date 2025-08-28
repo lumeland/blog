@@ -1,12 +1,12 @@
 ---
 title: Announcing LumeCMS
-date: '2024-02-16'
+date: "2024-02-16"
 author: Óscar Otero
 draft: false
 tags:
   - LumeCMS
 comments:
-  src: 'https://fosstodon.org/@lume/111942395614299012'
+  src: "https://fosstodon.org/@lume/111942395614299012"
 ---
 
 **LumeCMS** is a (yet another) CMS to manage site content. Despite its name, it

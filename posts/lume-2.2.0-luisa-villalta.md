@@ -1,11 +1,11 @@
 ---
 title: Lume 2.2.0 - Luísa Villalta
-date: '2024-05-17'
+date: "2024-05-17"
 author: Óscar Otero
 tags:
   - Releases
 comments:
-  src: 'https://fosstodon.org/@lume/112456294506815477'
+  src: "https://fosstodon.org/@lume/112456294506815477"
 ---
 
 From now on, every new minor version of Lume will be dedicated to a relevant

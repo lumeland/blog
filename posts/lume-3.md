@@ -5,9 +5,9 @@ draft: false
 tags:
   - Releases
 comments:
-  src: 'https://fosstodon.org/@lume/114467614312656125'
-  bluesky: 'https://bsky.app/profile/lume.land/post/3loluxs3cma2x'
-date: '2025-05-07T00:00:00.000Z'
+  src: "https://fosstodon.org/@lume/114467614312656125"
+  bluesky: "https://bsky.app/profile/lume.land/post/3loluxs3cma2x"
+date: "2025-05-07T00:00:00.000Z"
 ---
 
 After launching Lume 2 almost a year and a half ago, a new major version of Lume
