@@ -11,7 +11,8 @@ comments: {}
 Vento was born two years ago as an experiment to create a modern, ergonomic, and
 async-friendly template engine for JavaScript. Initially, it was a Deno-only
 project, intended to become the default template engine for **Lume**. But as
-soon as the NPM package was available, other projects started to use it.
+soon as the [NPM package was available](https://www.npmjs.com/package/ventojs),
+other projects started to use it.
 
 <!-- more -->
 
@@ -27,13 +28,13 @@ During this period, a number of people got involved in the development.
   [11ty plugin](https://github.com/noelforte/eleventy-plugin-vento) that made
   Vento popular in the 11ty ecosystem.
 - [Deniz Akşimşek](https://github.com/dz4k) created the
-  [Zed plugin](https://github.com/dz4k/zed-vento), and
-  [Illyrius](https://github.com/illyrius666) brought
+  [Zed plugin](https://github.com/dz4k/zed-vento).
+- [Illyrius](https://github.com/illyrius666) brought
   [support for WebStorm](https://github.com/ventojs/webstorm-vento).
 
-All these contributors and
-[many other](https://github.com/ventojs/vento/graphs/contributors) played an
-important role in converting Vento into the template engine that it already is.
+Vento wouldn't be so awesome without the help of these contributors and
+[many other](https://github.com/ventojs/vento/graphs/contributors) that improve
+it with their selfless work. **THANK YOU SO MUCH!**
 
 ## Why create a version 2?
 
@@ -41,12 +42,12 @@ Everything started with
 [this post](https://vrugtehagel.nl/posts/my-doubts-about-vento/) where
 Vrugtehagel exposed some issues detected in Vento. He was kind enough to send me
 an email to let me know about the post whose constructive feedback was very
-helpful and I addressed some of the issues mentioned.
+helpful and I addressed several issues mentioned.
 
 However, Vrugtehagel not only limited himself to providing feedback, but he also
 started to get involved in the
-[Sublime Text plugin](https://github.com/ventojs/sublime-vento) and created
-several
+[Sublime Text plugin](https://github.com/ventojs/sublime-vento) and created a
+bunch of
 [pull requests to the Vento repository](https://github.com/ventojs/vento/pulls?q=is%3Apr+is%3Aclosed+author%3Avrugtehagel),
 leading to some interesting discussions about Vento's philosophy and its future
 direction. The most demanding challenge, for which we made different proofs of
@@ -54,12 +55,53 @@ concept, was to find an alternative approach to analyze the JavaScript code
 without using meriyah or any other dependency. This would make the compilation
 faster and remove all Vento dependencies.
 
-Thanks to this change, the local footprint was reduced from
-[1.8MB](https://pkg-size.dev/ventojs@1) to
-[less than 100Kb](https://pkg-size.dev/ventojs@2.0.0-canary.1). The next step
-was to convert Vento in an isomorphic library, which makes it to work on
-browsers and on Node-like runtimes (Node, Deno, Bun) without changes or the need
-for a compilation step.
+Thanks to this change, the local footprint was reduced from 1.8MB to **less than
+80Kb** (**18KB** bundled and minified).
+
+Vento 1 was already quite fast, but version 2 is even faster thanks to the new
+compilation method. There are some bencharks to compare different template
+engines:
+
+### Compilation only:
+
+| Libraries | time/iter (avg) | iter/s |
+| :-------- | --------------: | -----: |
+| Vento     |        182.8 µs |  5,469 |
+| Nunjucks  |        540.5 µs |  1,850 |
+| Liquid    |        576.7 µs |  1,734 |
+| Eta       |         50.2 µs | 19,930 |
+| Pug       |          4.3 ms |  232.4 |
+| Preact    |          1.0 ms |  986.7 |
+| EJS       |        155.9 µs |  6,414 |
+
+### Compilation + rendering
+
+| Libraries | time/iter (avg) | iter/s |
+| :-------- | --------------: | -----: |
+| Vento     |        197.5 µs |  5,064 |
+| Nunjucks  |          1.5 ms |  664.5 |
+| Liquid    |          1.1 ms |  916.8 |
+| Eta       |         67.6 µs | 14,780 |
+| Pug       |          4.5 ms |  220.8 |
+| Preact    |        712.9 µs |  1,403 |
+| EJS       |        177.6 µs |  5,630 |
+| Edge      |        507.0 µs |  1,972 |
+
+### Rendering only
+
+| Libraries | time/iter (avg) |    iter/s |
+| :-------- | --------------: | --------: |
+| Vento     |        851.6 ns | 1,174,000 |
+| Nunjucks  |        803.5 µs |     1,245 |
+| Liquid    |        380.0 µs |     2,632 |
+| Eta       |         11.4 µs |    87,880 |
+| Pug       |          1.6 µs |   612,600 |
+| Preact    |          9.4 µs |   106,400 |
+| EJS       |         14.2 µs |    70,370 |
+
+The next step was to convert Vento in an isomorphic library, which makes it to
+work on browsers and on Node-like runtimes (Node, Deno, Bun) without changes or
+the need for a compilation step.
 
 And finally, one of the pain points of Vento, error reporting, was also
 addressed thanks to the
@@ -71,9 +113,9 @@ any JavaScript runtime and embedded on any framework easily.
 
 ## Main changes
 
-After upgrading to Vento 2, almost everything in your .vto templates should
-continue working as usual without changes, although there might be some edge
-cases that now have a different behavior.
+After upgrading to Vento 2, almost everything in your .vto files should continue
+working as usual without changes, although there might be some edge cases that
+now have a different behavior.
 
 ### New variable resolution
 
