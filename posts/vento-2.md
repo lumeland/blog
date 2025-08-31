@@ -6,7 +6,30 @@ tags:
   - Releases
   - Vento
 comments: {}
+extra_head: |-
+  <style>
+    .vento-logo {
+      border: none !important;
+      width: 100%;
+      display: block;
+      margin: 2rem 0;
+    }
+    table {
+      width: 100%;
+      background-color: var(--color-highlight);
+      font-variant-numeric: tabular-nums;
+    }
+    th {
+      color: var(--color-base);
+      border-bottom: solid 1px var(--color-line);
+    }
+    th, td {
+      padding: 4px 8px;
+    }
+  </style>
 ---
+
+![Vento 2](/uploads/vento-2.svg){.vento-logo}
 
 Vento was born two years ago as an experiment to create a modern, ergonomic, and
 async-friendly template engine for JavaScript. Initially, it was a Deno-only
@@ -42,62 +65,21 @@ Everything started with
 [this post](https://vrugtehagel.nl/posts/my-doubts-about-vento/) where
 Vrugtehagel exposed some issues detected in Vento. He was kind enough to send me
 an email to let me know about the post whose constructive feedback was very
-helpful and I addressed several issues mentioned.
+helpful and several issues mentioned were addressed in Vento 1.
 
 However, Vrugtehagel not only limited himself to providing feedback, but he also
 started to get involved in the
 [Sublime Text plugin](https://github.com/ventojs/sublime-vento) and created a
 bunch of
 [pull requests to the Vento repository](https://github.com/ventojs/vento/pulls?q=is%3Apr+is%3Aclosed+author%3Avrugtehagel),
-leading to some interesting discussions about Vento's philosophy and its future
-direction. The most demanding challenge, for which we made different proofs of
-concept, was to find an alternative approach to analyze the JavaScript code
-without using meriyah or any other dependency. This would make the compilation
-faster and remove all Vento dependencies.
+leading to some interesting discussions about Vento's philosophy and its
+implementation approach. The most demanding challenge, for which we made
+different proofs of concept, was to find an alternative way to analyze the
+JavaScript code without using meriyah or any other dependency. This would make
+the compilation faster and remove all Vento dependencies.
 
-Thanks to this change, the local footprint was reduced from 1.8MB to **less than
+Thanks to this change, the local footprint was reduced **from 1.8MB to less than
 80Kb** (**18KB** bundled and minified).
-
-Vento 1 was already quite fast, but version 2 is even faster thanks to the new
-compilation method. There are some bencharks to compare different template
-engines:
-
-### Compilation only:
-
-| Libraries | time/iter (avg) | iter/s |
-| :-------- | --------------: | -----: |
-| Vento     |        182.8 µs |  5,469 |
-| Nunjucks  |        540.5 µs |  1,850 |
-| Liquid    |        576.7 µs |  1,734 |
-| Eta       |         50.2 µs | 19,930 |
-| Pug       |          4.3 ms |  232.4 |
-| Preact    |          1.0 ms |  986.7 |
-| EJS       |        155.9 µs |  6,414 |
-
-### Compilation + rendering
-
-| Libraries | time/iter (avg) | iter/s |
-| :-------- | --------------: | -----: |
-| Vento     |        197.5 µs |  5,064 |
-| Nunjucks  |          1.5 ms |  664.5 |
-| Liquid    |          1.1 ms |  916.8 |
-| Eta       |         67.6 µs | 14,780 |
-| Pug       |          4.5 ms |  220.8 |
-| Preact    |        712.9 µs |  1,403 |
-| EJS       |        177.6 µs |  5,630 |
-| Edge      |        507.0 µs |  1,972 |
-
-### Rendering only
-
-| Libraries | time/iter (avg) |    iter/s |
-| :-------- | --------------: | --------: |
-| Vento     |        851.6 ns | 1,174,000 |
-| Nunjucks  |        803.5 µs |     1,245 |
-| Liquid    |        380.0 µs |     2,632 |
-| Eta       |         11.4 µs |    87,880 |
-| Pug       |          1.6 µs |   612,600 |
-| Preact    |          9.4 µs |   106,400 |
-| EJS       |         14.2 µs |    70,370 |
 
 The next step was to convert Vento in an isomorphic library, which makes it to
 work on browsers and on Node-like runtimes (Node, Deno, Bun) without changes or
@@ -108,7 +90,7 @@ addressed thanks to the
 [initial work of Vrugtehagel](https://github.com/ventojs/vento/pull/131) and
 some subsequent changes by me.
 
-Now, Vento is a modern, lean, and powerful template engine that can be used on
+Vento is now a modern, lean, and powerful template engine that can be used on
 any JavaScript runtime and embedded on any framework easily.
 
 ## Main changes
@@ -121,7 +103,7 @@ now have a different behavior.
 
 In Vento 1, when you run `Hello {{ name }}`, the compiler converts it
 automatically to `Hello {{ it.name }}`. This means that, **technically,** you
-could define a variable directly in the `it` global variable and would be
+could define a variable directly in the `it` global variable that would be
 accessible without the prefix. For example, the following code would print
 _"Hello World"_:
 
@@ -144,9 +126,10 @@ var { name } = it;
 
 The variable is not replaced with `it.name` automatically everywhere but the
 real variable `name` is created instead. If you edit the value of `it.name` in
-your code directly, it won't affect `name`. However, users never should edit the
-`it` variable directly, but use `{{ set name = "other value" }}`. So this change
-is unlikely to affect most users.
+your code directly, it won't affect `name`. However, this is more a Vento's
+internals change and it's unlikely to affect to final users since they never
+should edit the `it` variable directly, but use the code
+`{{ set name = "other value" }}`.
 
 ### New error handler
 
@@ -201,7 +184,7 @@ I hope to improve this in next versions. PR are very appreciated!
 ### Removed sync mode
 
 Vento is **async** by default, it's one of its main selling points. In Vento 1
-there was also the function `runStringSync` to run arbitrary strings in a
+there was also the function `runStringSync` to run arbitrary code in a
 synchronous context. For example:
 `env.runStringSync("Hello {{ name }}", { name: "World"})`.
 
@@ -243,7 +226,7 @@ variables, similar to what web components do.
 ### Browser support
 
 As said, Vento 2 works also on browsers, without any compilation step, thanks to
-not having dependencies and using only standard APIs. You can download the NPM
+not having dependencies and the use of standard APIs. You can download the NPM
 package or use a CDN like jsDelivr:
 
 ```js
@@ -261,6 +244,81 @@ Note that instead of importing the `mod.js` module, you have to import `web.js`.
 The only difference is that `web.js` uses the `URL` loader by default to load
 templates using `fetch`. The `includes` option defines the base URL to load all
 templates.
+
+## Benchmarks
+
+Vento 1 was already quite fast, but version 2 is even faster thanks to the new
+compiler.
+
+### Vento 1 vs Vento 2
+
+The compiler in Vento 2 is almost **200% faster** as you can see in the
+following benchmark:
+
+| Compilation | time/iter (avg) | iter/s |
+| :---------- | --------------: | -----: |
+| Vento 2     |        196.0 µs |  5,102 |
+| Vento 1     |        378.0 µs |  2,646 |
+
+When comparing the rendering performance of Vento 1 and Vento 2, there are no
+significant differences. Vento 1 may be slightly faster, but the difference is
+minimal and not easily noticeable.
+
+| Rendering | time/iter (avg) |    iter/s |
+| :-------- | --------------: | --------: |
+| Vento 2   |        860.9 ns | 1,162,000 |
+| Vento 1   |        820.0 ns | 1,220,000 |
+
+Comparing compilation and rendering performance, Vento 2 demonstrates **a 180%
+speed improvement**. Even if a few milliseconds are lost during rendering, the
+overall performance gain more than compensates for it.
+
+| Comp. & rendering | time/iter (avg) | iter/s |
+| :---------------- | --------------: | -----: |
+| Vento 2           |        186.0 µs |  5,376 |
+| Vento 1           |        342.8 µs |  2,917 |
+
+## Comparison with other libraries
+
+To compare the performance of Vento with other template engines, you can
+[run the bench code](https://github.com/ventojs/vento/tree/main/bench) in
+Vento's repository. As of writing this post, the benchmark data is:
+
+| Compilation | time/iter (avg) | iter/s |
+| :---------- | --------------: | -----: |
+| 1. Eta      |         51.1 µs | 19,580 |
+| 2. EJS      |        145.2 µs |  6,888 |
+| 3. Vento    |        196.0 µs |  5,102 |
+| 4. Nunjucks |        602.1 µs |  1,661 |
+| 5. Liquid   |        635.0 µs |  1,575 |
+| 6. Preact   |        978.4 µs |  1,022 |
+| 7. Pug      |          4.2 ms |    237 |
+
+| Rendering   | time/iter (avg) |    iter/s |
+| :---------- | --------------: | --------: |
+| 1. Vento    |        860.9 ns | 1,162,000 |
+| 2. Pug      |          1.6 µs |   632,100 |
+| 3. Preact   |          8.8 µs |   113,900 |
+| 4. Eta      |         11.2 µs |    89,600 |
+| 5. EJS      |         14.8 µs |    67,790 |
+| 6. Liquid   |        351.3 µs |     2,847 |
+| 7. Nunjucks |        812.5 µs |     1,231 |
+
+| Comp. & rendering | time/iter (avg) | iter/s |
+| :---------------- | --------------: | -----: |
+| 1. Eta            |         68.0 µs | 14,700 |
+| 2. EJS            |        177.3 µs |  5,639 |
+| 3. Vento          |        186.0 µs |  5,376 |
+| 4. Edge           |        518.0 µs |  1,931 |
+| 5. Preact         |        706.5 µs |  1,415 |
+| 6. Liquid         |          1.1 ms |    937 |
+| 7. Nunjucks       |          1.5 ms |    676 |
+| 8. Pug            |          4.2 ms |    236 |
+
+Vento delivers exceptional rendering performance. While Eta and EJS offer faster
+compilation speeds, they struggle with delimiter handling. For example,
+`<%= '%>' %>` throws an error in EJS, but Vento handles the equivalent,
+`{{ '}}' }}`, perfectly fine.
 
 ## Update now
 
