@@ -65,11 +65,11 @@ it with their selfless work. **THANK YOU SO MUCH!**
 
 Everything started with
 [this post](https://vrugtehagel.nl/posts/my-doubts-about-vento/) where
-Vrugtehagel exposed some issues detected in Vento. He was kind enough to send me
+vrugtehagel exposed some issues detected in Vento. He was kind enough to send me
 an email to let me know about the post whose constructive feedback was very
 helpful and several issues mentioned were addressed in Vento 1.
 
-However, Vrugtehagel not only limited himself to providing feedback, but he also
+However, vrugtehagel not only limited himself to providing feedback, but he also
 started to get involved in the
 [Sublime Text plugin](https://github.com/ventojs/sublime-vento) and created a
 bunch of
@@ -89,7 +89,7 @@ the need for a compilation step.
 
 And finally, one of the pain points of Vento, error reporting, was also
 addressed thanks to the
-[initial work of Vrugtehagel](https://github.com/ventojs/vento/pull/131) and
+[initial work of vrugtehagel](https://github.com/ventojs/vento/pull/131) and
 some subsequent changes by me.
 
 Vento is now a modern, lean, and powerful template engine that can be used on
