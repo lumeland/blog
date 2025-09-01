@@ -5,7 +5,9 @@ draft: false
 tags:
   - Releases
   - Vento
-comments: {}
+comments:
+  src: 'https://fosstodon.org/@lume/115128718698242188'
+  bluesky: 'https://bsky.app/profile/lume.land/post/3lxritwpakk2y'
 extra_head: |-
   <style>
     .vento-logo {
