@@ -1,7 +1,7 @@
 ---
 title: Vento 2 is here!
 author: Óscar Otero
-draft: true
+draft: false
 tags:
   - Releases
   - Vento
@@ -27,8 +27,8 @@ extra_head: |-
       padding: 4px 8px;
     }
   </style>
+date: '2025-09-01T00:00:00.000Z'
 ---
-
 ![Vento 2](/uploads/vento-2.svg){.vento-logo}
 
 Vento was born two years ago as an experiment to create a modern, ergonomic, and
@@ -103,7 +103,7 @@ now have a different behavior.
 
 In Vento 1, when you run `Hello {{ name }}`, the compiler converts it
 automatically to `Hello {{ it.name }}`. This means that, **technically,** you
-could define a variable directly in the `it` global variable that would be
+could define a variable directly in the `it` global variable and it would be
 accessible without the prefix. For example, the following code would print
 _"Hello World"_:
 
@@ -126,7 +126,7 @@ var { name } = it;
 
 The variable is not replaced with `it.name` automatically everywhere but the
 real variable `name` is created instead. If you edit the value of `it.name` in
-your code directly, it won't affect `name`. However, this is more a Vento's
+your code directly, **it won't affect `name`**. However, this is more a Vento's
 internals change and it's unlikely to affect to final users since they never
 should edit the `it` variable directly, but use the code
 `{{ set name = "other value" }}`.
@@ -179,7 +179,7 @@ works pretty well on Deno, but Node and Bun cannot recover the exact location of
 some errors so it's not possible to provide detailed info in some cases. There
 may be also some differences between browsers.
 
-I hope to improve this in next versions. PR are very appreciated!
+I hope this feature can be improved in next versions. PR are very appreciated!
 
 ### Removed sync mode
 
@@ -222,6 +222,8 @@ variables, similar to what web components do.
   <p>This is the content</p>
 {{ /layout }}
 ```
+
+Learn more about [slots in the documentation site](https://vento.js.org/syntax/layout/#slots).
 
 ### Browser support
 
