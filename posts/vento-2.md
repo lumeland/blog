@@ -6,8 +6,8 @@ tags:
   - Releases
   - Vento
 comments:
-  src: 'https://fosstodon.org/@lume/115128718698242188'
-  bluesky: 'https://bsky.app/profile/lume.land/post/3lxritwpakk2y'
+  src: "https://fosstodon.org/@lume/115128718698242188"
+  bluesky: "https://bsky.app/profile/lume.land/post/3lxritwpakk2y"
 extra_head: |-
   <style>
     .vento-logo {
@@ -29,8 +29,9 @@ extra_head: |-
       padding: 4px 8px;
     }
   </style>
-date: '2025-09-01T00:00:00.000Z'
+date: "2025-09-01T00:00:00.000Z"
 ---
+
 ![Vento 2](/uploads/vento-2.svg){.vento-logo}
 
 Vento was born two years ago as an experiment to create a modern, ergonomic, and
@@ -225,7 +226,8 @@ variables, similar to what web components do.
 {{ /layout }}
 ```
 
-Learn more about [slots in the documentation site](https://vento.js.org/syntax/layout/#slots).
+Learn more about
+[slots in the documentation site](https://vento.js.org/syntax/layout/#slots).
 
 ### Browser support
 
