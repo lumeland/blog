@@ -141,6 +141,43 @@ to run from a web worker:
 <script type="text/partytown">...</script>
 ```
 
+## New plugin: `seo`
+
+This plugin was created by [Tim Post](https://github.com/timthepost/) with the
+help of [Rick Cogley](https://github.com/RickCogley/) for the Japanese language
+support (thanks so much, guys!). It's a really interesting plugin that not only
+can check the SEO basics (titles, descriptions, alt text in images, etc) but
+also other not very common checks like common words percentage.
+
+Since Tim couldn't maintain it, we decided to port it to the Lume repo and
+convert it to an "official plugin". It was modified in order to align with the
+style and conventions of other plugins, and it was simplified a bit to make it
+more maintainable in the long run (originally the project was more ambitious).
+
+The installation is not different from other plugins, just import it into the
+_config.ts file:
+
+```ts
+import lume from "lume/mod.ts";
+import seo from "lume/plugins/seo.ts";
+
+const site = lume();
+site.use(seo());
+
+export default site;
+```
+
+Like other validator plugins (`check_urls`, `validate_html`, etc), it creates a
+new tab in the debug bar with all SEO issues found in all pages. It also has an
+option to export the report to a JSON file or any other format by providing a
+custom export function.
+
+The plugin is highly customizable. Since the default options are enough for most
+cases, you can configure what you want to validate (titles, H1 tags, meta
+descriptions, heading orders, duplicated titles, etc) and how to validate each
+element (min/max words, characters, or sentences, usage of common words, etc).
+Definitely, this plugin will help you to create more successful websites!
+
 ## Improved remote files
 
 The [function `remoteFile`](https://lume.land/docs/core/remote-files/) allows
