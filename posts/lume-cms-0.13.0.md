@@ -10,52 +10,47 @@ author: Óscar Otero
 date: "2025-08-07T00:00:00.000Z"
 ---
 
-It's been a while (one year and a half!) since
+It's been a while (one and a half year!) since
 [LumeCMS was announced](/posts/lume-cms/) as an alternative to other existing
-CMS to edit the content of web sites.
+CMS to edit the content of websites.
 
 <!-- more -->
 
 During this time, the project was improved in many ways: more field formats,
-more customization options, light/dark mode, etc. At the same time, it's still a
-demonstrations that it's possible in 2025 to build a web apps using simple tools
-and standard practices. Technically, LumeCMS uses Web components, HTTP imports
-and very few dependencies. In fact, there isn't a "build" process for frontend.
-Except Codemirror (the dependency used to create the code and markdown editors),
-everything else is simple JavaScript and CSS code, served as is, without any
-compilation or bundler step. This makes the development a lot leaner and easier
-to extends and customize by anyone.
+more customization options, light/dark mode, etc.
 
 But, like many projects in their earlier phases, LumeCMS was a bit "tricky" to
-run. It was created as an framework-agnostic solution, but in practice it was
-difficult to setup for other frameworks than Lume. The version 0.13 has received
-a lot of changes in order to address this issue among others. Some of these
-changes are BREAKING CHANGES (hopefully they are only a few). And even it's
-still a development version (the version starts with `0` yet), I think it's an
+run. It was created as a framework-agnostic solution, but in practice, it wasn't
+easy to set up for other frameworks than Lume. Version 0.13 has received a lot
+of changes in order to address this issue, among others. Some of these changes
+are BREAKING CHANGES (hopefully they are only a few). And even though it's still
+a development version (the version starts with `0` yet), I think it's an
 important step towards the future v1.0 version.
 
 ## New router
 
-Until now, LumeCMS used Hono as router and middleware runner. Although Hono is a
-very powerful and popular package, I found it a bit complicated to work with.
+Since the beginning, LumeCMS has used Hono under the hood. Although Hono is a
+very powerful and popular framework, I found it a bit complicated to work with.
 The way to pass data (or contexts) to routers and middlewares, the rendering
 system or the use of the custom class `HonoRequest` for the request instead of
-the standard `Request` (that is also available but more hidden) made me spend
-more time trying to figure out how to do something in "Hono way" than just doing
-it. In addition to that, it's becoming a full-featured framework with even a
+the standard `Request` (that is also available but hidden) made me spend more
+time trying to figure out how to do something in "Hono way" than just doing it.
+In addition to that, it's becoming a full-featured framework with even a
 client-side JSX library.
 
 That's why [Galo was created](https://github.com/oscarotero/galo). It's a fast
-and minimalist router, that embrace web standards and simplicity without
+and minimalist router that embraces web standards and simplicity without
 sacrificing flexibility. The change from a framework approach to a library like
 this made LumeCMS much easier to embed in any application running Deno. In fact,
-LumeCMS can run now as a simple middleware of your application without any side
-effect or interfere with your existing code.
+LumeCMS is now a middleware for your application without any side effects or
+interference with your existing code.
+
+![Image](/uploads/lumecms-galo.png)
 
 ## Document types
 
-LumeCMS was created assuming that all data can be stored in an object. Let's see
-this example:
+LumeCMS was created assuming that all data would be stored in an object. Let's
+see this example:
 
 ```js
 cms.collection({
@@ -68,8 +63,8 @@ cms.collection({
 });
 ```
 
-This works great if you want to store every note in a JSON file in the `notes/`
-directory. The stored notes have a structure like this:
+This stores every note in a JSON file in the `notes/` directory. The stored
+notes have a structure like this:
 
 ```json
 {
@@ -138,7 +133,7 @@ cms.document({
 ```
 
 LumeCMS detected the special name "[]" as an instruction to ignore the element
-and store directly its content. This allows to store the data as an array:
+and store its content directly. This allows us to store the data as an array:
 
 ```json
 [
@@ -153,9 +148,9 @@ and store directly its content. This allows to store the data as an array:
 ]
 ```
 
-The problem with this solution is it's bit hacky, verbose and not very flexible.
-That's why in the version 0.13 this feature was replaced with the new `type`
-option:
+The problem with this solution is that it's a bit hacky, verbose, and not very
+flexible. That's why in version 0.13 this feature was replaced with the new
+`type` option:
 
 ```js
 cms.document({
@@ -170,10 +165,10 @@ cms.document({
 ```
 
 As you may guess, this option configures the field type used to store the root
-data. If it's not defined, the default value is `object` but other available
+data. If it's not defined, the default value is `object`, but other available
 values are `object-list` (to store an array of objects) and `choose` (to allow
-to choose one structure among a list of options). More types can be added in
-next versions.
+the user to choose one structure among a list of options). More types can be
+added in future versions.
 
 ## New `previewUrl` and `sourcePath` options
 
@@ -181,30 +176,30 @@ One of the great features of LumeCMS is the ability to preview the changes while
 editing the data. To provide this, we need two things:
 
 - A way to know the URL generated by a file. For example, if we know that the
-  file `/posts/hello-world.md` produces the URL `/posts/hello-world/` we can
+  file `/posts/hello-world.md` produces the URL `/posts/hello-world/`, we can
   display this URL in the preview panel when the file is being edited.
 - A way to know the source file of a URL. If we know that the URL
   `/posts/hello-world/` is generated by `/posts/hello-world.md`, we can create a
   "Edit this page" link to go directly to the edit form.
 
 Until now, the way to get this info was a bit obscure and undocumented. In
-version 0.13, this is fully configurable which makes the CMS easier to adapt for
-other static site generators:
+version 0.13, this is fully configurable, which makes the CMS easier to adapt
+for other static site generators:
 
 ```js
 const cms = lumeCMS({
   previewUrl(path: string, content: Lume.CMS.Content, changed: boolean) {
     // Return the URL generated by this file
-  },
+ },
   sourcePath(url: string, content: Lume.CMS.Content) {
     // Return the file path that generates this URL
-  }
+ }
 });
 ```
 
-The `previewUrl` is also customizable at document or collection level, useful if
-you're editing a file that doesn't directly produce a URL but can affect to it
-(like a `_data` file):
+The `previewUrl` is also customizable at the document or collection level,
+useful if you're editing a file that doesn't directly produce a URL but can
+affect it (like a `_data` file):
 
 ```js
 cms.document({
@@ -220,9 +215,10 @@ cms.document({
 
 ## User-level permissions
 
-In previous versions, you can configure the permissions to create, edit, rename
-or delete documents globally. For example, let's say we have a collection of
-countries that we don't want to remove or create new ones, just edit them:
+In previous versions, you could configure the permissions to create, edit,
+rename, or delete documents globally. For example, let's say we have a
+collection of countries that we don't want to remove or create new ones, just
+edit them:
 
 ```js
 cms.collection({
@@ -239,7 +235,7 @@ cms.collection({
 ```
 
 With this configuration, all users can edit the countries, but cannot create,
-delete or rename files. In version 0.13.0, we can override this configuration
+delete, or rename files. In version 0.13.0, we can override this configuration
 for some users:
 
 ```js
@@ -259,10 +255,135 @@ cms.auth({
 });
 ```
 
-Previously, we only was able to configure a name and a password per user. Now we
-can use an object to include more options. In this example, the "user1" has a
-password, the visible name (Admin) and some special permissions that override
-the global permissions assigned to documents and collections: this user can
-create, rename and delete files of the countries collection, unlike other users
-like "user2". For backward compatibility, it still possible to use a string the
-value to simply configure a password.
+In previous versions, the auth configuration was simply an object with names and
+passwords. Now, we can also use an object to include more options. In this
+example, the "user1" has a password, the name "Admin" (which is visible in the
+interface), and some special permissions that override the permissions assigned
+to documents and collections: this user can create, rename, and delete files of
+the countries collection.
+
+For the user "user2" we just need the password so we don't have to create an
+options object.
+
+## Improved `documentLabel`
+
+In the list of documents of a collection, LumeCMS only displays the document
+name, but since it doesn't load the documents, it can't show any value inside
+the document (like a `title` or `date` properties). The option `documentLabel`
+allows customization of how this document is shown in the interface. For
+example, to transform the name `my-first-post.md` to a more human
+`My First Post` (in fact, this is the default behavior).
+
+```js
+cms.collection({
+  documentLabel: (filename) => filename.replace(".json", ""),
+  // More options...
+});
+```
+
+As of version 0.13, this function can return an object with the properties
+`label`, `icon`, and `flags` to extract and show more info in the list view.
+
+Let's say our country's collection is a folder with the following files:
+
+```
+/en-spain.json
+/pt-portugal.json
+/it-italy.json
+/fr-france.json
+```
+
+Let's configure the collection to show only the country name, the code as a
+"flag", and the flag icon (from [Phosphor](https://phosphoricons.com/?q=flag)).
+
+```js
+cms.collection({
+  documentLabel: (filename) => {
+    const [code, name] = filename.replace(".json", "").split("-");
+    return {
+      label: name,
+      icon: "flag"
+      flags: { code }
+    }
+  },
+  // ...more options
+});
+```
+
+## New `relation` and `relation-list` fields
+
+This feature is related to the improvements on `documentLabel` explained above.
+Now that we can extract more info from the filename, we can use this info to
+link a document to another. For example, let's say we have the "people"
+collection and we want to assign a country to each person:
+
+```js
+cms.collection({
+  name: "people",
+  storage: "src:people/*.md",
+  fields: [
+    "name: text",
+    {
+      name: "country",
+      type: "relation",
+      collection: "countries",
+      option: ({ label, flags }) => { label, value: flags.code }
+    }
+  ]
+});
+```
+
+Now, this field shows a selector to pick one of the countries and use the `code`
+flag as the value (`en` for Spain, `pt` for Portugal, etc). The `relation-list`
+field is similar but allows for storing an array of values.
+
+## Better git commits
+
+The git commits created by LumeCMS now include the current user name as the
+author. It's also possible to include the email by adding the `email` property
+to the user settings:
+
+```js
+cms.auth({
+  user1: {
+    password: "password1",
+
+    // name & email are included in the commits created by this user.
+    name: "Admin",
+    email: "user@example.com",
+  },
+});
+```
+
+## Allow to edit raw files
+
+Now it's possible to configure a document without fields, to show a code editor
+instead of a form to edit it. It's useful to edit code directly from the CMS:
+
+```js
+cms.document({
+  name: "Custom styles",
+  storage: "src:style.css",
+});
+```
+
+## Removed timezone from Date and Datetime fields
+
+From now on, date and datetime fields don't include the timezone in the YAML
+files. Hopefully, it will fix a lot of problems related to unexpected dates due
+to different time zones.
+
+```yml
+# before
+date: 2025-01-11T00:00:00.000Z
+
+# after
+date: 2025-01-11 00:00:00
+```
+
+## UI changes
+
+The UI of the CMS received some changes to fix responsive and scrolling
+problems.
+
+Take a look at the CHANGELOG.md file to see more changes.
