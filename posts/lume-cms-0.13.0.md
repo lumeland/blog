@@ -1,5 +1,5 @@
 ---
-title: Lume CMS v0.13
+title: Lume CMS 0.13.0
 url: /lume-cms-0.13/
 draft: true
 tags:
@@ -7,36 +7,37 @@ tags:
   - Releases
 comments: {}
 author: Óscar Otero
-date: "2025-08-07T00:00:00.000Z"
+date: 2025-09-14 18:39:00
 ---
 
 It's been a while (one and a half year!) since
 [LumeCMS was announced](/posts/lume-cms/) as an alternative to other existing
 CMS to edit the content of websites.
 
-<!-- more -->
-
 During this time, the project was improved in many ways: more field formats,
 more customization options, light/dark mode, etc.
 
 But, like many projects in their earlier phases, LumeCMS was a bit "tricky" to
 run. It was created as a framework-agnostic solution, but in practice, it wasn't
-easy to set up for other frameworks than Lume. Version 0.13 has received a lot
-of changes in order to address this issue, among others. Some of these changes
-are BREAKING CHANGES (hopefully they are only a few). And even though it's still
-a development version (the version starts with `0` yet), I think it's an
-important step towards the future v1.0 version.
+easy to set up for other frameworks than Lume.
+
+Version 0.13 has received a lot of changes in order to address this issue, among
+others. Some of these changes are BREAKING CHANGES (hopefully they are only a
+few). And even though it's still a development version (the version starts with
+`v0.*` yet), I think it's an important step towards the future v1.0 version.
+
+<!-- more -->
 
 ## New router
 
-Since the beginning, LumeCMS has used Hono under the hood. Although Hono is a
-very powerful and popular framework, I found it a bit complicated to work with.
-The way to pass data (or contexts) to routers and middlewares, the rendering
-system or the use of the custom class `HonoRequest` for the request instead of
-the standard `Request` (that is also available but hidden) made me spend more
-time trying to figure out how to do something in "Hono way" than just doing it.
-In addition to that, it's becoming a full-featured framework with even a
-client-side JSX library.
+Since the beginning, LumeCMS has used [Hono](https://hono.dev/) under the hood.
+Although Hono is a very powerful and popular framework, I found it a bit
+complicated to work with. The way to pass data (or contexts) to routers and
+middlewares, the rendering system or the use of the custom class `HonoRequest`
+for the request instead of the standard `Request` (that is also available but
+hidden) made me spend more time trying to figure out how to do something in
+"Hono way" than just doing it. In addition to that, it's becoming a
+full-featured framework with even a client-side JSX library.
 
 That's why [Galo was created](https://github.com/oscarotero/galo). It's a fast
 and minimalist router that embraces web standards and simplicity without
@@ -257,22 +258,20 @@ cms.auth({
 
 In previous versions, the auth configuration was simply an object with names and
 passwords. Now, we can also use an object to include more options. In this
-example, the "user1" has a password, the name "Admin" (which is visible in the
-interface), and some special permissions that override the permissions assigned
-to documents and collections: this user can create, rename, and delete files of
-the countries collection.
-
-For the user "user2" we just need the password so we don't have to create an
-options object.
+example, the "user1" has a password, the name "Admin" (which is used to show it
+in the interface instead of "user1"), and some special permissions that override
+the permissions assigned to documents and collections: this user can create,
+rename, and delete files of the countries collection, unlike "user2".
 
 ## Improved `documentLabel`
 
-In the list of documents of a collection, LumeCMS only displays the document
-name, but since it doesn't load the documents, it can't show any value inside
-the document (like a `title` or `date` properties). The option `documentLabel`
-allows customization of how this document is shown in the interface. For
-example, to transform the name `my-first-post.md` to a more human
-`My First Post` (in fact, this is the default behavior).
+If you see the list of documents in a collection, LumeCMS only displays the file
+names. Since it doesn't load the documents data, it can't use any value inside
+them (like `title` or `date` properties). The option `documentLabel` allows
+customization of how this document is shown in the interface. For example, it
+can transform the name `my-first-post.md` to a more human `My First Post`. In
+fact, LumeCMS comes with this especific behavior by default, but you can
+customize it with your own tranformer:
 
 ```js
 cms.collection({
@@ -284,17 +283,18 @@ cms.collection({
 As of version 0.13, this function can return an object with the properties
 `label`, `icon`, and `flags` to extract and show more info in the list view.
 
-Let's say our country's collection is a folder with the following files:
+Let's say our collection of countries is a folder with the following files:
 
 ```
 /en-spain.json
 /pt-portugal.json
-/it-italy.json
 /fr-france.json
+/it-italy.json
 ```
 
-Let's configure the collection to show only the country name, the code as a
-"flag", and the flag icon (from [Phosphor](https://phosphoricons.com/?q=flag)).
+We can configure the collection to show only the country name, and use the flag
+icon (from [Phosphor](https://phosphoricons.com/?q=flag)) instead of the default
+document icon. The country code is the code is saved in the flags object:
 
 ```js
 cms.collection({
@@ -326,7 +326,11 @@ cms.collection({
     {
       name: "country",
       type: "relation",
+
+      // The collection name that we want to relate
       collection: "countries",
+
+      // A function to return a label and value for each option
       option: ({ label, flags }) => { label, value: flags.code }
     }
   ]
@@ -381,9 +385,23 @@ date: 2025-01-11T00:00:00.000Z
 date: 2025-01-11 00:00:00
 ```
 
-## UI changes
+## And more changes
 
-The UI of the CMS received some changes to fix responsive and scrolling
-problems.
+There are more changes in this version, like UI improvements, ability to show
+EXIF data from uploaded images, the new `cssSelector` option to highlight an
+element in the previewer related with a field, etc.
 
-Take a look at the CHANGELOG.md file to see more changes.
+Take a look at the CHANGELOG.md file to see the complete list of changes.
+
+## Lume compability
+
+This version isn't compatible with Lume 3.0.x, but it will be in Lume 3.1.
+
+If you want to try it, upgrade Lume to the latest development version with:
+
+```
+deno task lume upgrade --dev
+```
+
+Then, run `deno task serve` and the CMS is automatically created if a `_cms.ts`
+file is detected. **You won't need to run `deno task cms` anymore!**

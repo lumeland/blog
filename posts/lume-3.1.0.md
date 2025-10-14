@@ -5,7 +5,12 @@ draft: true
 tags:
   - Releases
 comments: {}
+date: 2025-09-07 00:00:00
 ---
+
+Intro
+
+<!-- more -->
 
 ## Lume is moving to jsDelivr
 
