@@ -6,10 +6,12 @@ tags:
   - LumeCMS
   - Releases
 comments:
-  src: 'https://fosstodon.org/@lume/115373534999443376'
+  src: "https://fosstodon.org/@lume/115373534999443376"
+  bluesky: "https://bsky.app/profile/lume.land/post/3m366snodqm2c"
 author: Óscar Otero
-date: '2025-10-14T00:00:00.000Z'
+date: "2025-10-14T00:00:00.000Z"
 ---
+
 It's been a while (one and a half year!) since
 [LumeCMS was announced](/posts/lume-cms/) as an alternative to other existing
 CMS to edit the content of websites.
@@ -391,7 +393,9 @@ There are more changes in this version, like UI improvements, ability to show
 EXIF data from uploaded images, the new `cssSelector` option to highlight an
 element in the previewer related with a field, etc.
 
-Take a look at the CHANGELOG.md file to see the complete list of changes.
+Take a look at the
+[CHANGELOG.md file](https://github.com/lumeland/cms/blob/v0.13.0/CHANGELOG.md)
+to see the complete list of changes.
 
 ## Lume compability
 
