@@ -5,11 +5,11 @@ draft: false
 tags:
   - LumeCMS
   - Releases
-comments: {}
+comments:
+  src: 'https://fosstodon.org/@lume/115373534999443376'
 author: Óscar Otero
-date: 2025-09-14 18:39:00
+date: '2025-10-14T00:00:00.000Z'
 ---
-
 It's been a while (one and a half year!) since
 [LumeCMS was announced](/posts/lume-cms/) as an alternative to other existing
 CMS to edit the content of websites.
