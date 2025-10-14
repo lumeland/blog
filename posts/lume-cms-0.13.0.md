@@ -1,7 +1,7 @@
 ---
 title: Lume CMS 0.13.0
 url: /lume-cms-0.13/
-draft: true
+draft: false
 tags:
   - LumeCMS
   - Releases
