@@ -1,14 +1,44 @@
 ---
-title: Lume 3.1.0 - ?
+title: Lume 3.1.0 - Alexandre Bóveda
 author: Óscar Otero
 draft: true
 tags:
   - Releases
 comments: {}
-date: 2025-09-07 00:00:00
+date: "2025-09-07T00:00:00.000Z"
 ---
 
-Intro
+This is the first minor version of Lume 3.x, and it's dedicated to
+[**Alexandre Bóveda**](https://en.wikipedia.org/wiki/Alexandre_B%C3%B3veda), a
+financial officer and politician who was executed on 17 August 1936 by the
+Franco dictatorship because of his Galician ideals. The night before his death,
+he wrote several letters, the last one to his brother:
+
+> Dear Vitín:
+>
+> I don't know if I did right or wrong in trying to help you profitably. In any
+> case, it was with a desire for your good. I will die peacefully; I trust that
+> I will be received where we all want to gather, and I do it with joy and
+> entrusting this sacrifice to God. I wanted to do good, I worked for
+> Pontevedra, for Galicia, and for the Republic, and the flawed judgment of men
+> (which I forgive and you all must forgive) condemns me.
+>
+> Be more of a man now than ever because this is when you need it most, for our
+> elderly and for the children, to whom, without us expecting it, you are going
+> to be a little father.
+>
+> Comfort them all and try to always be good. Don't regret how much good you
+> have done and can still do.
+>
+> Little Vitin: To your parents, to Vera, to Carlos, to Cesar, to everyone, my
+> hugs. To you, good little brother, the biggest one you can receive from
+> Alexandre.
+>
+> P.S. / Pray for me that I will always remember you and (if I can, as I hope) I
+> will intercede for you.
+
+Alexandre is not only a Galician martyr but also a demonstration that good
+people exist in the world. Now more than ever, we have to remember that.
 
 <!-- more -->
 
@@ -60,13 +90,16 @@ features like live reload, debugbar etc.
 
 ### Moved to middleware
 
-With version 0.13, LumeCMS introduces significant changes, including replacing
-Hono with a [simpler router](https://github.com/oscarotero/galo). Now, LumeCMS
-is a middleware on top of Lume's server, handling only requests that start with
-`/admin/*` while delegating page previews to Lume's server. This makes the
-integration easier, eliminating the need for separate commands
-(`deno task serve` and `deno task cms`). In fact, if a `_cms.ts` file is
-present, the CMS is automatically included when running `deno task serve`.
+With version 0.13, LumeCMS introduces
+[significant changes](https://lume.land/blog/lume-cms-0-13/), including
+replacing Hono with a simpler router. Now, LumeCMS **is a middleware on top of
+Lume's server**, handling only requests that start with `/admin/*` while
+delegating page previews to Lume's server. This makes the integration easier,
+eliminating the need for separate commands (`deno task serve` and
+`deno task cms`).
+
+In Lume 3.1, **the `cms` task was removed**. Just run `deno task serve` and if
+the `_cms.ts` file is present, the CMS is automatically initialized.
 
 ### Improved VPS configuration
 
@@ -81,7 +114,7 @@ when updating the changes with `git pull` or after changing the git branch)
 without closing the server.
 
 Until now, you needed to use
-[`lume_cms_adapter`](https://deno.land/x/lume_cms_adapter) package to configure
+[an external package](https://deno.land/x/lume_cms_adapter) package to configure
 it. Now it's much easier since Lume's main repo includes a module to run the CMS
 in production: You only need to run `deno serve -A lume/serve.ts` and that's
 all!!
@@ -140,7 +173,7 @@ export default site;
 ```
 
 And now add the `type="text/partytown"` attribute to all scripts that you want
-to run from a web worker:
+to run from the web worker:
 
 ```html
 <script type="text/partytown">...</script>
@@ -177,11 +210,10 @@ new tab in the debug bar with all SEO issues found in all pages. It also has an
 option to export the report to a JSON file or any other format by providing a
 custom export function.
 
-The plugin is highly customizable. Since the default options are enough for most
-cases, you can configure what you want to validate (titles, H1 tags, meta
-descriptions, heading orders, duplicated titles, etc) and how to validate each
-element (min/max words, characters, or sentences, usage of common words, etc).
-Definitely, this plugin will help you to create more successful websites!
+The plugin is highly customizable. The default options are enough for most
+cases, but you can change how to validate titles, H1 tags, meta descriptions,
+heading orders, duplicated titles, etc. Definitely, this plugin will help you to
+create more successful websites!
 
 ## Improved remote files
 
@@ -193,9 +225,9 @@ For example:
 site.remoteFile("/styles/styles.css", "https://example.com/styles/styles.css");
 ```
 
-If the file `/my/styles.css` doesn't exist locally, the content of the URL will
-be used in place. This is very useful for themes because it allows for placing
-all templates and styles used by a theme remotely.
+If the file `/styles/styles.css` doesn't exist locally, the content of the URL
+will be used in place. This is very useful for themes because it allows for
+placing all templates and styles used by a theme remotely.
 
 The only problem with this function is that it only works for single files. If
 you have several files, you need to call the function once per file:
@@ -307,3 +339,31 @@ is converted to:
   background-image: url("data:image/svg+xml;utf8,<svg...</svg>");
 }
 ```
+
+## Picture plugin allows to crop images
+
+Until now, the [picture](https://lume.land/plugins/picture/) plugin only
+accepted the width value to resize images. For example this configuration
+transform the image to 300px and 600px, with versions for 2x resolutions and
+formats avif, webp and jpg:
+
+```html
+<img src="/flowers.jpg" transform-images="avif webp jpg 300@2 600@2">
+```
+
+Now it's possible to specifify a height to crop the images to a specific aspect
+ratio:
+
+```html
+<img src="/flowers.jpg" transform-images="avif webp jpg 300x150@2 600x300@2">
+```
+
+The image will be cropped to 300x150 and 600x300, with version for 2x
+resolutions. For now, there isn't any way to configure the origin of the crop
+(it's always centered) but this option can be added in future versions.
+
+---
+
+See
+[the CHANGELOG.md file](https://github.com/lumeland/lume/blob/v3.1.0/CHANGELOG.md)
+to see a complete list of all changes.
