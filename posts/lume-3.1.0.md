@@ -8,7 +8,7 @@ comments: {}
 date: "2025-09-07T00:00:00.000Z"
 ---
 
-The first minor version of Lume 3.x is dedicated to
+The first minor version of Lume 3 is dedicated to
 [**Alexandre Bóveda**](https://en.wikipedia.org/wiki/Alexandre_B%C3%B3veda), a
 financial officer and politician who was executed on 17 August 1936 by the
 Franco dictatorship because of his Galician ideals. The night before his death,
