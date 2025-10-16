@@ -8,7 +8,7 @@ comments: {}
 date: "2025-09-07T00:00:00.000Z"
 ---
 
-This is the first minor version of Lume 3.x, and it's dedicated to
+The first minor version of Lume 3.x is dedicated to
 [**Alexandre Bóveda**](https://en.wikipedia.org/wiki/Alexandre_B%C3%B3veda), a
 financial officer and politician who was executed on 17 August 1936 by the
 Franco dictatorship because of his Galician ideals. The night before his death,
@@ -16,10 +16,10 @@ he wrote several letters, the last one to his brother:
 
 > Dear Vitín:
 >
-> I don't know if I did right or wrong in trying to help you profitably. In any
-> case, it was with a desire for your good. I will die peacefully; I trust that
-> I will be received where we all want to gather, and I do it with joy and
-> entrusting this sacrifice to God. I wanted to do good, I worked for
+> I don't know if I did right or wrong in trying to get your help. In any case,
+> I did it wishing you the best. I will die peacefully; I trust that I will be
+> received where we all want to get together, and I do it with joy and
+> entrusting in God this sacrifice. I wanted to do good, I worked for
 > Pontevedra, for Galicia, and for the Republic, and the flawed judgment of men
 > (which I forgive and you all must forgive) condemns me.
 >
@@ -30,15 +30,15 @@ he wrote several letters, the last one to his brother:
 > Comfort them all and try to always be good. Don't regret how much good you
 > have done and can still do.
 >
-> Little Vitin: To your parents, to Vera, to Carlos, to Cesar, to everyone, my
-> hugs. To you, good little brother, the biggest one you can receive from
-> Alexandre.
+> Vitinciño: To our parents, to Vera, to Carlos, to Cesar, to everyone, my hugs.
+> To you, my good brother, the biggest one you can receive from Alexandre.
 >
-> P.S. / Pray for me that I will always remember you and (if I can, as I hope) I
-> will intercede for you.
+> P.S. / Pray for me because I will always remember you and (if I can, as I
+> hope) I will intercede for you.
 
-Alexandre is not only a Galician martyr but also a demonstration that good
-people exist in the world. Now more than ever, we have to remember that.
+Alexandre is not only a Galician martyr but also a demonstration that there have
+always been good people in the world. Now more than ever, we have to remember
+that.
 
 <!-- more -->
 
