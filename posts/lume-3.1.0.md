@@ -143,6 +143,7 @@ the default configuration:
         "0.0.0.0",
         "jsr.io:443",
         "cdn.jsdelivr.net:443",
+        "data.jsdelivr.com:443",
         "registry.npmjs.org:443"
       ],
       "env": true,
