@@ -6,6 +6,7 @@ tags:
   - Releases
 comments:
   src: 'https://fosstodon.org/@lume/115390795989493953'
+  bluesky: 'https://bsky.app/profile/lume.land/post/3m3ftvukox72s'
 date: 2025-10-17
 ---
 The first minor version of Lume 3 is dedicated to
