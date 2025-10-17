@@ -142,7 +142,8 @@ the default configuration:
       "net": [
         "0.0.0.0",
         "jsr.io:443",
-        "cdn.jsdelivr.net:443"
+        "cdn.jsdelivr.net:443",
+        "registry.npmjs.org:443"
       ],
       "env": true,
       "run": true,
@@ -154,10 +155,10 @@ the default configuration:
 ```
 
 As you can see, Deno only has writing permissions for the current folder, net
-permissions to localhost (to run the local server), and JSR and JsDelivr (to
-fetch dependencies). The other permissions are granted by default because they
-are needed for some plugins, but you can edit this configuration to make it more
-restrictive or lax.
+permissions to localhost (to run the local server), and JSR, NPM and JsDelivr
+(to fetch dependencies). The other permissions are granted by default because
+they are needed for some plugins, but you can edit this configuration to make it
+more restrictive or lax.
 
 ## Better integration with LumeCMS
 
