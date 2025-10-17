@@ -4,10 +4,10 @@ author: Óscar Otero
 draft: false
 tags:
   - Releases
-comments: {}
-date: 2025-10-17 18:00
+comments:
+  src: 'https://fosstodon.org/@lume/115390795989493953'
+date: 2025-10-17
 ---
-
 The first minor version of Lume 3 is dedicated to
 [**Alexandre Bóveda**](https://en.wikipedia.org/wiki/Alexandre_B%C3%B3veda), a
 financial officer and politician who was executed on 17 August 1936 by Franco's
