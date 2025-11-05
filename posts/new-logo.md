@@ -5,6 +5,7 @@ tags:
   - Design
 comments:
   src: 'https://fosstodon.org/@lume/115498290357954828'
+  bluesky: 'https://bsky.app/profile/lume.land/post/3m4vljeavsf2m'
 author: Óscar Otero
 date: 2025-11-05
 ---
