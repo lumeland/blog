@@ -3,11 +3,11 @@ title: Lume has a new logo!
 draft: false
 tags:
   - Design
-comments: {}
+comments:
+  src: 'https://fosstodon.org/@lume/115498290357954828'
 author: Óscar Otero
 date: 2025-11-05
 ---
-
 Lume was born 5 years ago as an excuse to try Deno, the new JavaScript runtime.
 At that moment, the hype around Deno led to many projects featuring a dinosaur
 in their logo. Lume joined this trend, making a joke with the concept of _fire_
