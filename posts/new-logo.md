@@ -4,11 +4,12 @@ draft: false
 tags:
   - Design
 comments:
-  src: 'https://fosstodon.org/@lume/115498290357954828'
-  bluesky: 'https://bsky.app/profile/lume.land/post/3m4vljeavsf2m'
+  src: "https://fosstodon.org/@lume/115498290357954828"
+  bluesky: "https://bsky.app/profile/lume.land/post/3m4vljeavsf2m"
 author: Óscar Otero
 date: 2025-11-05
 ---
+
 Lume was born 5 years ago as an excuse to try Deno, the new JavaScript runtime.
 At that moment, the hype around Deno led to many projects featuring a dinosaur
 in their logo. Lume joined this trend, making a joke with the concept of _fire_
