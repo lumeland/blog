@@ -8,46 +8,48 @@ tags:
 comments: {}
 ---
 
-So, you thought that Lume only can generate static sites, right?
+So, you thought that Lume could only generate static sites, right?
 
 **Not anymore!** As of version 3.2, Lume can also create books in EPUB format.
 That's why I wanted to dedicate this version to one of the most important
-galician writer of all time: Rosalía de Castro.
+figures of Galician literature of all time: **Rosalía de Castro**.
 
 <!--more-->
 
-You maybe know [Rosalía](https://en.wikipedia.org/wiki/Rosal%C3%ADa), the
-popular Spanish singer. But in Galicia we have another Rosalía:
+You may know [Rosalía](https://en.wikipedia.org/wiki/Rosal%C3%ADa), the popular
+Spanish singer. But in Galicia, we have another Rosalía:
 [Rosalía de Castro](https://en.wikipedia.org/wiki/Rosal%C3%ADa_de_Castro),
 probably our most important poet and novelist. She was a leading figure in the
-period of the resurgence and revitalization of the Galician language in the
+period of the resurgence and revitalization of the Galician language in
 literature during the 19th century (period known as
 [Rexurdimento](https://en.wikipedia.org/wiki/Rexurdimento)).
+
+Some of her poems were set to music by several artists. Do you want an example?
+Enjoy
+["Negra sombra" (black shadow)](https://www.youtube.com/watch?v=q_Nx2nq4oiM)
+interpreted by Luz Casal.
 
 ## New plugin `epub`
 
 [EPUB](https://www.w3.org/publishing/epub3/) is the standard format for ebooks.
-Tecnically, it's a zip file containing files in formats like XHTML, CSS, JPEG,
+Technically, it's a zip file containing files in formats like XHTML, CSS, JPEG,
 PNG; and other xml files specific for ebooks (a `container.xml` manifest file, a
 `content.opf` with the book structure, etc). Robin Whittleton
 [wrote a great article](https://www.htmhell.dev/adventcalendar/2025/11/)
 explaining how EPUB works.
 
-Since EPUB is based on web standards that Lume understand, it seems feasible to
+Since EPUB is based on web standards that Lume understands, it seems feasible to
 use Lume to create EPUBs. The only problem was the requirement of
-[XHTML](https://www.w3.org/TR/xhtml11/) (HTML is not valid for EPUBs) and this
-wasn't easy to do in previous versions of Lume. But in this version Lume can
-output `.xhtml` files and treat them in the same way as `.html` hence we have
-also a epub plugin to make easy the generation of epubs.
+[XHTML](https://www.w3.org/TR/xhtml11/) (HTML is not valid for EPUBs), and this
+wasn't easy to do in previous versions of Lume. But in this version, Lume can
+output `.xhtml` files and treat them in the same way as `.html`, hence we also
+have an EPUB plugin to help you to generate EPUBs. What this plugin can do?
 
-Note that the plugin cannot magically convert any website to a epub, you still
-need to have a proper structure, but it does the following:
-
-- Create the `container.xml`, `encryption.xml`, `mimetype` and `content.opf`
+- Create the `container.xml`, `encryption.xml`, `mimetype`, and `content.opf`
   manifest files.
 - Create the `toc.ncx` file with the book structure (using the
   [nav plugin](https://lume.land/plugins/nav/) under the hood).
-- Change the extension of all `.html` pages to `.xhtml`.
+- Convert the code and change the extension of all `.html` pages to `.xhtml`.
 - Compress all files and create the `book.epub` file in the `dest` folder.
 
 This is an example of using the plugin:
@@ -58,12 +60,6 @@ import epub from "lume/plugins/epub.ts";
 
 const site = lume({
   prettyUrls: false, // prettyUrls don't make sense for ebooks
-}, {
-  markdown: {
-    options: {
-      xhtmlOut: true, // ensure markdown outputs xhtml
-    },
-  },
 });
 
 site.use(epub({
@@ -83,14 +79,19 @@ site.use(epub({
 export default site;
 ```
 
+Note that the plugin cannot magically convert any website to an EPUB; you still
+need to have a proper structure, use some epub specific attributes, etc. But
+don't worry! the [Simple ePub theme](https://github.com/lumeland/simple-epub)
+provides a nice boilerplate to start publishing books.
+
 ## New plugin `image_size`
 
-This is a recurrent request and finally Lume has a plugin to add automaticaly
-the `width` and `height` values to the images.
+This is a recurrent request, and finally, Lume has a plugin to add automatically
+the `width` and `height` values of the images.
 
-The plugin use the awesome
+The plugin uses the awesome
 [image-dimensions](https://github.com/sindresorhus/image-dimensions) library by
-Sindre Sorhus. To use it, just install like any other plugin:
+Sindre Sorhus. To use it, just install it like any other plugin:
 
 ```js
 import lume from "lume/mod.ts";
@@ -103,14 +104,14 @@ site.use(imageSize());
 export default site;
 ```
 
-Add the `image-size` attribute to the images you want the plugin calculates the
-dimmensions
+Add the `image-size` attribute to the images you want the plugin to calculate
+the size:
 
 ```html
 <img src="/image.png" image-size>
 ```
 
-And the plugin automatically add the `width` and `height` attributes:
+And the plugin automatically adds the `width` and `height` attributes:
 
 ```html
 <img src="/image.png" width="600" height="300">
@@ -119,7 +120,7 @@ And the plugin automatically add the `width` and `height` attributes:
 ## New plugin `extract_order`
 
 Sometimes you have a list of pages that you want to show in a specific order. A
-common way to do that is defining a `order` variable in the front matter:
+common way to do that is to define an `order` variable in the front matter:
 
 ```md
 ---
@@ -136,34 +137,35 @@ Then, you only have to select the pages in this specific order:
 {{ set pages = search.pages("type=article", "order=asc") }}
 ```
 
-The problem of this approach is the pages are not ordered in your IDE, because
-the order is not in the filename:
+The problem with this approach is that the pages are not ordered in your IDE,
+because the order is not reflected in the filename:
 
 ```
-article-three.md
-first-article.md
-other-article.md
+/article-three.md
+/first-article.md
+/other-article.md
 ```
 
-This plugin can extract the order value from the filename so you can see them
-sorted in all places:
+With this plugin you can set the order in the filename (in the format
+`{number}.filename`) and this value will be extracted and removed from the final
+URL (configurable).:
 
 ```
-1.first-article.md
-2.other-article.md
-3.article-three.md
+/1.first-article.md
+/2.other-article.md
+/3.article-three.md
 ```
 
 This also works great for folders:
 
 ```
-1.articles/
-  1.first-article.md
-  2.other-article.md
-  3.article-three.md
-2.notes/
-  1.note-one.md
-  2.note-two.md
+/1.articles/
+   1.first-article.md
+   2.other-article.md
+   3.article-three.md
+/2.notes/
+   1.note-one.md
+   2.note-two.md
 ```
 
 To use it:
@@ -179,19 +181,19 @@ site.use(extractOrder());
 export default site;
 ```
 
-## `parseBasename` can access to the parent values
+## `parseBasename` can access the parent values
 
-The option `site.parseBasename` allows to register functions to extract values
+The option `site.parseBasename` allows registering functions to extract values
 from files and folders. In fact, it's what the `extract_order` and
 `extract_date` plugins use under the hood.
 
-As of Lume 3.2, the parent value is added as the second argument. This allows to
-compose values contextually using the name of different folders. For example,
-let's say we have some files with following paths:
+As of Lume 3.2, the parent value is added as the second argument. This allows us
+to compose values contextually using the names of different folders. For
+example, let's say we have some files with the following paths:
 
 ```
-2026/01/01/happy-new-year.md
-2026/01/05/this-year-sucks.md
+/2026/01/01/happy-new-year.md
+/2026/01/05/this-year-sucks.md
 ```
 
 Now you can compose the final date of each file using the values of the
@@ -199,7 +201,7 @@ directories and subdirectories. For example:
 
 ```js
 site.parseBasename((basename, parent) => {
-  // Check if the name only contain numbers
+  // Check if the name only contains numbers
   if (!/^\d+$/.test(name)) {
     return;
   }
@@ -209,6 +211,7 @@ site.parseBasename((basename, parent) => {
     return { year: basename, basename }
   }
 
+  // 2 digits, it's the month or day
   if (basename.length === 2) {
     // If the month isn't in the parent, this is the month
     if (!parent.month) {
@@ -227,5 +230,5 @@ site.parseBasename((basename, parent) => {
 
 ## Other changes
 
-This version includes also some other minor changes and several bugfixes. You
+This version also includes some other minor changes and several bugfixes. You
 can read the details in the CHANGELOG.md file.
