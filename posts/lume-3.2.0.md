@@ -181,6 +181,54 @@ site.use(extractOrder());
 export default site;
 ```
 
+## New plugin `replace`
+
+This simple plugin allows to perform simple text replacements in the site which
+is especially useful for documentation sites. For example, let's say you want to
+display always the last version of your library in a website:
+
+```md
+Welcome to Libros 2.3.0, the library to read ebook. To getting started, run the
+following command:
+
+deno install --global https://deno.land/x/libros@2.3.0/mod.ts
+```
+
+Instead of harcoding the version number everywhere in your site (and remember to
+update it after a new version), this plugin allows to use a placeholder:
+
+```md
+Welcome to Libros $VERSION, the library to read ebook. To getting started, run
+the following command:
+
+deno install --global https://deno.land/x/libros@$VERSION/mod.ts
+```
+
+Now, configure the replacements in the plugin options:
+
+```js
+import lume from "lume/mod.ts";
+import replace from "lume/plugins/replace.ts";
+
+const site = lume();
+
+site.use(replace({
+  replacements: {
+    "$VERSION": "2.3.0",
+  },
+}));
+
+export default site;
+```
+
+Now you have this value centralized in one place. This is the approach used in
+the Lume website to
+[keep the versions of all packages up to date](https://github.com/lumeland/lume.land/blob/055eac5d0a960ab014eedc552492237c6613dbac/_config.ts#L54).
+
+You can use this plugin for any constant value that you want to use globally,
+like a url parameter for caching, the hash of the latest commit, the year to
+include in the copyright, etc.
+
 ## `parseBasename` can access the parent values
 
 The option `site.parseBasename` allows registering functions to extract values
