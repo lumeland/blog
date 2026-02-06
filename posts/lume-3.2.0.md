@@ -137,8 +137,9 @@ Then, you only have to select the pages in this specific order:
 {{ set pages = search.pages("type=article", "order=asc") }}
 ```
 
-The problem with this approach is that the pages are not ordered in your IDE,
-because the order is not reflected in the filename:
+This works great, the only problem is that you can't see the pages in the same
+order in your code editor or file system because they are ordered
+alphabetically:
 
 ```
 /article-three.md
@@ -146,9 +147,9 @@ because the order is not reflected in the filename:
 /other-article.md
 ```
 
-With this plugin you can set the order in the filename (in the format
-`{number}.filename`) and this value will be extracted and removed from the final
-URL (configurable).:
+With this plugin you can set the order in the filename, using the format
+`{number}.filename`, and this value will be used as the `order` variable. The
+plugin also removes this prefix from the final URL by default (configurable).
 
 ```
 /1.first-article.md
@@ -183,9 +184,9 @@ export default site;
 
 ## New plugin `replace`
 
-This simple plugin allows to perform simple text replacements in the site which
-is especially useful for documentation sites. For example, let's say you want to
-display always the last version of your library in a website:
+This simple plugin allows to perform simple text replacements in the site,
+something especially useful for documentation sites. For example, let's say you
+want to display always the last version of your library in a website:
 
 ```md
 Welcome to Libros 2.3.0, the library to read ebook. To getting started, run the
@@ -226,8 +227,8 @@ the Lume website to
 [keep the versions of all packages up to date](https://github.com/lumeland/lume.land/blob/055eac5d0a960ab014eedc552492237c6613dbac/_config.ts#L54).
 
 You can use this plugin for any constant value that you want to use globally,
-like a url parameter for caching, the hash of the latest commit, the year to
-include in the copyright, etc.
+like a query parameter for caching CSS and JS files, the hash of the latest
+commit, the year in the copyright, etc.
 
 ## `parseBasename` can access the parent values
 
@@ -235,9 +236,9 @@ The option `site.parseBasename` allows registering functions to extract values
 from files and folders. In fact, it's what the `extract_order` and
 `extract_date` plugins use under the hood.
 
-As of Lume 3.2, the parent value is added as the second argument. This allows us
-to compose values contextually using the names of different folders. For
-example, let's say we have some files with the following paths:
+As of Lume 3.2, the data from the parent folder is added as the second argument.
+This allows us to compose values contextually using the names of different
+folders. For example, let's say we have some files with the following paths:
 
 ```
 /2026/01/01/happy-new-year.md
@@ -279,10 +280,10 @@ site.parseBasename((basename, parent) => {
 ## `watcher.dependencies` option
 
 The Lume file watcher detects changes in your files in order to rebuild the site
-with the new content. Note that only the files that have changed are reloaded,
-which is way faster than reloading all files every time something changes. This
-works great in 99% of the cases, but there are some edge cases where we need to
-say Lume to reload a file when another file has changed.
+with the new content. An important aspect is that only the changed files are
+reloaded, which is way faster than reloading all files every time something
+changed. This works great in 99% of the cases, but there are some edge cases
+where we need to say Lume to reload a file when another file has changed.
 
 As an example, let's say you have some data stored in a SQLite database and you
 want to expose some of its data to your pages using a `_data.ts` file:
@@ -308,7 +309,8 @@ it available to all pages. If we make changes in the `database.db` file, Lume
 will detect that the file has changed, but because `_data.ts` hasn't changed,
 Lume won't re-run this file, so the new changes won't be available. What we
 really want is to reload the `_data.ts` file every time the `database.db` file
-has changed. And now we can do that with the new `watcher.dependencies` option:
+has changed. And now we can do it thanks to the new `watcher.dependencies`
+option:
 
 ```ts
 import lume from "lume/mod.ts";
@@ -328,6 +330,87 @@ Here we are telling Lume that the file `_data.ts` depends on
 `database.db-journal` (the extension `.db-journal` is used by SQLite to create a
 temporary file during the data transactions). Now Lume knows that every time any
 of its dependencies change, `_data.ts` will be reloaded too.
+
+## Better logs
+
+When Lume builds a site, the logger outputs messages to the terminal in the same
+order they are generated. One problem with this approach is that there are
+messages more important than others, and, especially if the site has a lot of
+pages, those messages can be lost among others. Another problem is that if the
+same error is produced by different pages, it's shown once per page, which
+produces a lot of noise and prevents seeing other important messages. Let's see
+an example:
+
+```
+WARN [esbuild plugin] No TS, JS, TSX, JSX files found. Use site.add() to add files. For example: site.add("script.js")
+ERROR SourceError: Unclosed tag
+/_includes/templates/blocks.vto:4:3
+ 1 | {{ for block of blocks }}
+ 2 |   {{ if !block.hide }}
+ 3 |     {{ await comp[block.type]({ block, lang, url }) }}
+ 4 |   {{ /if }
+   |   ^ Unclosed tag
+ERROR SourceError: Unclosed tag
+/_includes/templates/blocks.vto:4:3
+ 1 | {{ for block of blocks }}
+ 2 |   {{ if !block.hide }}
+ 3 |     {{ await comp[block.type]({ block, lang, url }) }}
+ 4 |   {{ /if }
+   |   ^ Unclosed tag
+🔥 /docs/configuration/env-variables/ <- /docs/configuration/env-variables.md
+🔥 /docs/configuration/config-file/ <- /docs/configuration/config-file.md
+🔥 /docs/configuration/add-files/ <- /docs/configuration/add-files.md
+🔥 /img/extend.svg <- /img/extend.svg
+🔥 /img/deploy.svg <- /img/deploy.svg
+...
+🔥 /img/http-imports.svg <- /img/http-imports.svg
+🔥 /init.ts <- /static/init.ts
+🔥 /img/gradient.png <- /img/gradient.png
+🔥 /img/zero-runtime.svg <- /img/zero-runtime.svg
+🔥 /logo.png <- /static/logo.png
+WARN [validate_html plugin] 512 HTML error(s) found. Setup an output file or check the debug bar.
+WARN [seo plugin] 45 SEO error(s) found. Setup an output file or check the debug bar.
+🍾 Site built into ./_site
+  188 files generated in 6.28 seconds
+```
+
+In the example, the Vento error shown twice because it occurred on two pages.
+There are some WARN errors at the start and others at the end, and a long list
+of generated pages in the middle.
+
+In order to make the logs clearer, two changes were introduced in this version
+of Lume:
+
+- Messages of type WARN, ERROR, and FATAL are shown at the end, sorted by
+  severity (WARN first, FATAL last). Other levels (TRACE, DEBUG, and INFO) are
+  still shown as they were produced.
+- Duplicated logs are removed.
+
+The example above is shown as follows in the new version:
+
+```
+...
+🔥 /img/http-imports.svg <- /img/http-imports.svg
+🔥 /init.ts <- /static/init.ts
+🔥 /img/gradient.png <- /img/gradient.png
+🔥 /img/zero-runtime.svg <- /img/zero-runtime.svg
+🔥 /logo.png <- /static/logo.png
+🍾 Site built into ./_site
+  188 files generated in 6.28 seconds
+WARN [validate_html plugin] 512 HTML error(s) found. Setup an output file or check the debug bar.
+WARN [seo plugin] 45 SEO error(s) found. Setup an output file or check the debug bar.
+WARN [esbuild plugin] No TS, JS, TSX, JSX files found. Use site.add() to add files. For example: site.add("script.js")
+ERROR SourceError: Unclosed tag
+/_includes/templates/blocks.vto:4:3
+ 1 | {{ for block of blocks }}
+ 2 |   {{ if !block.hide }}
+ 3 |     {{ await comp[block.type]({ block, lang, url }) }}
+ 4 |   {{ /if }
+   |   ^ Unclosed tag
+```
+
+This hopefully ensures that you won't miss anything important during the build
+process!
 
 ## Other changes
 
