@@ -84,6 +84,9 @@ need to have a proper structure, use some epub specific attributes, etc. But
 don't worry! the [Simple ePub theme](https://github.com/lumeland/simple-epub)
 provides a nice boilerplate to start publishing books.
 
+Learn more about this plugin
+[on the documentation page](https://lume.land/plugins/epub/).
+
 ## New plugin `image_size`
 
 This is a recurrent request, and finally, Lume has a plugin to add automatically
@@ -116,6 +119,8 @@ And the plugin automatically adds the `width` and `height` attributes:
 ```html
 <img src="/image.png" width="600" height="300">
 ```
+
+More info [on the documentation page](https://lume.land/plugins/image_size/).
 
 ## New plugin `extract_order`
 
@@ -182,6 +187,8 @@ site.use(extractOrder());
 export default site;
 ```
 
+More info [on the documentation page.](https://lume.land/plugins/extract_order/)
+
 ## New plugin `replace`
 
 This simple plugin allows to perform simple text replacements in the site,
@@ -230,11 +237,14 @@ You can use this plugin for any constant value that you want to use globally,
 like a query parameter for caching CSS and JS files, the hash of the latest
 commit, the year in the copyright, etc.
 
+More info [on the documentation page](https://lume.land/plugins/replace/).
+
 ## `parseBasename` can access the parent values
 
-The option `site.parseBasename` allows registering functions to extract values
-from files and folders. In fact, it's what the `extract_order` and
-`extract_date` plugins use under the hood.
+The function
+[`site.parseBasename`](https://lume.land/docs/core/basename-parsers/) allows
+registering functions to extract values from files and folders. In fact, it's
+what the `extract_order` and `extract_date` plugins use under the hood.
 
 As of Lume 3.2, the data from the parent folder is added as the second argument.
 This allows us to compose values contextually using the names of different
