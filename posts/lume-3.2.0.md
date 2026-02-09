@@ -1,13 +1,12 @@
 ---
 title: Lume 3.2.0 - Rosalía
 author: Óscar Otero
-date: 2026-01-31
-draft: true
+date: 2026-02-09
+draft: false
 tags:
   - Releases
 comments: {}
 ---
-
 So, you thought that Lume could only generate static sites, right?
 
 **Not anymore!** As of version 3.2, Lume can also **create books** in EPUB
