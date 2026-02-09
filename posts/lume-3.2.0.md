@@ -7,6 +7,7 @@ tags:
   - Releases
 comments:
   src: "https://fosstodon.org/@lume/116042051368577870"
+  bluesky: "https://bsky.app/profile/lume.land/post/3meh3a5yfgp24"
 ---
 
 So, you thought that Lume could only generate static sites, right?
