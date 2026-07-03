@@ -11,11 +11,15 @@
     "serve": {
       "description": "Run and serve the site for development",
       "command": "deno task lume -s"
+    },
+    "new": {
+      "description": "Create new content or code using artifacts",
+      "command": "deno task lume new"
     }
   },
   "imports": {
-    "lume/": "https://cdn.jsdelivr.net/gh/lumeland/lume@ccdf09448910da374c54f0726786e8e10313b031/",
-    "lume/cms/": "https://cdn.jsdelivr.net/gh/lumeland/cms@025df1200d324df3403f3d158add34b8afa825eb/",
+    "lume/": "https://cdn.jsdelivr.net/gh/lumeland/lume@3.2.6/",
+    "lume/cms/": "https://cdn.jsdelivr.net/gh/lumeland/cms@0.15.5/",
     "blog/": "https://cdn.jsdelivr.net/gh/lumeland/theme-simple-blog@1.16.2/",
     "lume/jsx-runtime": "https://cdn.jsdelivr.net/gh/oscarotero/ssx@0.1.15/jsx-runtime.ts"
   },
@@ -36,7 +40,7 @@
   ],
   "lint": {
     "plugins": [
-      "https://cdn.jsdelivr.net/gh/lumeland/lume@ccdf09448910da374c54f0726786e8e10313b031/lint.ts"
+      "https://cdn.jsdelivr.net/gh/lumeland/lume@3.2.6/lint.ts"
     ],
     "rules": {
       "exclude": [
@@ -74,7 +78,8 @@
   "lock": false,
   "allowScripts": {
     "deny": [
-      "npm:sharp"
+      "npm:sharp",
+      "npm:@parcel/watcher"
     ]
   }
 }
