@@ -19,7 +19,7 @@
   },
   "imports": {
     "lume/": "https://cdn.jsdelivr.net/gh/lumeland/lume@3.2.6/",
-    "lume/cms/": "https://cdn.jsdelivr.net/gh/lumeland/cms@0.15.5/",
+    "lume/cms/": "https://cdn.jsdelivr.net/gh/lumeland/cms@0.15.7/",
     "blog/": "https://cdn.jsdelivr.net/gh/lumeland/theme-simple-blog@1.16.2/",
     "lume/jsx-runtime": "https://cdn.jsdelivr.net/gh/oscarotero/ssx@0.1.15/jsx-runtime.ts"
   },
