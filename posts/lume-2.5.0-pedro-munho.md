@@ -35,18 +35,18 @@ For example:
 
 ```html
 <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "url": "https://oscarotero.com/",
-    "headline": "Óscar Otero - Web designer and developer",
-    "name": "Óscar Otero",
-    "description": "I’m just a designer and web developer",
-    "author": {
-      "@type": "Person",
-      "name": "Óscar Otero"
-    }
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "url": "https://oscarotero.com/",
+  "headline": "Óscar Otero - Web designer and developer",
+  "name": "Óscar Otero",
+  "description": "I’m just a designer and web developer",
+  "author": {
+    "@type": "Person",
+    "name": "Óscar Otero"
   }
+}
 </script>
 ```
 

@@ -319,7 +319,7 @@ export default async function ({ comp }) {
 Or Vento:
 
 ```html
-<p>{{ comp.Salute({ id: 23}) }}</p>
+<p>{{ comp.Salute({ id: 23 }) }}</p>
 ```
 
 ### Folder components

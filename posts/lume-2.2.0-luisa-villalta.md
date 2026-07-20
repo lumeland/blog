@@ -245,7 +245,7 @@ work:
 ```html
 <ul>
   {% for item in search.pages('post') %}
-  <li>{{item.title}}</li>
+  <li>{{ item.title }}</li>
   {% endfor %}
 </ul>
 ```
