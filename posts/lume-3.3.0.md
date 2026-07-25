@@ -7,7 +7,6 @@ tags:
   - Releases
 comments: {}
 ---
-
 A new Lume version is born! And this time it's dedicated to
 [Castelao](https://en.wikipedia.org/wiki/Alfonso_Daniel_Rodr%C3%ADguez_Castelao),
 probably the most important figure in Galician culture in the 20th century.
@@ -29,15 +28,14 @@ creator using some of his drawings, that
 ## Deno support
 
 Lume 3.3.0 drops support for versions of Deno older than 2.9.0, because it uses
-some new features of Deno (like HMR) that are not supported in older versions.
+some new features (like HMR) that are not supported in older versions.
 
-Since Deno
-[revived the LTS channel](https://docs.deno.com/runtime/fundamentals/stability_and_releases/#long-term-support-(lts))
-recently, support for LTS will be guaranteed.
+Since Deno revived
+[the LTS channel](https://docs.deno.com/runtime/fundamentals/stability_and_releases/#long-term-support-(lts)) with the 2.9.0 version, it looks fine for Lume to garantee support for LTS.
 
 ## Lume is on Codeberg
 
-[Codeberg](https://codeberg.org) is an alternative to GitHub, managed by a
+[Codeberg](https://codeberg.org) is a [more ethical](https://blog.codeberg.org/protecting-our-floss-commons-from-llms.html) alternative to GitHub, managed by a
 non-profit association based in Berlin, Germany. For some time now, Lume is
 available on both [Codeberg](https://codeberg.org/lume) and
 [GitHub](https://github.com/lumeland/). If you want to star, create a PR, or
@@ -52,24 +50,22 @@ makes Lume more independent since it doesn't rely on a single platform.
 
 ES modules are immutable by design. This means that when you import a module
 like `import foo from "./bar.ts"`, the code of `bar.ts` is cached forever, and
-the only way to reload it after a change is restarting the process.
+the only way to reload it is restarting the process.
 
-Lume bypasses that limitation in `--serve` or `--watch` mode by adding a hash at
+Lume bypasses this limitation in `--serve` or `--watch` mode by adding a hash at
 the end of the files. For example, when Lume loads the file `_data.ts`, it's
 loaded as `_data.ts#123456`, so when the file changes, it's loaded again with a
 different hash.
 
-But this workaround has a big limitation: it only works for files loaded by
+But this workaround only works for files loaded directly by
 Lume. If the `_data.ts` file has a nested import (for example,
 `import foo from "./bar.ts"`), this file isn't loaded by Lume, so it can't add
 the hash and it can't be reloaded after a change.
 
 Fortunately, Deno 2.9.0 implemented the
 [module hook API of Nodejs](https://nodejs.org/api/module.html#moduleregisterhooksoptions).
-This API allows you to configure Deno to resolve and load modules in different
-ways, and Lume uses it to add the hash to all local modules loaded by Deno. This
-means that all modules loaded from your `src` folder will be reloaded with the
-new changes, no matter how they were imported.
+This API allows you to configure how Deno resolves and loads modules, and Lume uses it to add the hash to all local modules loaded by Deno. This
+means that any module loaded from your `src` folder will be reloaded automatically when it's updated, no matter how is imported.
 
 ```ts
 // If bar.ts changes, it's reloaded in Lume 3.3.0!
@@ -125,7 +121,7 @@ E.T. meets Elliott in a field of wells.
 
 As you can see, it's possible to use aliases to other variables (i.e. `app.name`
 is an alias to `title`). The plugin will generate the manifest file and the
-icons in different sizes using `favicon.svg` as the input image.
+icons in different sizes using the `favicon.svg` file as the input image.
 
 PWA can have shortcuts (additional pages shown in a submenu). Use the `shortcut`
 variable in other pages to add shortcuts to your application:
@@ -170,7 +166,9 @@ import wellKnown from "lume/plugins/well_known.ts";
 
 const site = lume();
 site.use(wellKnown({
-  gpc: true,
+  gpc: {
+    gpc: true,
+  },
   atProto: "did:plc:lqbfqodxim3n27heuou7do3g",
   trust: {
     contact: "mailto:info@example.com",
@@ -181,6 +179,66 @@ site.use(wellKnown({
 }));
 
 export default site;
+```
+
+## New plugin `toc`
+
+A common way to generate a table of contents in Lume is using a markdown-it plugin like [the `toc` plugin](https://github.com/lumeland/markdown-plugins). A drawback of this approach is it only works for pages rendered with markdown-it. If you want to use the [Remark plugin](https://lume.land/plugins/remark/) you have to need a different plugin. And if you want to generate table of contents from pages in other formats like Vento or JSX, it's become more complex.
+
+In this version, Lume added the new TOC plugin, which is agnostic of the template engine. It uses the DOM API to generate the toc using the `toc` attribute:
+
+```html
+<nav toc="content">
+  <!-- toc will be generated here -->
+</nav>
+
+<div id="content">
+  <h2>First title</h2>
+  <h3>Subtitle</h3>
+  <h2>Other title</h2>
+</div>
+```
+
+As you can see in the example, the plugin only need the `toc` attribute defined in the element that will contain the table of contents. The value of this attribute must be the id of the element with the text. The plugin automatically will generate the following HTML code:
+
+```html
+<nav toc="content">
+  <ol>
+    <li>
+      <a href="#first-title">First title</a>
+      <ol>
+        <li><a href="#subtitle">Subtitle</a></li>
+      </ol>
+    </li>
+    <li><a href="#other-title">Other title</a></li>
+  </ol>
+</nav>
+
+<div id="content">
+  <h2 id="first-title"><a href="#first-title">First title</a></h2>
+  <h3 id="subtitle"><a href="#subtitle">Subtitle</a></h3>
+  <h2 id="other-title"><a href="#other-title">Other title</a></h2>
+</div>
+```
+
+Note that the plugin not only generates the table of contents, but also the ids of the headers (if needed) and the anchors. Use the `anchor` option allows to configure how these anchors are generated or disable this feature:
+
+```ts
+import lume from "lume/mod.ts";
+import toc from "lume/plugins/toc.ts";
+
+const site = lume();
+site.use(toc({
+  anchor: false, // disable the anchor generation
+}));
+
+export default site;
+```
+
+The `no-toc` attribute can be used to ignore some headers to be included in the table of contents:
+
+```html
+<h2 no-toc>This header is omited</h2>
 ```
 
 ## New plugin `git_date`
@@ -219,6 +277,8 @@ site.use(gitDate({
   varName: "lastModified",
 }));
 ```
+
+This makes the built-in feature obsolete, since the plugin is faster and better and goes in line with the Lume philosophy of keeping the core lean and moving the features to plugins.
 
 ## New plugin `git_info`
 
