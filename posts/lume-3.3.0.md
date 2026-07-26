@@ -379,5 +379,8 @@ breakpoints to debug your code.
 
 ## Improved Lume debugbar
 
-The [Lume debug bar](https://lume.land/docs/core/debugbar/) now displays the RAM
-used. It's useful to detect the steps in the build that consume more memory.
+The [Lume debug bar](https://lume.land/docs/core/debugbar/) got some improvements:
+
+- The js code is inlined in the HTML, instead loaded remotely from jsdelivr.
+- It displays the RAM used, useful to detect the steps in the build that consume more memory.
+- The button to edit the content in the CMS was moved to the tab bar, so it's visible even if the debugbar is collapsed.
