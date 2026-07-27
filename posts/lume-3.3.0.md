@@ -377,6 +377,111 @@ Now it's easier to debug Lume thanks to the `--inspect` flag. Run
 you can open the `chrome://inspect` URL in any Chromium-based browser and add
 breakpoints to debug your code.
 
+## Improved TypeScript
+
+First: big thanks to [Volpeon for the tireless work](https://github.com/lumeland/lume/pull/855). In this version Lume got some changes in how the types are managed.
+
+### Add your types
+
+Lume has the `Lume.Data` type with the available data for all pages. In old versions, the way to add your types is extending the interface:
+
+```ts
+interface Post extends Lume.Data {
+  title: string;
+  excerpt: string;
+}
+export default function (data: Post) { }
+```
+
+In this version, `Lume.Data` is no longer an interface, but an special type. The way to extend it is by passing the interface as a generic:
+
+```ts
+interface Post {
+  title: string;
+  excerpt: string;
+}
+export default function (data: Lume.Data<Post>) { }
+```
+
+### Global types
+
+If you want to apply the same types to all pages, you can extend the `Lume.GlobalData` interface in the `_config.ts` file:
+
+```ts
+// _config.ts
+
+declare global {
+  namespace Lume {
+    export interface GlobalData {
+      title: string;
+      excerpt: string;
+    }
+  }
+}
+```
+
+Now `Lume.Data` will have the `title` and `excerpt` types.
+
+### Types in processors
+
+The functions `site.process` and `site.preprocess` accepts an interface as generic, that will be applied to all pages processed:
+
+```ts
+interface Post {
+  title: string;
+  excerpt: string;
+}
+
+site.process<Post>([".html"], (pages) => {
+  for (const page of pages) {
+    console.log(page.data.title);
+    console.log(page.data.excerpt);
+  }
+});
+
+interface CssFile {
+  compress: boolean
+}
+
+site.process<CssFile>([".css"], (files) => {
+  for (const file of files) {
+    if (file.data.compress) {
+      file.text = compress(file.text);
+    }
+  }
+});
+```
+
+### Stric types
+
+By default, any undeclared property of `Lume.Data` has the `any` type:
+
+```ts
+export default (data: Lume.Data, filters: Lume.Helpers) => {
+  data.foo // any
+};
+```
+
+You can configure Lume to use strict types and apply `unknown` to properties not declared previously. Just add the `strict: true` property to the `Lume.TypeConfig` interface:
+
+```ts
+// _config.ts
+
+declare global {
+  namespace Lume {
+    export interface TypeConfig {
+      strict: true
+    }
+  }
+}
+```
+
+```ts
+export default (data: Lume.Data, filters: Lume.Helpers) => {
+  data.foo // unknown
+};
+```
+
 ## Improved Lume debugbar
 
 The [Lume debug bar](https://lume.land/docs/core/debugbar/) got some improvements:
