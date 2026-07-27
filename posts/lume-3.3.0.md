@@ -7,7 +7,7 @@ tags:
   - Releases
 comments: {}
 ---
-A new Lume version is born! And this time it's dedicated to
+A new Lume version was released, and it's dedicated to
 [Castelao](https://en.wikipedia.org/wiki/Alfonso_Daniel_Rodr%C3%ADguez_Castelao),
 probably the most important figure in Galician culture in the 20th century.
 
@@ -15,7 +15,7 @@ probably the most important figure in Galician culture in the 20th century.
 
 Castelao studied to be a doctor but, as he said once: "I became a doctor for the
 love of my father; I don't practice for the love of humanity". He is better
-known as a politician, writer, painter, and caricaturist. As a caricaturist, one
+known as a politician, writer, painter, caricaturist and many other things. As a caricaturist, one
 of his best-known works is "Cousas da vida" (Things in life), a collection of
 drawings published in different newspapers denouncing the caciquism and
 suffering of the rural people of Galicia with a humorous eye. Seven years ago, I
@@ -156,6 +156,7 @@ this first version, the implemented standards are:
   subject, not dynamic `?resource=` lookups)
 - [gpc](https://w3c.github.io/gpc/)
 - [PWA origin migration](https://developer.chrome.com/blog/seamless-pwa-origin-migration)
+- [matrix](https://spec.matrix.org/v1.19/client-server-api/#well-known-uris), thanks to [Ege Celikci](https://ege.celikci.me/).
 
 The plugin allows to configure the data of all these standards from the
 `_config.ts` file:
