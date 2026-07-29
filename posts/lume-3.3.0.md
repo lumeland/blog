@@ -1,8 +1,8 @@
 ---
 title: Lume 3.3.0 - Castelao
 author: Óscar Otero
-date: 2026-07-03
-draft: true
+date: 2026-07-29
+draft: false
 tags:
   - Releases
 comments: {}
@@ -19,19 +19,21 @@ known as a politician, writer, painter, caricaturist and many other things. As a
 of his best-known works is "Cousas da vida" (Things in life), a collection of
 drawings published in different newspapers denouncing the caciquism and
 suffering of the rural people of Galicia with a humorous eye. Seven years ago, I
-created ["Memes da vida"](https://github.com/oscarotero/memes-da-vida) a meme
+created ["Memes da vida"](https://github.com/oscarotero/memes-da-vida), a meme
 creator using some of his drawings, that
 [you can try here](https://oscarotero.github.io/memes-da-vida/).
 
 ![Mom, can I update my website to Lume 3.3? Of course, honey](/uploads/meme.png)
 
-## Deno support
+## Deno changes
 
 Lume 3.3.0 drops support for versions of Deno older than 2.9.0, because it uses
 some new features (like HMR) that are not supported in older versions.
 
 Since Deno revived
-[the LTS channel](https://docs.deno.com/runtime/fundamentals/stability_and_releases/#long-term-support-(lts)) with the 2.9.0 version, it looks fine for Lume to garantee support for LTS.
+[the LTS channel](https://docs.deno.com/runtime/fundamentals/stability_and_releases/#long-term-support-(lts)) with the 2.9.0 version, it looks fine for Lume to guarantee support for LTS.
+
+Another important change is that [the deno.land/x registry is now read-only](https://deno.land/x), which means that it's not possible to publish new versions of Lume there. If you're still importing Lume from this domain, please update it to [JsDelivr](https://www.jsdelivr.com/package/gh/lumeland/lume).
 
 ## Lume is on Codeberg
 
@@ -60,12 +62,12 @@ different hash.
 But this workaround only works for files loaded directly by
 Lume. If the `_data.ts` file has a nested import (for example,
 `import foo from "./bar.ts"`), this file isn't loaded by Lume, so it can't add
-the hash and it can't be reloaded after a change.
+the hash, and it can't be reloaded after a change.
 
 Fortunately, Deno 2.9.0 implemented the
-[module hook API of Nodejs](https://nodejs.org/api/module.html#moduleregisterhooksoptions).
+[module hook API of Node.js](https://nodejs.org/api/module.html#moduleregisterhooksoptions).
 This API allows you to configure how Deno resolves and loads modules, and Lume uses it to add the hash to all local modules loaded by Deno. This
-means that any module loaded from your `src` folder will be reloaded automatically when it's updated, no matter how is imported.
+means that any module loaded from your `src` folder will be reloaded automatically when it's updated, no matter how it is imported.
 
 ```ts
 // If bar.ts changes, it's reloaded in Lume 3.3.0!
@@ -84,7 +86,7 @@ export default function () {
 }
 ```
 
-Note that this is just an example, the `comp` variable is still the best way to
+Note that this is just an example; the `comp` variable is still the best way to
 use Lume components.
 
 ## New plugin `pwa`
@@ -140,6 +142,8 @@ E.T. is an adventure game in which players control the alien E.T.
 from a top-down perspective.
 ```
 
+See the [plugin documentation on lume.land](https://lume.land/plugins/pwa/) for more details.
+
 ## New plugin `well_known`
 
 This plugin makes it easier to generate some
@@ -158,7 +162,7 @@ this first version, the implemented standards are:
 - [PWA origin migration](https://developer.chrome.com/blog/seamless-pwa-origin-migration)
 - [matrix](https://spec.matrix.org/v1.19/client-server-api/#well-known-uris), thanks to [Ege Celikci](https://ege.celikci.me/).
 
-The plugin allows to configure the data of all these standards from the
+The plugin allows you to configure the data of all these standards from the
 `_config.ts` file:
 
 ```ts
@@ -182,11 +186,13 @@ site.use(wellKnown({
 export default site;
 ```
 
+More details in the [plugin documentation page](https://lume.land/plugins/well_known/).
+
 ## New plugin `toc`
 
-A common way to generate a table of contents in Lume is using a markdown-it plugin like [the `toc` plugin](https://github.com/lumeland/markdown-plugins). A drawback of this approach is it only works for pages rendered with markdown-it. If you want to use the [Remark plugin](https://lume.land/plugins/remark/) you have to need a different plugin. And if you want to generate table of contents from pages in other formats like Vento or JSX, it's become more complex.
+A common way to generate a table of contents in Lume is using a markdown-it plugin like [the `toc` plugin](https://github.com/lumeland/markdown-plugins). A drawback of this approach is that it only works for pages rendered with markdown-it. If you want to use the [Remark plugin](https://lume.land/plugins/remark/), you need a different plugin. And if you want to generate a table of contents from pages in other formats like Vento or JSX, it becomes more complex.
 
-In this version, Lume added the new TOC plugin, which is agnostic of the template engine. It uses the DOM API to generate the toc using the `toc` attribute:
+In this version, Lume added the new TOC plugin, which is agnostic of the template engine. It uses the DOM API to generate the TOC using the `toc` attribute:
 
 ```html
 <nav toc="content">
@@ -200,7 +206,7 @@ In this version, Lume added the new TOC plugin, which is agnostic of the templat
 </div>
 ```
 
-As you can see in the example, the plugin only need the `toc` attribute defined in the element that will contain the table of contents. The value of this attribute must be the id of the element with the text. The plugin automatically will generate the following HTML code:
+As you can see in the example, the plugin only needs the `toc` attribute defined in the element that will contain the table of contents. The value of this attribute must be the ID of the element with the text. The plugin will automatically generate the following HTML code:
 
 ```html
 <nav toc="content">
@@ -222,7 +228,7 @@ As you can see in the example, the plugin only need the `toc` attribute defined 
 </div>
 ```
 
-Note that the plugin not only generates the table of contents, but also the ids of the headers (if needed) and the anchors. Use the `anchor` option allows to configure how these anchors are generated or disable this feature:
+Note that the plugin not only generates the table of contents, but also the ids of the headers (if needed) and the anchors. Use the `anchor` option to configure how these anchors are generated or disable this feature:
 
 ```ts
 import lume from "lume/mod.ts";
@@ -236,15 +242,17 @@ site.use(toc({
 export default site;
 ```
 
-The `no-toc` attribute can be used to ignore some headers to be included in the table of contents:
+The `no-toc` attribute can be used to ignore some headers from being included in the table of contents:
 
 ```html
 <h2 no-toc>This header is omited</h2>
 ```
 
+Go to [lume.land for more info about this plugin](https://lume.land/plugins/toc/).
+
 ## New plugin `git_date`
 
-In Lume it's possible to use the value
+In Lume, it's possible to use the value
 "[Git last modified](https://lume.land/docs/creating-pages/page-data/#date)" to
 extract the date when a file was modified from the Git history.
 
@@ -281,6 +289,8 @@ site.use(gitDate({
 
 This makes the built-in feature obsolete, since the plugin is faster and better and goes in line with the Lume philosophy of keeping the core lean and moving the features to plugins.
 
+More info in the [plugin documentation page](https://lume.land/plugins/git_date/).
+
 ## New plugin `git_info`
 
 This plugin extracts some useful info from Git and saves it in the `gitInfo`
@@ -294,13 +304,13 @@ variable. This variable is an object with the following properties:
 This info can be used in your templates for multiple purposes. For example, to
 show the latest version:
 
-```vto
+```html
 Version {{ gitInfo.tag || gitInfo.hash }}
 ```
 
 Or to prevent caching issues:
 
-```vto
+```html
 <link rel="stylesheet" href="/styles.css?v={{ gitInfo.hash }}">
 ```
 
@@ -335,7 +345,7 @@ plugins or themes to register custom archetypes.
 
 By default, the paths of the generated files are relative to the `src` folder.
 The new property `base` allows you to change the base path to "root" (the same
-folder of `_config.ts` and `deno.json` files).
+folder as the `_config.ts` and `deno.json` files).
 
 ### Edit files
 
@@ -380,11 +390,11 @@ breakpoints to debug your code.
 
 ## Improved TypeScript
 
-First: big thanks to [Volpeon for the tireless work](https://github.com/lumeland/lume/pull/855). In this version Lume got some changes in how the types are managed.
+First: big thanks to [Volpeon for the tireless work](https://github.com/lumeland/lume/pull/855). In this version, Lume got some changes in how the types are managed.
 
 ### Add your types
 
-Lume has the `Lume.Data` type with the available data for all pages. In old versions, the way to add your types is extending the interface:
+Lume has the `Lume.Data` type with the available data for all pages. In old versions, the way to add your types was to extend the interface:
 
 ```ts
 interface Post extends Lume.Data {
@@ -394,7 +404,7 @@ interface Post extends Lume.Data {
 export default function (data: Post) { }
 ```
 
-In this version, `Lume.Data` is no longer an interface, but an special type. The way to extend it is by passing the interface as a generic:
+In this version, `Lume.Data` is no longer an interface, but a special type. The way to extend it is by passing the interface as a generic:
 
 ```ts
 interface Post {
@@ -425,7 +435,7 @@ Now `Lume.Data` will have the `title` and `excerpt` types.
 
 ### Types in processors
 
-The functions `site.process` and `site.preprocess` accepts an interface as generic, that will be applied to all pages processed:
+The functions `site.process` and `site.preprocess` accept an interface as a generic, which will be applied to all pages processed:
 
 ```ts
 interface Post {
@@ -453,7 +463,7 @@ site.process<CssFile>([".css"], (files) => {
 });
 ```
 
-### Stric types
+### Strict types
 
 By default, any undeclared property of `Lume.Data` has the `any` type:
 
@@ -487,6 +497,10 @@ export default (data: Lume.Data, filters: Lume.Helpers) => {
 
 The [Lume debug bar](https://lume.land/docs/core/debugbar/) got some improvements:
 
-- The js code is inlined in the HTML, instead loaded remotely from jsdelivr.
+- The JS code is inlined in the HTML, instead of being loaded remotely from jsdelivr.
 - It displays the RAM used, useful to detect the steps in the build that consume more memory.
 - The button to edit the content in the CMS was moved to the tab bar, so it's visible even if the debugbar is collapsed.
+
+---
+
+See the [CHANGELOG.md file](https://github.com/lumeland/lume/blob/v3.3.0/CHANGELOG.md) for the complete list of changes.
