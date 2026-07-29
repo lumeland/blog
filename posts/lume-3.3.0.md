@@ -5,7 +5,8 @@ date: 2026-07-29
 draft: false
 tags:
   - Releases
-comments: {}
+comments:
+  src: 'https://fosstodon.org/@lume/117004766093799104'
 ---
 A new Lume version was released, and it's dedicated to
 [Castelao](https://en.wikipedia.org/wiki/Alfonso_Daniel_Rodr%C3%ADguez_Castelao),
