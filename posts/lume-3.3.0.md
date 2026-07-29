@@ -7,6 +7,7 @@ tags:
   - Releases
 comments:
   src: 'https://fosstodon.org/@lume/117004766093799104'
+  bluesky: 'https://bsky.app/profile/lume.land/post/3mrsmhizwtr2b'
 ---
 A new Lume version was released, and it's dedicated to
 [Castelao](https://en.wikipedia.org/wiki/Alfonso_Daniel_Rodr%C3%ADguez_Castelao),
