@@ -9,7 +9,6 @@ import "npm:prismjs/components/prism-liquid.js";
 import "npm:prismjs/components/prism-typescript.js";
 import "npm:prismjs/components/prism-json.js";
 import "npm:prismjs/components/prism-jsx.js";
-import "https://deno.land/x/vento@v2.0.0/prism-vento.js";
 
 export default lume({
     location: new URL("https://lume.land/blog/")

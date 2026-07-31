@@ -318,7 +318,7 @@ export default async function ({ comp }) {
 
 Or Vento:
 
-```html
+```vto
 <p>{{ comp.Salute({ id: 23 }) }}</p>
 ```
 
