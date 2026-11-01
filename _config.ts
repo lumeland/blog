@@ -1,17 +1,19 @@
-import lume from "lume/mod.ts";
-import basePath from "lume/plugins/base_path.ts";
-import blog from "blog/mod.ts";
+import lume from "@lumeland/lume";
+import theme from "@lumeland/theme-simple-blog";
 
-import "npm:prismjs/components/prism-markdown.js";
-import "npm:prismjs/components/prism-yaml.js";
-import "npm:prismjs/components/prism-markup-templating.js";
-import "npm:prismjs/components/prism-liquid.js";
-import "npm:prismjs/components/prism-typescript.js";
-import "npm:prismjs/components/prism-json.js";
-import "npm:prismjs/components/prism-jsx.js";
+import "prismjs/components/prism-markdown";
+import "prismjs/components/prism-yaml";
+import "prismjs/components/prism-markup-templating";
+import "prismjs/components/prism-liquid";
+import "prismjs/components/prism-typescript";
+import "prismjs/components/prism-json";
+import "prismjs/components/prism-jsx";
 
-export default lume({
-    location: new URL("https://lume.land/blog/")
-  })
-  .use(blog())
-  .use(basePath());
+const site = lume({
+  location: new URL("https://lume.land/blog/"),
+});
+
+site.use(theme());
+
+export default site;
+
