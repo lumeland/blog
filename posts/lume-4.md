@@ -17,25 +17,25 @@ As you may know, Deno is sunsetting after [being acquired by Cloudflare](https:/
 
 <!-- more -->
 
-What I didn't expect is the abandonment of the runtime (it will be maintained for just one year). I always assumed that once the company shut down, the software would be maintained by the community or an open source organization. There are indeed [some](https://github.com/are-we-dodo-yet/dodo) [movements](https://ende.sh/) in the community to fork the project, and even now it looks like Bartek (Deno's co-creator) is [working on getting Deno into a foundation](https://github.com/denoland/deno/issues/37030#issuecomment-6310897867), but there is no certainty about anything.
+What I didn't expect is the abandonment of the runtime (it will be maintained for just one year). I always assumed that once the company shut down, the software would be maintained by the community or an open source organization. There are indeed [some](https://github.com/are-we-dodo-yet/dodo) [movements](https://ende.sh/) in the community to fork the project, and now it even looks like Bartek (Deno's co-creator) is [working on getting Deno into a foundation](https://github.com/denoland/deno/issues/37030#issuecomment-6310897867), but there is no certainty about anything.
 
 I can't wait a year to know the future of Deno; I want a stable, boring, and reliable foundation, that's why I decided to port Lume to Node and release it as **Lume 4**.
 
-## The loses
+## The losses
 
-HTTP imports are probably the most missed feature. It allowed you to import Lume using a single URL that just works, no matter if the URL is to a stable release, a development version using the commit hash, or a local version using the `file://` protocol. Unfortunately, Node doesn't support that, so I published Lume on NPM.
+HTTP imports are probably the most missed feature. This allowed you to import Lume using a single URL that just works, no matter if the URL is to a stable release, a development version using the commit hash, or a local version using the `file://` protocol. Unfortunately, Node doesn't support that, so I published Lume on NPM.
 
 Another Deno feature that I will miss is the ability to download only the imported modules. This is not possible with NPM packages, because the entire package and dependencies need to be downloaded before running, even files that you don't need. In order to avoid installing a single package with all plugins and hundreds of megabytes of dependencies, I had to split Lume into several packages.
 
-The new Lume repository is a monorepo. This introduces way more complexity and makes it difficult to test development versions with real websites compared with HTTP imports. At least I'm using [PNPM](https://pnpm.io/) to manage all the stuff, which is proving very useful.
+The new Lume repository is a monorepo. Compared with HTTP imports, this introduces way more complexity and makes it difficult to test development versions with real websites. At least I'm using [PNPM](https://pnpm.io/) to manage all the stuff, which is proving very useful.
 
-Since Lume is not a single package anymore, it doesn't make sense to continue creating big releases dedicated to certain notable Galician figures 😢. Until now, every new Lume version introduced new plugins or features in the same release. Now these changes are spread across a whole bunch of packages (+70 so far), each one with an independent release pace.
+Since Lume is not a single package anymore, it doesn't make sense to continue creating big releases dedicated to certain notable Galician figures 😢. Until now, every new version of Lume introduced new plugins or features contained in the same release. Now these changes are spread across a whole bunch of packages (+70 so far), each one with its own independent release pace.
 
 ## The wins
 
-The first benefit is stability and peace of mind. Node is not a VC company or a startup that needs to play the Silicon Valley game. This change ensures the long-term survival of Lume, which is the most important thing after all.
+The first benefit is stability and peace of mind. Node is not a VC company or a startup that needs to play the Silicon Valley game. This change ensures the long-term survival of Lume, which is the most important thing, after all.
 
-Another good side effect is the simplification of some plugins. The way in which Deno resolves dependencies, with three systems behaving differently (HTTP, JSR, and NPM), is more complicated than Node, and some plugins like esbuild required a lot more code to make it work. Now these plugins were simplified since only the `node_modules` folder need to be supported.
+Another good side effect is the simplification of some plugins. The way in which Deno resolves dependencies is more complicated than Node, with three systems that behave differently: HTTP, JSR, and NPM. Some plugins, like [esbuild](https://lume.land/plugins/esbuild/), required a lot more code to make all three dependency resolution systems work identically. Now these plugins are simplified, since we only need to support the `node_modules` folder.
 
 An unexpected benefit of having a `node_modules` folder with all dependencies downloaded is that it's easier to scan and copy their assets (for instance, CSS files with the themes for Prism or Highlight.js).
 
@@ -92,9 +92,9 @@ Brotli and Gzip plugins were merged into [@lumeland/plugin-compress](https://www
 
 ## Lume CMS
 
-The CMS has ported [to NPM](https://www.npmjs.com/package/@lumeland/cms) too. The GitHub adapter is not included because it will be moved into a different package (`@lumeland/cms-github-storage`) to avoid downloading its dependencies if not needed.
+The CMS has been ported [to NPM](https://www.npmjs.com/package/@lumeland/cms) too. The GitHub adapter is not included because it will be moved into a different package (`@lumeland/cms-github-storage`) to avoid downloading its dependencies when they are not needed.
 
-In Lume 4 the CMS is not detected automatically if the `_cms.ts` file exists. This was a nice convenience in the Deno version thanks to HTTP imports that allow to load packages on demand. In the Node version, the CMS must be installed like any other plugin and requires two dependencies: `@lumeland/cms` which is the CMS and `@lumeland/plugin-cms` which is the plugin to integrate with Lume:
+In Lume 4 the CMS is not detected automatically if the `_cms.ts` file exists. This was a nice convenience in the Deno version, thanks to HTTP imports that allow loading packages on demand. In the Node version, the CMS must be installed like any other plugin and requires two dependencies: `@lumeland/cms` which is the CMS, and `@lumeland/plugin-cms` which is the plugin to integrate with Lume:
 
 ```ts
 // _cms.ts
@@ -122,19 +122,19 @@ export default site;
 
 ## Other changes
 
-With this migration, there are some other changes that you may consider:
+With this migration, there are some other changes to consider:
 
-- Node doesn't support [the Web Cache API](https://developer.mozilla.org/en-US/docs/Web/API/Cache). It was used by Lume on Deno to cache all remote files. Now these requests are cached in the `_cache` folder. I think this is even better because now all caches are stored in a single place.
-- The Pagefind plugin has changed to use the new UI, based on Web components.
+- Node doesn't support [the Web Cache API](https://developer.mozilla.org/en-US/docs/Web/API/Cache). On Deno, Lume used it to cache all remote files. Now these requests are cached in the `_cache` folder. I think this is even better because now all caches are stored in a single place.
+- The [Pagefind plugin](https://lume.land/plugins/pagefind/) has changed to use the new UI, based on Web components.
 - The option `watcher.includes` was removed, since Node doesn't allow setting different paths in the same watcher.
 - `site.remoteFile()` was removed. Use `site.remote()`.
-- The option `includes` was removed from Lume options and all plugin, so it's no longer possible to set a different `_includes` folder. My idea, in the future, is to make it work like `_components` and allow to override files in nested folders.
+- The option `includes` was removed from Lume options and all plugins, so it's no longer possible to set a different `_includes` folder. My idea, in the future, is to make it work like `_components` and allow to override files in nested folders.
 
 ## Conclusion
 
-Lume has changed so you don't have to change. The same spirit and philosophy but in a different runtime. And in this case, it's a runtime maintained by a community and ruled by a foundation, which conveys more tranquility and peace.
+Lume has changed so you don't have to change. The same spirit and philosophy, but in a different runtime. And in this case, it's a runtime maintained by a community and governed by a foundation, which offers more tranquility and peace.
 
-That said, I want to thank the Deno team for creating such a great runtime. I did not agree with some of their decisions and the overall direction, but I admit that Node wouldn't become so good without the inspiration and competition with Deno. And Lume definitely wouldn't have been born without Deno.
+That said, I want to thank the Deno team for creating such a great runtime. I did not agree with some of their decisions and the overall direction, but I admit that Node wouldn't have become so good without the inspiration from and competition with Deno. And Lume definitely wouldn't have been born without Deno.
 
 There are some emerging initiatives to fork Deno, or create new runtimes inspired by it. Lume is now easier to port to other runtimes, so once the Node version is stabilized, I'd be happy to experiment with them, as long as they are projects created by the community (not another VC-backed company, please).
 
