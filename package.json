@@ -12,7 +12,7 @@
     "build": "lume build"
   },
   "dependencies": {
-    "@lumeland/lume": "^4.0.0",
+    "@lumeland/lume": "^4.0.1",
     "@lumeland/ssx": "^0.1.16",
     "@lumeland/theme-simple-blog": "^2.0.1"
   }
