@@ -8,7 +8,7 @@ comments:
   src: 'https://fosstodon.org/@lume/117553939698730875'
   bluesky: 'https://bsky.app/profile/lume.land/post/3mzgi36vhn22u'
 ---
-<svg width="647" height="443" viewBox="0 0 647 443" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="647" height="443" viewBox="0 0 647 443" fill="none" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;">
   <style>
   .lume-black { fill: #121014; }
   [data-theme="dark"] .lume-black { fill: #fff; }
