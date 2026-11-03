@@ -4,7 +4,9 @@ author: Óscar Otero
 draft: false
 tags:
   - Releases
-comments: {}
+comments:
+  src: 'https://fosstodon.org/@lume/117553939698730875'
+  bluesky: 'https://bsky.app/profile/lume.land/post/3mzgi36vhn22u'
 ---
 <svg width="647" height="443" viewBox="0 0 647 443" fill="none" xmlns="http://www.w3.org/2000/svg">
   <style>
