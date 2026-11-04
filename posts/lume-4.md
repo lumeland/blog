@@ -87,7 +87,7 @@ With this new major version, all existing plugins have been migrated to Node, ex
 
 - `attributes`: It was one of the first Lume plugins, created before Vento existed to mitigate the cumbersome task of generating HTML attributes in Nunjucks using variables. The plugin is too specific, and if anyone needs something like this, it's easy to create a filter in the `_config.ts` file or install one of the many options available on NPM.
 - `fff`: A plugin to use [fff](https://github.com/importantimport/fff) to transform the frontmatter. Since the package hasn't been updated in two years and the plugin usage is low, I decided not to port it.
-- `relations`: I created this plugin for a specific project, and I thought it could be useful for other people. It's too complex and hard to configure correctly, and I don't think many people are using it.
+- `relations`: ~~I created this plugin for a specific project, and I thought it could be useful for other people. It's too complex and hard to configure correctly, and I don't think many people are using it.~~<br>**Edit:** it looks like it's indeed useful and there are more people using it that I thought, so it was ported to Node. 
 - `decap-cms`: Lume already has a CMS integrated, so maybe DecapCMS is not so useful. I got some warnings because some of its dependencies are deprecated, so I decided not to port it for now (but it could be added in the future if it's still useful).
 
 ## Lume CMS
